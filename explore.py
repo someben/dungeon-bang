@@ -7,6 +7,7 @@
   python explore.py verify A,B,C,D [games]   # long run of one assignment (strategy names from STRATS)
   python explore.py rules        # house-rule tweaks one at a time, then a greedy search for the most even mix
   python explore.py adapt RULES  # under a rule mix, let each class switch to its best strategy
+  python explore.py human [RULES ...]  # human-like styles: everyone the same style, then random mixed tables
 
 Results are appended to results/explore.jsonl.
 """
@@ -261,6 +262,86 @@ def adapt(text, games=1000):
     return cur
 
 
+# Human-like play styles: all guess at the odds a little (noise), each has a different habit.
+HUMAN = {
+    "casual": "noise=0.5",                              # sensible, but judges by gut feel
+    "by-the-board": "safe+noise=0.3",                   # sticks to the board's 'safest levels' for the class
+    "ladder": "ladder=1+noise=0.3",                     # starts shallow, goes deeper as the gold piles up
+    "nearest": "dist=2.5+noise=0.3",                    # whatever worthwhile room is closest
+    "big-game": "dist=0.5+risk=0.5+noise=0.3",          # walks far for the big prizes
+    "timid": "risk=3+noise=0.3",                        # won't risk the treasure already held
+    "reckless": "risk=0+noise=0.3",                     # never thinks about getting hit back
+    "wanderer": "rand=0.3+noise=0.3",                   # often just goes somewhere
+    "vulture": "scav=3+follow=0.5+noise=0.3",           # hangs around the leader for dropped loot
+}
+HUMAN_WIZ = {"spell-happy": "spell_lv=1+min_lv=1+home_at=1+noise=0.3"}  # casts at everything, heads home early
+
+
+def human_menu(cls):
+    return list(HUMAN) + (list(HUMAN_WIZ) if cls == "wizard" else [])
+
+
+def _mixed(args):
+    """Games where every seat draws a random human style; returns per (class, style) seats and wins."""
+    global _B, _M, _T
+    if _B is None:
+        _B, _M, _T = sim.Board(), sim.load_monsters(), sim.load_treasures()
+    seed0, n, rules = args
+    import random
+    seats, wins, rounds = {}, {}, 0
+    for g in range(seed0, seed0 + n):
+        r = random.Random(g * 7 + 1)
+        names = [r.choice(human_menu(c)) for c in CLASSES]
+        pols = [HUMAN.get(nm) or HUMAN_WIZ[nm] for nm in names]
+        w, rd = sim.Game(_B, _M, _T, CLASSES, pols, seed=g, book=BOOK, max_rounds=400, rules=rules).play()
+        rounds += rd
+        for c, nm in zip(CLASSES, names):
+            seats[c, nm] = seats.get((c, nm), 0) + 1
+        k = ("win", w.cls, names[w.idx]) if w else ("none",)
+        wins[k] = wins.get(k, 0) + 1
+    return seats, wins, rounds
+
+
+def human(rule_sets, games=3000, mixed_games=24000):
+    for text in rule_sets:
+        rules = rules_of(text)
+        label = text or "printed rules"
+        print(f"\n#### {label}")
+        print("== everyone plays the same human style")
+        for st in HUMAN:
+            names = [st] * 4
+            pols = [HUMAN[st]] * 4
+            step = 25
+            jobs = [(pols, 31 * 10_000_000 + i, min(step, games - i), rules, BOOK) for i in range(0, games, step)]
+            wins, rd = [0] * 5, 0
+            for w, r in POOL.map(_chunk, jobs):
+                wins = [a + b for a, b in zip(wins, w)]
+                rd += r
+            res = {"strats": names, "human": True, "rules": rules, "games": games,
+                   "win": [x / games for x in wins[:4]], "none": wins[4] / games, "rounds": rd / games}
+            with open(OUT, "a") as f:
+                f.write(json.dumps(res) + "\n")
+            show(res, st)
+        print(f"== mixed tables: every seat picks a random human style ({mixed_games} games)")
+        seats, wins, rd = {}, {}, 0
+        for sts, ws, r in POOL.map(_mixed, [(32 * 10_000_000 + i, 50, rules) for i in range(0, mixed_games, 50)]):
+            for k, v in sts.items():
+                seats[k] = seats.get(k, 0) + v
+            for k, v in ws.items():
+                wins[k] = wins.get(k, 0) + v
+            rd += r
+        tot = [sum(v for k, v in wins.items() if k[0] == "win" and k[1] == c) / mixed_games for c in CLASSES]
+        res = {"strats": ["human-mix"] * 4, "human": True, "rules": rules, "games": mixed_games, "win": tot,
+               "none": wins.get(("none",), 0) / mixed_games, "rounds": rd / mixed_games}
+        with open(OUT, "a") as f:
+            f.write(json.dumps(res) + "\n")
+        show(res, "MIXED TABLE overall")
+        print("   win rate by the style a class played (vs random opponents):")
+        for c in CLASSES:
+            row = sorted(((wins.get(("win", c, st), 0) / seats[c, st], st) for st in human_menu(c)), reverse=True)
+            print(f"   {c:8}" + "  ".join(f"{st} {x:.0%}" for x, st in row))
+
+
 def main():
     global POOL
     POOL = Pool(os.cpu_count())
@@ -282,6 +363,8 @@ def main():
         rules_search(games=int(sys.argv[2]) if len(sys.argv) > 2 else 6000, singles=False)
     elif cmd == "adapt":
         adapt(sys.argv[2] if len(sys.argv) > 2 else "")
+    elif cmd == "human":
+        human(sys.argv[2:] or ["", "swords=fighter+book=12"])
     elif cmd == "verify":
         n = int(sys.argv[3]) if len(sys.argv) > 3 else 10000
         show(run(sys.argv[2].split(","), n, seed=9), f"verify {sys.argv[2]}")

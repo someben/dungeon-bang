@@ -29,6 +29,7 @@ MOVE = 5
 #   refill     keep rolling in the Great Hall until within this many spells of a full book (99 = one roll only)
 WIZ = {"spell_lv": 4, "min_lv": 6, "home_at": 0, "refill": 0}
 SLIDE_LEVEL = 4
+NUM_SLOTS = 12  # numbered monster slots on the board edge
 # House-rule switches (Game(rules={...}) or --rules key=val,...). Defaults are the printed 2014 rules.
 #   move         "5" fixed 5 spaces | "d6" roll 1 die | "d6p2" roll 1 die and add 2
 #   secret       "std" a failed search ends the move | "retry" a failed search costs 1 space and you may roll again
@@ -58,9 +59,12 @@ def parse_policy(policy, cls):
       rand=P     chance each new target is picked at random instead (1 = pure chaos)
       scav=W     weight on treasure other heroes dropped (3 = scavenger)
       follow=W   prefer targets near the hero closest to winning (shadow the leader)
+      noise=S    misjudge each target's worth by a random factor exp(N(0,S)) (human guesswork)
+      ladder=1   start shallow and go deeper as treasure piles up, across the class's 'safest levels'
       spell_lv, min_lv, home_at, refill   Wizard play style (see WIZ)
     """
-    p = {"lo": 1, "hi": 6, "risk": 1.0, "dist": 1.0, "rand": 0.0, "scav": 1.0, "follow": 0.0, "wiz": dict(WIZ)}
+    p = {"lo": 1, "hi": 6, "risk": 1.0, "dist": 1.0, "rand": 0.0, "scav": 1.0, "follow": 0.0,
+         "noise": 0.0, "ladder": 0.0, "wiz": dict(WIZ)}
     for part in filter(None, policy.split("+")):
         if part == "ev":
             continue
@@ -71,7 +75,7 @@ def parse_policy(policy, cls):
         if k == "lv":
             a, _, b = v.partition("-")
             p["lo"], p["hi"] = int(a), int(b or a)
-        elif k in ("risk", "dist", "rand", "scav", "follow"):
+        elif k in ("risk", "dist", "rand", "scav", "follow", "noise", "ladder"):
             p[k] = float(v)
         elif k in WIZ:
             p["wiz"][k] = int(v)
@@ -165,6 +169,7 @@ class Hero:
         self.spells = dict(self.book)
         self.regen = False
         self.goal = None
+        self.cast_this_turn = False  # rulebook: only 1 Spell card per turn
 
     @property
     def gp(self):
@@ -192,6 +197,7 @@ class Game:
             assert k in RULES, k
             self.R[k] = v
         self.found_all = set()  # secret doors anyone has found (used with secret_share)
+        self.stats_slots_full = 0
         self.max_rounds = max_rounds
         self.mdeck = defaultdict(list)
         self.mdisc = defaultdict(list)
@@ -207,26 +213,14 @@ class Game:
         for lv in self.tdeck:
             self.rng.shuffle(self.tdeck[lv])
         self.defeated = Counter()     # node -> defeated tokens
-        self.slot = {}                # node -> {"monster": card, "drops": [cards]}
+        # node -> {"monster": card, "drops": [cards], "known": None (face up) or {hero idx who peeked},
+        #          "treasure": card pre-drawn by a Crystal Ball (rooms), else absent}
+        self.slot = {}
         self.heroes = []
         # spell deck and books (alternate picks between wizards)
-        pool = {"fireball": 9, "lightning": 9, "teleport": 6}
+        self.want = book or {"fireball": 0.5, "lightning": 0.5, "teleport": 0.0}
         wiz = [i for i, c in enumerate(lineup) if c == "wizard"]
-        books = {i: Counter() for i in wiz}
-        sizes = {i: 12 if self.R["book"] == "12" else d6(self.rng) + 6 for i in wiz}
-        want = book or {"fireball": 0.5, "lightning": 0.5, "teleport": 0.0}
-        while any(sum(books[i].values()) < sizes[i] for i in wiz) and sum(pool.values()):
-            for i in wiz:
-                if sum(books[i].values()) >= sizes[i]:
-                    continue
-                n = sum(books[i].values()) + 1
-                # pick the spell furthest below its target share that is still in the pool
-                choices = [s for s in pool if pool[s] > 0]
-                if not choices:
-                    break
-                s = max(choices, key=lambda s: want.get(s, 0) * n - books[i][s])
-                books[i][s] += 1
-                pool[s] -= 1
+        books = self.build_books(wiz, {"fireball": 9, "lightning": 9, "teleport": 6})
         for i, c in enumerate(lineup):
             self.heroes.append(Hero(i, c, policy[i] if isinstance(policy, (list, tuple)) else policy, books.get(i, {})))
         for h in self.heroes:
@@ -239,6 +233,47 @@ class Game:
                     ps = [1.0 if m["trap"] else self.p_hit(m, mode, bonus) for m in deck]
                     self.p_level[lv, mode, bonus] = sum(ps) / len(ps)
         self.avg_treasure = {lv: sum(t["gp"] for t in d) / len(d) for lv, d in self.tdeck.items()}
+
+    def build_books(self, wiz, pool):
+        """Each listed Wizard rolls 1d6+6 and they take turns picking 1 Spell card at a time from pool."""
+        books = {i: Counter() for i in wiz}
+        sizes = {i: 12 if self.R["book"] == "12" else d6(self.rng) + 6 for i in wiz}
+        want = self.want
+        while any(sum(books[i].values()) < sizes[i] for i in wiz) and sum(pool.values()):
+            for i in wiz:
+                if sum(books[i].values()) >= sizes[i]:
+                    continue
+                n = sum(books[i].values()) + 1
+                # pick the spell furthest below its target share that is still in the pool
+                choices = [s for s in pool if pool[s] > 0]
+                if not choices:
+                    break
+                s = max(choices, key=lambda s: want.get(s, 0) * n - books[i][s])
+                books[i][s] += 1
+                pool[s] -= 1
+        return books
+
+    def new_wizard_book(self, h):
+        """A Crushed Wizard comes back as a new Wizard with a new spellbook, picked from the Spell cards
+        that aren't in another Wizard's book."""
+        pool = {"fireball": 9, "lightning": 9, "teleport": 6}
+        for o in self.heroes:
+            if o is not h and o.cls == "wizard":
+                for k, v in o.book.items():
+                    pool[k] -= v
+        h.book = dict(self.build_books([h.idx], pool)[h.idx])
+
+    def park(self, n):
+        """After a fight the monster waits in a numbered slot. If all 12 slots are taken, it is discarded
+        instead, unless treasure was dropped under it (then it stays)."""
+        s = self.slot.get(n)
+        if s and len(self.slot) > NUM_SLOTS and not s["drops"]:
+            del self.slot[n]
+            self.mdisc[s["monster"]["level"]].append(s["monster"])
+            if s.get("treasure"):
+                self.tdeck[self.b.level(n)].insert(0, s["treasure"])
+            self.stats_slots_full += 1
+            self.log(f"  all {NUM_SLOTS} slots taken: {s['monster']['name']} in {n} is discarded")
 
     def log(self, *a):
         if self.verbose:
@@ -256,10 +291,12 @@ class Game:
         return p_at_least(t - bonus) if mode not in ("fireball", "lightning") else p_at_least(t)
 
     def p_hit_melee(self, h, s, n):
-        return self.best_mode(h, s["monster"] if s else None, self.b.level(n), spells=False)[0]
+        return self.best_mode(h, self.seen_monster(h, s), self.b.level(n), spells=False)[0]
 
     def modes(self, h):
         ms = [h.cls]
+        if h.cast_this_turn:
+            return ms
         for s in ("fireball", "lightning"):
             if h.spells.get(s, 0) > 0:
                 ms.append(s)
@@ -353,13 +390,29 @@ class Game:
         avg_card = gp / len(h.cards) if h.cards else 0
         return gp * P2[12] + gp * 0.5 * P2[11] + avg_card * (1 - P2[12] - P2[11] - sum(P2[s] for s in range(2, 6)))
 
+    def seen_monster(self, h, s):
+        """The slot's monster card if h can see it: face up, or h peeked at it (ESP / Crystal Ball)."""
+        if not s:
+            return None
+        k = s.get("known")
+        return s["monster"] if k is None or h.idx in k else None
+
+    def room_treasure_value(self, h, n, s):
+        lv = self.b.level(n)
+        if self.b.kind(n) != "room":
+            return 0
+        t = s.get("treasure") if s else None
+        if t is not None:
+            return t["gp"] if h.idx in (s.get("known") or ()) or s.get("known") is None else self.avg_treasure.get(lv, 0)
+        return self.avg_treasure.get(lv, 0) if self.tdeck[lv] else 0
+
     def target_value(self, h, n):
-        """(expected gain, p_win) for fighting at node n."""
+        """(expected gain, p_win) for fighting at node n, using only what h can see."""
         lv = self.b.level(n)
         s = self.slot.get(n)
-        drops = sum(c["gp"] for c in s["drops"]) if s else 0
-        gain = drops * h.p["scav"] + (self.avg_treasure.get(lv, 0) if self.b.kind(n) == "room" and self.tdeck[lv] else 0)
-        p, mode = self.best_mode(h, s["monster"] if s else None, lv)
+        drops = sum(c["gp"] for c in s["drops"]) if s else 0  # dropped loot lies face up
+        gain = drops * h.p["scav"] + self.room_treasure_value(h, n, s)
+        p, mode = self.best_mode(h, self.seen_monster(h, s), lv)
         loss = 0 if mode in ("fireball", "lightning") else self.fight_back_loss(h) * h.p["risk"]
         return p * gain - (1 - p) * loss, p
 
@@ -391,6 +444,12 @@ class Game:
         if h.cls == "wizard" and h.maxspells() and h.attack_spells() <= h.wiz["home_at"] and not self.refill_spot(h.pos):
             spots = [n for n in [self.b.gh] + self.b.chambers if n in dist and self.refill_spot(n)]
             return min(spots, key=lambda n: dist[n]), dist, par
+        if h.p["ladder"]:
+            # aim level climbs through the class's safest levels as gold approaches the goal
+            slo, shi = SAFE_LEVELS[h.cls]
+            t = round(slo - 0.5 + min(1.0, h.gp / goal) * (shi - slo + 1))
+            lo, hi = max(lo, max(1, t - 1)), min(hi, min(6, t + 1))
+            lo = min(lo, hi)
         g = h.goal
         if g and g != h.pos and g in dist and not self.cleared(g) and self.target_value(h, g)[0] > 0:
             return g, dist, par
@@ -419,7 +478,7 @@ class Game:
             ev, p = self.target_value(h, n)
             if not (lo <= lv <= hi) and not self.slot.get(n):
                 continue
-            if h.cls == "wizard" and h.attack_spells() and lv < h.wiz["min_lv"] and not (self.slot.get(n) and self.slot[n]["drops"]):
+            if h.cls == "wizard" and h.attack_spells() and lv < (lo if h.p["ladder"] else h.wiz["min_lv"]) and not (self.slot.get(n) and self.slot[n]["drops"]):
                 continue
             turns = math.ceil(dist[n] / MOVE) + 1
             if ev <= 0:
@@ -427,6 +486,8 @@ class Game:
                     fb, fbt = ev * turns, n
                 continue
             sc = ev / turns ** h.p["dist"]
+            if h.p["noise"]:
+                sc *= math.exp(self.rng.gauss(0, h.p["noise"]))
             if ld is not None:
                 sc /= 1 + h.p["follow"] * ld.get(n, 99) / MOVE
             cands.append(n)
@@ -453,17 +514,17 @@ class Game:
         here = self.teleport_level(n)
         r = self.R["tele_range"]
         opts = [c for c in self.b.chambers if c != n and abs(self.b.level(c) - here) <= r]
-        if r >= 6 and n != self.b.gh:
-            opts.append(self.b.gh)
+        if n != self.b.gh and abs(1 - here) <= r:
+            opts.append(self.b.gh)  # the Great Hall is a chamber too (Level 1)
         return opts
 
     def try_teleport_travel(self, h, target, dist):
         """Wizard in a chamber: teleport to a chamber within one level if that saves at least one turn of walking."""
-        if h.cls != "wizard" or not h.spells.get("teleport", 0):
+        if h.cls != "wizard" or not h.spells.get("teleport", 0) or h.cast_this_turn:
             return False
         if self.R["tele_from"] == "chamber" and self.b.kind(h.pos) != "chamber":
             return False
-        if target not in dist or (target == self.b.gh and self.R["tele_range"] < 6):
+        if target not in dist:
             return False
         opts = self.teleport_opts(h.pos)
         if not opts:
@@ -479,6 +540,7 @@ class Game:
             return False
         if not self.R["tele_keep"]:
             h.spells["teleport"] -= 1
+        h.cast_this_turn = True
         h.stats["teleports"] += 1
         self.log(f"  {h.cls}{h.idx} teleports {pos} -> {best} (toward {target})")
         h.prev, h.pos = None, best
@@ -490,6 +552,7 @@ class Game:
 
     # ---------- turn
     def take_turn(self, h):
+        h.cast_this_turn = False
         if h.lose:
             h.lose -= 1
             return
@@ -506,6 +569,8 @@ class Game:
         if target == h.pos and not self.cleared(h.pos):
             self.encounter(h)  # best option is the monster already here: fight it
             return
+        if h.has("crystal_ball") and self.try_crystal_ball(h, dist):
+            return
         if self.try_teleport_travel(h, target, dist):
             return
         path = self.path_to(par, target) if target in par else [h.pos]
@@ -514,6 +579,8 @@ class Game:
         esp_used = False
         for nxt in path[1:]:
             kind = next(k for m, k in self.b.adj[h.pos] if m == nxt)
+            if kind == "secret" and h.has("secret_door"):
+                h.found.add(frozenset((h.pos, nxt)))  # you still remember these if you drop the card
             while kind == "secret" and not self.can_cross(h, h.pos, nxt, kind):
                 need = 3 if h.cls == "rogue" else 5
                 roll = d6(self.rng)
@@ -531,24 +598,27 @@ class Game:
                 self.settle(h)
                 return
             stopper = not self.cleared(nxt)
+            if stopper and self.b.kind(nxt) == "room" and self.occupied(nxt, h):
+                break  # entering would mean stopping in another hero's room
             if stopper:
                 # ESP peek before entering an unknown room/chamber
+                # (one ESP-or-Crystal-Ball use per turn; the card stays face down, only h knows it)
                 if not esp_used and h.has("esp") and nxt not in self.slot:
                     esp_used = True
                     m = self.draw_monster(self.b.level(nxt))
-                    self.slot[nxt] = {"monster": m, "drops": []}
+                    self.slot[nxt] = {"monster": m, "drops": [], "known": {h.idx}}
+                    h.stats["esp"] += 1
                     ev, p = self.target_value(h, nxt)
                     self.log(f"  {h.cls}{h.idx} ESP peeks {nxt}: {m['name']} (p={p:.2f})")
-                    if ev <= 0 and nxt != target:
-                        self.settle(h)
-                        return
                     if ev <= 0:
-                        self.settle(h)
+                        self.park(nxt)
+                        self.settle(h)  # chose not to enter: the turn ends
                         return
                 # wizard ranged spell from outside
-                if h.cls == "wizard" and h.nspells():
+                can_stop_here = not (self.occupied(h.pos, h) and self.b.kind(h.pos) != "chamber")
+                if h.cls == "wizard" and h.nspells() and can_stop_here and not h.cast_this_turn:
                     s = self.slot.get(nxt)
-                    p, mode = self.best_mode(h, s["monster"] if s else None, self.b.level(nxt))
+                    p, mode = self.best_mode(h, self.seen_monster(h, s), self.b.level(nxt))
                     worth = self.b.kind(nxt) == "room" or (s and s["drops"]) or p < 0.25
                     if mode in ("fireball", "lightning") and (worth or self.p_hit_melee(h, s, nxt) < 0.4):
                         self.cast(h, nxt, mode)
@@ -604,16 +674,63 @@ class Game:
     def reveal(self, h, n):
         s = self.slot.get(n)
         if s:
+            s["known"] = None  # a hero has entered (or cast at) the space: the card is turned face up
             return s
         m = self.draw_monster(self.b.level(n))
-        s = {"monster": m, "drops": []}
+        s = {"monster": m, "drops": [], "known": None}
         self.slot[n] = s
         return s
+
+    def info_gain(self, h, n):
+        """Expected value of looking at n's Monster (and Treasure, for a room) before committing to it."""
+        lv = self.b.level(n)
+        room = self.b.kind(n) == "room"
+        deck = self.mdeck[lv] or self.mdisc[lv] or self.all_monsters[lv]
+        tdeck = (self.tdeck[lv] if room else []) or [None]
+        drops = sum(c["gp"] for c in self.slot[n]["drops"]) * h.p["scav"] if n in self.slot else 0
+        loss_melee = self.fight_back_loss(h) * h.p["risk"]
+        blind = self.target_value(h, n)[0]
+        tot = 0.0
+        for m in deck:
+            p, mode = (1.0, h.cls) if m["trap"] else self.best_mode(h, m)
+            loss = 0 if mode in ("fireball", "lightning") else loss_melee
+            for t in tdeck:
+                gain = drops + (t["gp"] if t else 0)
+                tot += max(0.0, p * gain - (1 - p) * loss)
+        return tot / (len(deck) * len(tdeck)) - max(0.0, blind)
+
+    def try_crystal_ball(self, h, dist):
+        """Spend the turn scrying an unrevealed room/chamber when what it tells us beats a turn of play."""
+        if h.gp >= GOAL[h.cls] or len(self.slot) >= NUM_SLOTS:
+            return False
+        bt, _, cands = self.scan_targets(h, dist, None, 1, 6)
+        pool = [n for n in (cands or []) if n not in self.slot and dist.get(n, 1e18) > MOVE]
+        if not pool:
+            return False
+        # value of a normal turn ~ the best target's expected gain per turn of travel
+        rate = max((self.target_value(h, n)[0] / (math.ceil(dist[n] / MOVE) + 1) for n in cands), default=0)
+        best = max(pool, key=lambda n: self.info_gain(h, n))
+        if self.info_gain(h, best) <= rate:
+            return False
+        lv = self.b.level(best)
+        s = {"monster": self.draw_monster(lv), "drops": [], "known": {h.idx}}
+        if self.b.kind(best) == "room":
+            t = self.draw_treasure(lv)
+            if t:
+                s["treasure"] = t
+        self.slot[best] = s
+        h.stats["crystal"] += 1
+        h.goal = None
+        self.log(f"  {h.cls}{h.idx} Crystal Ball on {best}: {s['monster']['name']}"
+                 + (f", {s['treasure']['name']} {s['treasure']['gp']}" if s.get("treasure") else ""))
+        self.end_turn(h)
+        return True
 
     def cast(self, h, n, mode):
         s = self.reveal(h, n)
         m = s["monster"]
         h.spells[mode] -= 1
+        h.cast_this_turn = True
         h.stats["casts"] += 1
         if m["trap"]:
             # spell at a trap: treat as springing it on entry
@@ -630,6 +747,7 @@ class Game:
             h.stats["spell_miss"] += 1
             if self.R["miss_keep"]:
                 h.spells[mode] += 1
+            self.park(n)
             self.end_turn(h)  # monster stays (already in slot); hero stays outside
 
     def encounter(self, h):
@@ -640,13 +758,14 @@ class Game:
             self.spring_trap(h, n, s)
             return
         # wizard teleport away from a bad chamber fight
-        if h.cls == "wizard" and self.b.kind(n) == "chamber" and h.spells.get("teleport", 0):
+        if h.cls == "wizard" and self.b.kind(n) == "chamber" and h.spells.get("teleport", 0) and not h.cast_this_turn:
             p, _ = self.best_mode(h, m)
             if p < 0.3:
                 opts = self.teleport_opts(n)
                 if opts:
                     if not self.R["tele_keep"]:
                         h.spells["teleport"] -= 1
+                    h.cast_this_turn = True
                     h.stats["teleports"] += 1
                     dest = self.rng.choice([c for c in opts if self.cleared(c)] or opts)
                     self.log(f"  {h.cls}{h.idx} teleports {n} -> {dest}")
@@ -660,6 +779,7 @@ class Game:
         if mode in ("fireball", "lightning"):
             # inside the space: casting still allowed, but a miss means it fights back
             h.spells[mode] -= 1
+            h.cast_this_turn = True
             t = m["tgt"][mode]
         else:
             mode = h.cls
@@ -681,7 +801,7 @@ class Game:
         h.stats["wins"] += 1
         gained = list(s["drops"])
         if self.b.kind(n) == "room":
-            t = self.draw_treasure(self.b.level(n))
+            t = s.get("treasure") or self.draw_treasure(self.b.level(n))
             if t:
                 gained.append(t)
         for c in gained:
@@ -699,7 +819,7 @@ class Game:
         for c in s["drops"]:
             self.gain(h, c)
         if self.b.kind(n) == "room":
-            t = self.draw_treasure(self.b.level(n))
+            t = s.get("treasure") or self.draw_treasure(self.b.level(n))
             if t:
                 self.gain(h, t)
         if m["trap"] == "cage":
@@ -748,6 +868,8 @@ class Game:
             self.log(f"    CRUSHED (drops {len(d)})")
             h.stats["crushed"] += 1
             stats = h.stats
+            if h.cls == "wizard":
+                self.new_wizard_book(h)
             h.reset()
             h.stats = stats
             h.pos = self.b.gh
@@ -769,6 +891,7 @@ class Game:
             h.stats["stunned"] += 1
         else:
             self.log("    missed")
+        self.park(n)
         self.end_turn(h)
 
     # ---------- driver
