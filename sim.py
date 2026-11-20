@@ -263,17 +263,33 @@ class Game:
                     pool[k] -= v
         h.book = dict(self.build_books([h.idx], pool)[h.idx])
 
-    def park(self, n):
-        """After a fight the monster waits in a numbered slot. If all 12 slots are taken, it is discarded
-        instead, unless treasure was dropped under it (then it stays)."""
+    def park(self, n, h=None):
+        """House ruling (user, 2026-11-20): a monster that wasn't defeated (after a fight, a missed spell, or an
+        ESP peek) takes a numbered slot if one of the 12 is free. If all 12 are taken it is discarded, and any
+        treasure dropped in that fight goes under a waiting monster of the dropping player's choice.
+        A discarded monster's space stays undefeated, so the next hero in draws a new card from that level."""
         s = self.slot.get(n)
-        if s and len(self.slot) > NUM_SLOTS and not s["drops"]:
-            del self.slot[n]
-            self.mdisc[s["monster"]["level"]].append(s["monster"])
-            if s.get("treasure"):
-                self.tdeck[self.b.level(n)].insert(0, s["treasure"])
-            self.stats_slots_full += 1
-            self.log(f"  all {NUM_SLOTS} slots taken: {s['monster']['name']} in {n} is discarded")
+        if not s or len(self.slot) <= NUM_SLOTS:
+            return
+        del self.slot[n]
+        self.mdisc[s["monster"]["level"]].append(s["monster"])
+        if s.get("treasure"):  # a Crystal Ball's face-down treasure goes back into its pile
+            lv = self.b.level(n)
+            self.tdeck[lv].insert(self.rng.randrange(len(self.tdeck[lv]) + 1), s["treasure"])
+        self.stats_slots_full += 1
+        self.log(f"  all {NUM_SLOTS} slots taken: {s['monster']['name']} in {n} is discarded")
+        if s["drops"]:
+            to = self.choose_drop_slot(h)
+            self.slot[to]["drops"].extend(s["drops"])
+            self.log(f"    its {len(s['drops'])} dropped card(s) go under the monster in {to}")
+
+    def choose_drop_slot(self, h):
+        """Player's choice: under the waiting monster this hero is likeliest to beat soonest."""
+        dist, _ = self.dijkstra(h)
+        def score(m):
+            p = self.best_mode(h, self.seen_monster(h, self.slot[m]), self.b.level(m))[0]
+            return p / (1 + math.ceil(dist.get(m, 1e9) / MOVE))
+        return max(self.slot, key=score)
 
     def log(self, *a):
         if self.verbose:
@@ -891,7 +907,7 @@ class Game:
             h.stats["stunned"] += 1
         else:
             self.log("    missed")
-        self.park(n)
+        self.park(n, h)
         self.end_turn(h)
 
     # ---------- driver

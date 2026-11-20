@@ -150,7 +150,7 @@ class Combat(unittest.TestCase):
             g.rng.load(1, 1, *({12: (6, 6), 11: (5, 6), 9: (4, 5), 6: (3, 3), 4: (2, 2)}[roll]))
             g.encounter(h)
             s = g.slot[self.room]
-            self.assertIs(s["monster"], m, what)           # card waits in a number slot
+            self.assertIs(s["monster"], m, what)           # waits in a free numbered slot
             self.assertIsNone(s["known"], what)            # face up
             self.assertEqual(len(s["drops"]), dropped, what)  # dropped under the monster
             if what in ("crushed", "serious"):
@@ -295,7 +295,7 @@ class Wizards(unittest.TestCase):
         self.assertEqual(self.w.pos, self.door)              # stayed outside
         self.assertEqual(len(self.w.cards), 1)               # monster did not fight back
         self.assertEqual(self.w.stats["hit_back"], 0)
-        self.assertIsNone(self.g.slot[self.room]["known"])   # it stays there, revealed
+        self.assertIsNone(self.g.slot[self.room]["known"])   # it stays there in a slot, revealed
 
     def test_spell_hit_moves_in_and_loots(self):
         put_on_top(self.g, monster("Goblin") | {"level": 5})
@@ -389,7 +389,8 @@ class Specials(unittest.TestCase):
         other = g.heroes[2]
         other.prev, other.pos = door, r
         g.rng.load(1, 1, 1, 1)
-        g.encounter(other)                                   # next hero to enter reveals it
+        g.encounter(other)                                   # next hero to enter reveals it and fights it
+        self.assertEqual(other.stats["fights"], 1)
         self.assertIsNone(g.slot[r]["known"])
 
     def test_crystal_ball_scry_without_moving_and_treasure_kept(self):
@@ -476,17 +477,30 @@ class Specials(unittest.TestCase):
 class HouseRulings(unittest.TestCase):
     """Situations the rulebook doesn't cover, ruled by the user (2026-11-20)."""
 
-    def fill_slots(self, g, n):
+    def fill_slots(self, g, n=sim.NUM_SLOTS):
         rooms = [r for r in BOARD.rooms if BOARD.level(r) in (1, 2, 3)][:n]
         assert len(rooms) == n
         for r in rooms:
             g.slot[r] = {"monster": monster("Goblin"), "drops": [], "known": None}
 
-    def test_thirteenth_monster_is_discarded_without_drops(self):
+    def test_unbeaten_monster_takes_a_free_slot(self):
         g = new_game()
         h = g.heroes[2]
         park_others(g, h)
-        self.fill_slots(g, sim.NUM_SLOTS)
+        self.fill_slots(g, sim.NUM_SLOTS - 1)       # one slot left
+        r, door = door_room(4)
+        put_on_top(g, monster("Hill Giant"))
+        h.prev, h.pos = door, r
+        g.rng.load(1, 1, 2, 2)
+        g.encounter(h)
+        self.assertIn(r, g.slot)
+        self.assertEqual(len(g.slot), sim.NUM_SLOTS)
+
+    def test_unbeaten_monster_discarded_when_slots_full(self):
+        g = new_game()
+        h = g.heroes[2]
+        park_others(g, h)
+        self.fill_slots(g)
         r, door = door_room(4)
         m = monster("Hill Giant")
         put_on_top(g, m)
@@ -494,22 +508,88 @@ class HouseRulings(unittest.TestCase):
         g.rng.load(1, 1, 2, 2)                      # miss, then the monster misses too: nothing dropped
         g.encounter(h)
         self.assertNotIn(r, g.slot)
-        self.assertIn(m, g.mdisc[4])
+        self.assertTrue(any(x is m for x in g.mdisc[4]))
         self.assertFalse(g.cleared(r))              # still unbeaten: a new monster jumps out next time
 
-    def test_thirteenth_monster_with_drops_stays(self):
+    def test_discarded_monster_replaced_by_random_draw_from_remaining_deck(self):
         g = new_game()
         h = g.heroes[2]
         park_others(g, h)
-        h.cards = [treasure("Sack of Gold", 1)]
-        self.fill_slots(g, sim.NUM_SLOTS)
+        self.fill_slots(g)
         r, door = door_room(4)
-        put_on_top(g, monster("Hill Giant"))
+        giant = monster("Hill Giant")
+        put_on_top(g, giant)
+        h.prev, h.pos = door, r
+        g.rng.load(1, 1, 2, 2)                      # miss, monster misses: discarded (no drops)
+        g.encounter(h)
+        self.assertNotIn(r, g.slot)
+        remaining = list(g.mdeck[4])
+        self.assertFalse(any(x is giant for x in remaining))
+        # next hero in: a new card comes off the top of the remaining Level 4 pile
+        other = g.heroes[0]
+        other.prev, other.pos = door, r
+        g.rng.load(1, 1, 2, 2)
+        g.encounter(other)
+        drawn = g.mdisc[4][-1]                      # it was drawn, missed, and discarded too
+        self.assertIs(drawn, remaining[-1])         # the top card of the remaining pile
+        self.assertIsNot(drawn, giant)
+        # the discarded card only returns once the pile runs out and the discards are reshuffled
+        g.mdeck[4] = []
+        self.assertTrue(any(x is giant for x in g.mdisc[4]))
+        back = g.draw_monster(4)
+        self.assertEqual(g.mdisc[4], [])
+        self.assertTrue(any(x is giant for x in g.mdeck[4] + [back]))
+
+    def test_full_slots_discard_and_drops_go_under_a_waiting_monster(self):
+        g = new_game()
+        h = g.heroes[2]
+        park_others(g, h)
+        gold = treasure("Sack of Gold", 1)
+        h.cards = [gold]
+        self.fill_slots(g)
+        r, door = door_room(4)
+        giant = monster("Hill Giant")
+        put_on_top(g, giant)
         h.prev, h.pos = door, r
         g.rng.load(1, 1, 3, 3)                      # miss, then Stunned: drops a card
         g.encounter(h)
+        self.assertNotIn(r, g.slot)                 # no room: the monster is discarded
+        self.assertTrue(any(x is giant for x in g.mdisc[4]))
+        self.assertEqual(len(g.slot), sim.NUM_SLOTS)
+        holders = [k for k, v in g.slot.items() if gold in v["drops"]]
+        self.assertEqual(len(holders), 1)           # the treasure went under one waiting monster
+        self.assertEqual(h.cards, [])
+
+    def test_spell_miss_and_esp_peek_same_rule(self):
+        g = new_game()
+        w = g.heroes[3]
+        park_others(g, w)
+        r, door = door_room(5)
+        put_on_top(g, monster("Hill Giant") | {"level": 5})
+        w.pos = door
+        g.rng.load(1, 1)
+        g.cast(w, r, "fireball")                    # missed spell, slot free: it waits
         self.assertIn(r, g.slot)
-        self.assertEqual(len(g.slot[r]["drops"]), 1)
+        g1 = new_game()
+        w1 = g1.heroes[3]
+        park_others(g1, w1)
+        self.fill_slots(g1)
+        put_on_top(g1, monster("Hill Giant") | {"level": 5})
+        w1.pos = door
+        g1.rng.load(1, 1)
+        g1.cast(w1, r, "fireball")                  # missed spell, slots full: discarded, same as everyone
+        self.assertNotIn(r, g1.slot)
+        # an ESP peek takes a free slot too
+        g2 = new_game()
+        h = g2.heroes[0]
+        park_others(g2, h)
+        r2, door2 = door_room(6)
+        h.cards, h.pos = [treasure("ESP Medallion", 3)], door2
+        put_on_top(g2, next(m for m in MONSTERS if m["level"] == 6 and m["tgt"]["rogue"] is None and not m["trap"]))
+        dist, par = g2.dijkstra(h)
+        g2.choose_target = lambda hero: (r2, dist, par)
+        g2.take_turn(h)
+        self.assertEqual(g2.slot[r2]["known"], {h.idx})
 
     def test_crushed_wizard_gets_new_spellbook(self):
         g = new_game(lineup=("wizard", "wizard", "rogue", "fighter"),
