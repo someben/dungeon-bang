@@ -1,0 +1,871 @@
+# Dungeon! (2014) board graph. Coordinates are photos/mosaic.jpg pixels, each at the center of its tile/room/chamber.
+# One space per line; then one connection per line (link = open floor, door, secret = secret door). See tools/board.py.
+chamber ARM 3 560,760 Armory
+chamber KIT 2 1345,380 Kitchen
+chamber GR 2 1480,720 Guard Room
+chamber GH 0 1447,1674 Great Hall
+chamber PAN 3 2181,615 Pantry
+chamber CH 4 2330,1430 Chapel
+chamber LAB 5 2200,2360 Laboratory
+chamber CRY 5 2330,2620 Crypt
+chamber LAIR 6 1390,2560 The Lair
+chamber BUR 6 1590,2960 The Burrow
+chamber CEL 4 600,1500 Cells
+chamber HOLE 5 507,2510 The Hole
+chamber TOR 5 890,2515 Torture Chamber
+room R3a 3 428,441
+room R3b 3 584,493
+room R3c 3 727,464
+room R3d 3 891,743
+room R3e 3 428,1093
+room R3f 3 555,997
+room R3g 3 706,1131
+room R2a 2 1121,269
+room R2b 2 1578,256
+room R2e 2 1760,515
+room R2d 2 1530,509
+room R2c 2 1140,510
+room R2f 2 1098,759
+room R2g 2 1259,830
+room R2i 2 1752,1050
+room R2h 2 1113,1087
+room R1a 1 1138,1266
+room R1b 1 1398,1410
+room R1e 1 1749,1467
+room R1c 1 1152,1608
+room R1d 1 1216,1854
+room R1f 1 1780,1662
+room R3h 3 1960,279
+room R3j 3 1969,528
+room R3i 3 2321,315
+room R3k 3 2537,544
+room R3m 3 2026,820
+room R3n 3 2113,995
+room R3l 3 2567,705
+room R3p 3 2609,978
+room R3o 3 2302,1031
+room R4a 4 1972,1238
+room R4b 4 2321,1247
+room R4c 4 2620,1225
+room R4d 4 1942,1553
+room R4e 4 1959,1777
+room R4f 4 2627,1723
+room R1g 1 1825,1958
+room R4g 4 2220,2065
+room R4h 4 2522,1929
+room R4i 4 2676,2081
+room R5a 5 2019,2285
+room R5b 5 2526,2278
+room R5c 5 2707,2279
+room R5d 5 2469,2906
+room R5e 5 2680,2867
+room R5f 5 2494,3186
+room R5g 5 2717,3155
+room R5h 5 2136,3026
+room R5i 5 2271,3173
+room R1h 1 1171,2159
+room R1i 1 1531,1939
+room T6c 6 1557,2418
+room T6d 6 1572,2595
+room T6e 6 1748,2310
+room T6f 6 1752,2497
+room T6g 6 1743,2695
+room T6a 6 1135,2340
+room T6b 6 1292,2333
+room T6h 6 1255,2720
+room T6i 6 1246,3040
+room T6j 6 1430,3030
+room T6l 6 1842,3219
+room T6k 6 1841,3050
+room R4j 4 590,1310
+room R4k 4 894,1382
+room R4l 4 406,1710
+room R4m 4 823,1727
+room R4o 4 405,1865
+room R4p 4 413,2055
+room R4q 4 826,2010
+room R4n 4 930,1871
+room R4r 4 975,2148
+room R5j 5 951,2321
+room R5k 5 354,2881
+room R5l 5 681,2715
+room R5n 5 913,2943
+room R5m 5 642,2909
+room R5o 5 730,3101
+room R5p 5 225,3237
+hall C 305,315
+hall T1 395,315
+hall T2 465,315
+hall T3 552,315
+hall T4 650,315
+hall T5 735,315
+hall T6 812,315
+hall T7 885,310
+hall N 548,388
+hall L1 300,419
+hall L2 300,490
+hall L3 300,581
+hall L4 300,671
+hall L5 300,753
+hall L6 300,837
+hall L7 300,923
+hall L8 300,1014
+hall L9 300,1106
+hall L10 300,1187
+hall L11 300,1270
+hall L12 300,1350
+hall W1 425,615
+hall M2 735,612
+hall M3 815,610
+hall M4 893,612
+hall M5 967,612
+hall M6 1038,615
+hall M7 1120,617
+hall D2 818,877
+hall D3 903,885
+hall D4 972,885
+hall LR1 953,977
+hall AR1 485,855
+hall AR2 432,892
+hall AR3 388,950
+hall X 579,1147
+hall S1 785,995
+hall S2 845,1075
+hall S4 915,1155
+hall S5 970,1230
+hall P1 693,985
+hall E1 900,405
+hall E2 1010,400
+hall E3 1143,385
+hall F2 1557,378
+hall F3 1677,378
+hall F4 1773,378
+hall F5 1840,378
+hall V1 1667,450
+hall V2 1667,520
+hall V3 1650,610
+hall V4 1668,706
+hall V5 1668,787
+hall V6 1668,858
+hall H1 1755,680
+hall H2 1842,680
+hall H3 1926,680
+hall M8 1220,617
+hall M9 1300,650
+hall DD1 1088,900
+hall DD2 1122,973
+hall DD3 1215,973
+hall DD4 1303,973
+hall DD5 1395,976
+hall DD6 1503,985
+hall DD7 1556,1014
+hall G1 1746,860
+hall G2 1821,860
+hall G3 1904,906
+hall NC1 1628,1024
+hall NC2 1596,1110
+hall NC3 1596,1172
+hall NC4 1588,1248
+hall NC5 1577,1337
+hall NC6 1566,1426
+hall NC7 1545,1510
+hall Q1 1442,1052
+hall Q2 1254,1100
+hall Q3 1260,1187
+hall Q4 1329,1281
+hall Q5 1254,1350
+hall WC1 1124,1729
+hall WC2 1177,1729
+hall WC3 1232,1729
+hall SE1 1750,1780
+hall SE2 1720,1881
+hall SE4 1675,1987
+hall SE5 1709,2108
+hall SW2 1401,1877
+hall F6 1903,378
+hall F7 1985,385
+hall PNW1 2100,410
+hall PNW2 2090,510
+hall PNE2 2363,467
+hall PNE3 2417,373
+hall PNE4 2447,487
+hall PW2 2015,685
+hall PS2 2149,888
+hall PSE2 2345,762
+hall PSE3 2435,805
+hall PSE4 2475,900
+hall ST2 2615,810
+hall SD1 2411,971
+hall SD2 2442,1053
+hall SD3 2449,1134
+hall SD4 2456,1205
+hall SD5 2473,1267
+hall CG2 1940,993
+hall CG3 2040,1104
+hall CG4 2107,1155
+hall LV1 2151,1237
+hall LV2 2151,1313
+hall LV4 2151,1406
+hall LV5 2155,1484
+hall SR1 1692,1256
+hall SR2 1747,1280
+hall SR3 1792,1318
+hall SR4 1830,1342
+hall SR5 1878,1356
+hall SR6 1919,1363
+hall SDX1 2490,1339
+hall SDX2 2504,1422
+hall SDX3 2511,1500
+hall SDX4 2511,1569
+hall HC1 2146,1584
+hall HC2 2230,1584
+hall HC3 2309,1584
+hall HC4 2398,1584
+hall HE1 2580,1566
+hall RV1 2652,1379
+hall RV2 2652,1483
+hall RV3 2652,1566
+hall VC1 2334,1673
+hall VC2 2338,1773
+hall VC3 2350,1870
+hall VC4 2357,1960
+hall VC5 2353,2034
+hall VC6 2358,2120
+hall VC7 2330,2200
+hall EC1 2093,1773
+hall EC2 2210,1773
+hall FS 2480,1765
+hall J 1637,2110
+hall CU1 1822,2125
+hall CU2 1867,2135
+hall CU3 1955,2070
+hall CU4 1955,2002
+hall HZ1 2060,1947
+hall HZ2 2157,1947
+hall HZ3 2243,1947
+hall G4 2083,2026
+hall K1 2675,1940
+hall EB1 2445,2120
+hall EB2 2512,2110
+hall LN1 2293,2257
+hall LW1 2045,2418
+hall LW2 2050,2493
+hall LW3 2088,2569
+hall LW4 2105,2646
+hall U1 2551,2411
+hall U2 2551,2468
+hall U3 2554,2549
+hall U4 2709,2554
+hall U5 2686,2474
+hall U6 2686,2411
+hall CE1 2498,2690
+hall CE2 2625,2693
+hall X5 2465,3045
+hall X6 2673,3010
+hall CW1 2059,2710
+hall CW2 2033,2790
+hall CW3 1968,2868
+hall CW4 1997,2947
+hall CW5 1997,3047
+hall CW6 2010,3160
+hall CB1 2110,2860
+hall CB2 2200,2860
+hall CB3 2267,2877
+hall CB4 2260,2967
+hall BT1 2120,3173
+hall SW3 1370,1953
+hall YW1 1328,2046
+hall YW2 1255,2040
+hall YW3 1188,2018
+hall YE1 1425,2095
+hall YE2 1530,2085
+hall ARC1 1621,2189
+hall ARC2 1563,2196
+hall ARC3 1521,2220
+hall ARC4 1473,2244
+hall ST6 1605,2300
+hall RC1 1880,2267
+hall RC2 1880,2326
+hall RC3 1880,2400
+hall RC4 1880,2476
+hall RC5 1880,2564
+hall RC6 1880,2665
+hall RC7 1880,2755
+hall WL2 1217,2537
+hall WL3 1123,2540
+hall LB1 1437,2654
+hall LB2 1437,2734
+hall BR1 1528,2750
+hall BR2 1611,2752
+hall LV61 1106,2617
+hall LV62 1110,2700
+hall LV65 1107,2954
+hall LV66 1107,3058
+hall LV67 1114,3150
+hall MB1 1116,2863
+hall MB2 1211,2863
+hall MB3 1294,2863
+hall BB1 1178,3190
+hall BB3 1278,3190
+hall BB4 1382,3190
+hall BB5 1489,3190
+hall BB6 1589,3190
+hall BB8 1687,3190
+hall RB1 1774,2883
+hall RB2 1858,2880
+hall IC1 430,1265
+hall IC2 430,1355
+hall IC3 430,1432
+hall IC4 430,1508
+hall IC5 430,1583
+hall CN1 910,1255
+hall CN2 830,1270
+hall CLS 520,1690
+hall CV2 676,1692
+hall CV3 676,1800
+hall MW1 963,1729
+hall MW2 1024,1729
+hall MW3 1074,1729
+hall CH22 565,1885
+hall IV1 560,1997
+hall IV2 560,2090
+hall IV3 560,2163
+hall IV4 557,2240
+hall TS1 687,1880
+hall JV1 683,2000
+hall JV2 680,2103
+hall JV3 713,2203
+hall JV4 763,2290
+hall QX 968,2000
+hall QE1 1030,2000
+hall QE2 1076,1998
+hall HN1 537,2327
+hall HT2 725,2510
+hall TN 792,2353
+hall HV2 510,2737
+hall HV3 514,2858
+hall TD1 899,2658
+hall TD2 907,2760
+hall RO 895,3130
+hall RX 1010,3120
+hall PK1 518,3068
+hall PK3 600,3065
+hall BN1 368,3030
+hall BN2 375,3120
+hall BOT1 392,3223
+hall BOT2 502,3223
+hall BOT3 592,3223
+hall BOT4 681,3223
+hall BOT5 775,3223
+hall BOT6 873,3223
+hall DK 995,2735
+hall A1 285,1428
+hall A2 285,1503
+hall A3 285,1576
+hall A4 285,1650
+hall A5 285,1728
+hall A6 285,1815
+hall A7 285,1906
+hall A8 285,1983
+hall A9 285,2053
+hall A10 285,2134
+hall A11 285,2223
+hall A12 265,2307
+hall A13 265,2397
+hall A14 265,2486
+hall A15 265,2565
+hall A16 265,2643
+hall A17 265,2720
+hall A18 265,2800
+hall A19 265,2878
+hall A20 265,2955
+hall A21 265,3037
+hall PNE1 2290,527
+hall PS1 2190,825
+hall CG2b 1965,1068
+hall SR7 1997,1369
+hall SR8 2038,1434
+hall SR9 2041,1497
+hall SR10 2055,1576
+hall G5 2083,2103
+hall TY 1768,2104
+hall CU2b 1912,2120
+hall CU5 1974,1946
+hall ARC5 1459,2292
+hall ARC6 1425,2337
+hall ARC7 1418,2399
+hall YW4 1136,1999
+hall WC4 1295,1727
+hall QA 1422,1144
+hall QB 1385,1225
+hall QE 1194,1425
+hall QF 1247,1506
+hall QG 1322,1550
+hall V7 1663,934
+hall NB0 1507,871
+hall NCD 1642,1429
+hall WLA 1103,2460
+hall CNa 745,1275
+hall CNb 745,1365
+hall W2 445,720
+hall M1 650,610
+hall Da 740,770
+hall LRb 1026,969
+hall Sa 685,868
+hall Sb 712,925
+hall LCa 2315,2456
+hall LW5 2188,2655
+hall UM 2626,2554
+hall CEd 2450,2755
+hall Ka 838,1522
+hall Kb 888,1552
+hall Kc 872,1618
+hall TW 805,2790
+hall PK0 510,2985
+hall BRs 1533,2821
+link T1 T2
+link T2 T3
+link T3 T4
+link T4 T5
+link T5 T6
+link T6 T7
+link C T1
+link T3 N
+link L1 L2
+link L2 L3
+link L3 L4
+link L4 L5
+link L5 L6
+link L6 L7
+link L7 L8
+link L8 L9
+link L9 L10
+link L10 L11
+link L11 L12
+link C L1
+secret R3a L2
+door R3b N
+secret R3b R3c
+door R3a W1
+link M2 M3
+link M3 M4
+link M4 M5
+link M5 M6
+link M6 M7
+door R3c M2
+link D2 D3
+link D3 D4
+door R3d D3
+link D4 LR1
+link AR1 AR2
+link AR2 AR3
+secret ARM AR1
+door R3e AR3
+door R3e X
+door R3g X
+link S1 S2
+link S2 S4
+link S4 S5
+door R3f P1
+door R3g P1
+link E1 E2
+link E2 E3
+link E3 KIT
+link T7 E1
+door R2a E3
+link KIT F2
+link F2 F3
+link F3 F4
+link F4 F5
+door R2b F2
+door R2e F4
+link V1 V2
+link V2 V3
+link V3 V4
+link V4 V5
+link V5 V6
+link F3 V1
+door R2d V3
+link H1 H2
+link H2 H3
+door R2c M7
+link M7 M8
+link M8 M9
+link M9 GR
+link DD1 DD2
+link DD2 DD3
+link DD3 DD4
+link DD4 DD5
+link DD6 DD7
+door R2f DD1
+door R2g DD3
+link G1 G2
+link G2 G3
+link V6 G1
+link NC1 NC2
+link NC2 NC3
+link NC3 NC4
+link NC4 NC5
+link NC5 NC6
+link NC6 NC7
+link DD7 NC1
+link NC7 GH
+door R2i NC1
+link Q2 Q3
+link Q4 Q5
+link DD5 Q1
+door R2h Q2
+door R1b Q4
+link WC1 WC2
+link WC2 WC3
+door R1c WC2
+door R1d WC2
+link SE1 SE2
+link SE2 SE4
+link SE4 SE5
+door R1f SE1
+link GH SW2
+secret R1a Q3
+secret R2h DD2
+link F5 F6
+link F6 F7
+link PNW1 PNW2
+link PNW2 PAN
+secret F7 PNW1
+door R3j PNW2
+link PNE2 PNE3
+link PAN PW2
+link PW2 H3
+door R3m PS2
+door R3n PS2
+door R3m G3
+link PAN PSE2
+link PSE2 PSE3
+link PSE3 PSE4
+door R3l ST2
+door R3p PSE4
+link SD1 SD2
+link SD2 SD3
+link SD3 SD4
+link SD4 SD5
+link PSE4 SD1
+door R3o SD2
+link G3 CG2
+link CG3 CG4
+link LV1 LV2
+link LV2 LV4
+link LV4 LV5
+link CG4 LV1
+link SR1 SR2
+link SR2 SR3
+link SR3 SR4
+link SR4 SR5
+link SR5 SR6
+link SDX1 SDX2
+link SDX2 SDX3
+link SDX3 SDX4
+link SD5 SDX1
+door R4b CH
+link HC1 HC2
+link HC2 HC3
+link HC3 HC4
+link LV5 HC1
+secret HC4 SDX4
+link SDX4 HE1
+link RV1 RV2
+link RV2 RV3
+door R4c RV1
+link RV3 HE1
+link VC1 VC2
+link VC2 VC3
+link VC3 VC4
+link VC4 VC5
+link VC5 VC6
+link VC6 VC7
+link HC4 VC1
+link EC1 EC2
+door R4e EC1
+secret EC2 VC2
+secret VC2 FS
+door R4f FS
+door R1g SE2
+link SE5 J
+link CU1 CU2
+link CU3 CU4
+link HZ1 HZ2
+link HZ2 HZ3
+link HZ3 VC4
+link HZ1 G4
+door R4h K1
+link EB1 EB2
+link VC6 EB1
+door R4i EB2
+link VC7 LN1
+link LN1 LAB
+link LW1 LW2
+link LW2 LW3
+link LW3 LW4
+door R5a LW1
+link U1 U2
+link U2 U3
+link U4 U5
+link U5 U6
+door R5b U1
+door R5c U6
+secret CRY U3
+link CE1 CE2
+link CRY CE1
+door R5e CE2
+door R5d X5
+door R5f X5
+door R5e X6
+door R5g X6
+link CW1 CW2
+link CW2 CW3
+link CW3 CW4
+link CW4 CW5
+link CW5 CW6
+link LW4 CW1
+link CB1 CB2
+link CB2 CB3
+link CB3 CB4
+link CW2 CB1
+door R5i CB4
+link CW6 BT1
+door R5h BT1
+link SW2 SW3
+link YW1 YW2
+link YW2 YW3
+link SW3 YW1
+door R1h YW3
+link YE1 YE2
+link ARC1 ARC2
+link ARC2 ARC3
+link ARC3 ARC4
+link J ARC1
+secret ST6 T6e
+secret ST6 T6c
+door T6c T6d
+link RC1 RC2
+link RC2 RC3
+link RC3 RC4
+link RC4 RC5
+link RC5 RC6
+link RC6 RC7
+door T6f RC4
+door T6g RC6
+link LAIR WL2
+link WL2 WL3
+secret T6a T6b
+link LB1 LB2
+link LAIR LB1
+link BR1 BR2
+link LB2 BR1
+door T6d BR2
+link LV61 LV62
+link MB1 LV65
+link LV65 LV66
+link LV66 LV67
+link WL3 LV61
+door T6h LV62
+link MB1 MB2
+link MB2 MB3
+door T6h MB3
+door T6i MB2
+link BB1 BB3
+link BB3 BB4
+link BB4 BB5
+link BB5 BB6
+link BB6 BB8
+link LV67 BB1
+door T6j BB4
+door T6l BB8
+door T6k BUR
+link RB1 RB2
+link BUR RB1
+secret RB2 RC7
+link IC1 IC2
+link IC2 IC3
+link IC3 IC4
+link IC4 IC5
+link CN1 CN2
+link S5 CN1
+secret CEL CLS
+door R4l CLS
+link CEL CV2
+link CV2 CV3
+link MW1 MW2
+link MW2 MW3
+door R4m MW1
+link MW3 WC1
+link TS1 CH22
+link CV3 TS1
+link IV1 IV2
+link IV2 IV3
+link IV3 IV4
+link CH22 IV1
+door R4p IV1
+link JV1 JV2
+link JV2 JV3
+link JV3 JV4
+link TS1 JV1
+door R4q JV1
+door R4q QX
+secret QX R4n
+secret QX R4r
+link QE1 QE2
+link QX QE1
+link IV4 HN1
+link HN1 HOLE
+link HOLE HT2
+link HT2 TOR
+link JV4 TN
+link TN TOR
+secret R5j TOR
+link HV2 HV3
+link HOLE HV2
+door R5k HV3
+link TD1 TD2
+link TOR TD1
+door R5n TD2
+door R5o RO
+link RO BOT6
+link RO RX
+link RX LV67
+link PK3 PK1
+link BN1 BN2
+link BN2 BOT1
+secret R5k BN1
+door R5p BN2
+link BOT1 BOT2
+link BOT2 BOT3
+link BOT3 BOT4
+link BOT4 BOT5
+link BOT5 BOT6
+link TD2 DK
+link DK LV62
+
+link L12 A1
+link A1 A2
+link A2 A3
+link A3 A4
+link A4 A5
+link A5 A6
+link A6 A7
+link A7 A8
+link A8 A9
+link A9 A10
+link A10 A11
+link A11 A12
+link A12 A13
+link A13 A14
+link A14 A15
+link A15 A16
+link A16 A17
+link A17 A18
+link A18 A19
+link A19 A20
+link A20 A21
+door R4o A7
+secret R4p A9
+link A21 BN1
+link V4 H1
+door R3h F7
+link PAN PNE1
+link PNE1 PNE2
+door R3i PNE3
+link PNE2 PNE4
+door R3k PNE4
+secret ST2 PSE4
+link PAN PS1
+link PS1 PS2
+link CG2 CG2b
+link CG2b CG3
+link CH LV5
+link SR6 SR7
+link SR7 SR8
+link SR8 SR9
+link SR9 SR10
+link SR10 HC1
+door R4a SR7
+door R4d SR10
+link HC3 VC1
+link CH SDX3
+door R4i K1
+link G4 G5
+door R4g G5
+link SE5 TY
+link TY CU1
+link YE2 J
+link CU2 CU2b
+link CU2b CU3
+link CU4 CU5
+link CU5 HZ1
+link ARC4 ARC5
+link ARC5 ARC6
+link ARC6 ARC7
+link ARC7 LAIR
+door R1i YE2
+secret YW1 YE1
+link YW3 YW4
+link YW4 QE2
+link WC3 WC4
+link WC4 GH
+link Q1 QA
+link QA QB
+link QB Q4
+link Q5 QE
+link QE QF
+link QF QG
+link QG GH
+door R1a Q5
+link Q1 DD6
+link V6 V7
+link V7 NC1
+link DD6 NB0
+link NB0 GR
+secret NC4 SR1
+link NC6 NCD
+door R1e NCD
+link WLA WL3
+door T6a WLA
+door T6e RC1
+door R5m PK3
+door R4j IC1
+door R4l IC5
+link CEL CNb
+link CNb CNa
+link CNa CN2
+door R4k CNb
+link W1 W2
+link W2 ARM
+link ARM M1
+link M1 M2
+link ARM Da
+link Da D2
+link LR1 LRb
+link LRb DD2
+link ARM Sa
+link Sa Sb
+link Sb S1
+link LAB LCa
+link LCa CRY
+link LW4 LW5
+link LW5 CRY
+link U3 UM
+link UM U4
+link CE1 CEd
+door R5d CEd
+link CEL Ka
+link Ka Kb
+link Kb Kc
+door R4m Kc
+door R5l TW
+link TW TD2
+secret HV3 PK0
+link PK0 PK1
+link BR1 BRs
+link BRs BUR
+link CEd CRY
+link PNE3 PNE4
+link RB2 CW3

@@ -1,0 +1,423 @@
+{"strats": ["ev", "ev", "ev", "ev"], "games": 2000, "win": [0.316, 0.36, 0.149, 0.175], "none": 0.0, "rounds": 29.3455}
+{"strats": ["safe", "safe", "safe", "safe"], "games": 2000, "win": [0.501, 0.2235, 0.0945, 0.181], "none": 0.0, "rounds": 28.703}
+{"strats": ["L1-2", "L1-2", "L1-2", "L1-2"], "games": 2000, "win": [0.3835, 0.357, 0.211, 0.0485], "none": 0.0, "rounds": 37.2845}
+{"strats": ["L1-3", "L1-3", "L1-3", "L1-3"], "games": 2000, "win": [0.3565, 0.3545, 0.241, 0.048], "none": 0.0, "rounds": 37.5875}
+{"strats": ["L2-4", "L2-4", "L2-4", "L2-4"], "games": 2000, "win": [0.461, 0.281, 0.205, 0.053], "none": 0.0, "rounds": 33.979}
+{"strats": ["L3-5", "L3-5", "L3-5", "L3-5"], "games": 2000, "win": [0.349, 0.3535, 0.2025, 0.095], "none": 0.0, "rounds": 34.867}
+{"strats": ["L4-6", "L4-6", "L4-6", "L4-6"], "games": 2000, "win": [0.3855, 0.295, 0.167, 0.1525], "none": 0.0, "rounds": 33.683}
+{"strats": ["L5-6", "L5-6", "L5-6", "L5-6"], "games": 2000, "win": [0.216, 0.226, 0.0815, 0.4765], "none": 0.0, "rounds": 34.2295}
+{"strats": ["L6", "L6", "L6", "L6"], "games": 2000, "win": [0.0425, 0.1645, 0.141, 0.652], "none": 0.0, "rounds": 35.202}
+{"strats": ["near", "near", "near", "near"], "games": 2000, "win": [0.283, 0.365, 0.203, 0.149], "none": 0.0, "rounds": 28.1755}
+{"strats": ["far", "far", "far", "far"], "games": 2000, "win": [0.336, 0.306, 0.125, 0.233], "none": 0.0, "rounds": 31.3365}
+{"strats": ["bold", "bold", "bold", "bold"], "games": 2000, "win": [0.312, 0.384, 0.1685, 0.1355], "none": 0.0, "rounds": 27.5515}
+{"strats": ["cautious", "cautious", "cautious", "cautious"], "games": 2000, "win": [0.2965, 0.301, 0.151, 0.2515], "none": 0.0, "rounds": 33.886}
+{"strats": ["scav", "scav", "scav", "scav"], "games": 2000, "win": [0.311, 0.338, 0.17, 0.181], "none": 0.0, "rounds": 29.6855}
+{"strats": ["follow", "follow", "follow", "follow"], "games": 2000, "win": [0.269, 0.2875, 0.1755, 0.268], "none": 0.0, "rounds": 30.906}
+{"strats": ["chaos", "chaos", "chaos", "chaos"], "games": 2000, "win": [0.1645, 0.206, 0.059, 0.5705], "none": 0.0, "rounds": 49.058}
+{"strats": ["eps", "eps", "eps", "eps"], "games": 2000, "win": [0.2335, 0.293, 0.1415, 0.332], "none": 0.0, "rounds": 36.0585}
+{"strats": ["deep-bold", "deep-bold", "deep-bold", "deep-bold"], "games": 2000, "win": [0.224, 0.25, 0.2395, 0.2865], "none": 0.0, "rounds": 34.6765}
+{"strats": ["mid-bold", "mid-bold", "mid-bold", "mid-bold"], "games": 2000, "win": [0.348, 0.2725, 0.222, 0.1575], "none": 0.0, "rounds": 32.4025}
+{"strats": ["ev", "ev", "ev", "ev"], "games": 1000, "win": [0.314, 0.304, 0.17, 0.212], "none": 0.0, "rounds": 29.329}
+{"strats": ["safe", "ev", "ev", "ev"], "games": 1000, "win": [0.295, 0.306, 0.183, 0.216], "none": 0.0, "rounds": 29.721}
+{"strats": ["L1-2", "ev", "ev", "ev"], "games": 1000, "win": [0.282, 0.327, 0.175, 0.216], "none": 0.0, "rounds": 30.412}
+{"strats": ["L1-3", "ev", "ev", "ev"], "games": 1000, "win": [0.295, 0.306, 0.183, 0.216], "none": 0.0, "rounds": 29.721}
+{"strats": ["L2-4", "ev", "ev", "ev"], "games": 1000, "win": [0.227, 0.42, 0.187, 0.166], "none": 0.0, "rounds": 29.745}
+{"strats": ["L3-5", "ev", "ev", "ev"], "games": 1000, "win": [0.114, 0.548, 0.154, 0.184], "none": 0.0, "rounds": 28.926}
+{"strats": ["L4-6", "ev", "ev", "ev"], "games": 1000, "win": [0.15, 0.538, 0.151, 0.161], "none": 0.0, "rounds": 28.322}
+{"strats": ["L5-6", "ev", "ev", "ev"], "games": 1000, "win": [0.115, 0.538, 0.145, 0.202], "none": 0.0, "rounds": 28.891}
+{"strats": ["L6", "ev", "ev", "ev"], "games": 1000, "win": [0.033, 0.602, 0.129, 0.236], "none": 0.0, "rounds": 28.21}
+{"strats": ["near", "ev", "ev", "ev"], "games": 1000, "win": [0.32, 0.337, 0.169, 0.174], "none": 0.0, "rounds": 28.809}
+{"strats": ["far", "ev", "ev", "ev"], "games": 1000, "win": [0.212, 0.398, 0.188, 0.202], "none": 0.0, "rounds": 30.025}
+{"strats": ["bold", "ev", "ev", "ev"], "games": 1000, "win": [0.282, 0.362, 0.195, 0.161], "none": 0.0, "rounds": 28.652}
+{"strats": ["cautious", "ev", "ev", "ev"], "games": 1000, "win": [0.237, 0.36, 0.172, 0.231], "none": 0.0, "rounds": 30.918}
+{"strats": ["scav", "ev", "ev", "ev"], "games": 1000, "win": [0.299, 0.313, 0.175, 0.213], "none": 0.0, "rounds": 29.585}
+{"strats": ["follow", "ev", "ev", "ev"], "games": 1000, "win": [0.243, 0.382, 0.165, 0.21], "none": 0.0, "rounds": 29.327}
+{"strats": ["chaos", "ev", "ev", "ev"], "games": 1000, "win": [0.017, 0.598, 0.187, 0.198], "none": 0.0, "rounds": 29.364}
+{"strats": ["eps", "ev", "ev", "ev"], "games": 1000, "win": [0.107, 0.49, 0.188, 0.215], "none": 0.0, "rounds": 30.044}
+{"strats": ["deep-bold", "ev", "ev", "ev"], "games": 1000, "win": [0.159, 0.524, 0.151, 0.166], "none": 0.0, "rounds": 27.35}
+{"strats": ["mid-bold", "ev", "ev", "ev"], "games": 1000, "win": [0.243, 0.396, 0.191, 0.17], "none": 0.0, "rounds": 28.625}
+{"strats": ["ev", "safe", "ev", "ev"], "games": 1000, "win": [0.458, 0.215, 0.132, 0.195], "none": 0.0, "rounds": 28.856}
+{"strats": ["ev", "L1-2", "ev", "ev"], "games": 1000, "win": [0.307, 0.279, 0.187, 0.227], "none": 0.0, "rounds": 30.215}
+{"strats": ["ev", "L1-3", "ev", "ev"], "games": 1000, "win": [0.315, 0.309, 0.166, 0.21], "none": 0.0, "rounds": 29.496}
+{"strats": ["ev", "L2-4", "ev", "ev"], "games": 1000, "win": [0.458, 0.215, 0.132, 0.195], "none": 0.0, "rounds": 28.856}
+{"strats": ["ev", "L3-5", "ev", "ev"], "games": 1000, "win": [0.503, 0.17, 0.137, 0.19], "none": 0.0, "rounds": 28.781}
+{"strats": ["ev", "L4-6", "ev", "ev"], "games": 1000, "win": [0.501, 0.193, 0.138, 0.168], "none": 0.0, "rounds": 28.513}
+{"strats": ["ev", "L5-6", "ev", "ev"], "games": 1000, "win": [0.475, 0.141, 0.163, 0.221], "none": 0.0, "rounds": 29.412}
+{"strats": ["ev", "L6", "ev", "ev"], "games": 1000, "win": [0.534, 0.063, 0.151, 0.252], "none": 0.0, "rounds": 29.186}
+{"strats": ["ev", "near", "ev", "ev"], "games": 1000, "win": [0.3, 0.34, 0.178, 0.182], "none": 0.0, "rounds": 28.802}
+{"strats": ["ev", "far", "ev", "ev"], "games": 1000, "win": [0.456, 0.202, 0.136, 0.206], "none": 0.0, "rounds": 29.524}
+{"strats": ["ev", "bold", "ev", "ev"], "games": 1000, "win": [0.355, 0.34, 0.156, 0.149], "none": 0.0, "rounds": 28.051}
+{"strats": ["ev", "cautious", "ev", "ev"], "games": 1000, "win": [0.332, 0.238, 0.192, 0.238], "none": 0.0, "rounds": 31.628}
+{"strats": ["ev", "scav", "ev", "ev"], "games": 1000, "win": [0.323, 0.298, 0.172, 0.207], "none": 0.0, "rounds": 29.278}
+{"strats": ["ev", "follow", "ev", "ev"], "games": 1000, "win": [0.366, 0.233, 0.189, 0.212], "none": 0.0, "rounds": 30.452}
+{"strats": ["ev", "chaos", "ev", "ev"], "games": 1000, "win": [0.561, 0.04, 0.185, 0.214], "none": 0.0, "rounds": 30.452}
+{"strats": ["ev", "eps", "ev", "ev"], "games": 1000, "win": [0.455, 0.126, 0.216, 0.203], "none": 0.0, "rounds": 30.824}
+{"strats": ["ev", "deep-bold", "ev", "ev"], "games": 1000, "win": [0.484, 0.21, 0.147, 0.159], "none": 0.0, "rounds": 27.596}
+{"strats": ["ev", "mid-bold", "ev", "ev"], "games": 1000, "win": [0.437, 0.244, 0.161, 0.158], "none": 0.0, "rounds": 27.646}
+{"strats": ["ev", "ev", "safe", "ev"], "games": 1000, "win": [0.354, 0.344, 0.112, 0.19], "none": 0.0, "rounds": 29.435}
+{"strats": ["ev", "ev", "L1-2", "ev"], "games": 1000, "win": [0.329, 0.324, 0.1, 0.247], "none": 0.0, "rounds": 31.047}
+{"strats": ["ev", "ev", "L1-3", "ev"], "games": 1000, "win": [0.308, 0.368, 0.092, 0.232], "none": 0.0, "rounds": 30.42}
+{"strats": ["ev", "ev", "L2-4", "ev"], "games": 1000, "win": [0.316, 0.355, 0.141, 0.188], "none": 0.0, "rounds": 29.484}
+{"strats": ["ev", "ev", "L3-5", "ev"], "games": 1000, "win": [0.354, 0.344, 0.112, 0.19], "none": 0.0, "rounds": 29.435}
+{"strats": ["ev", "ev", "L4-6", "ev"], "games": 1000, "win": [0.325, 0.329, 0.146, 0.2], "none": 0.0, "rounds": 29.227}
+{"strats": ["ev", "ev", "L5-6", "ev"], "games": 1000, "win": [0.301, 0.395, 0.066, 0.238], "none": 0.0, "rounds": 29.468}
+{"strats": ["ev", "ev", "L6", "ev"], "games": 1000, "win": [0.301, 0.386, 0.052, 0.261], "none": 0.0, "rounds": 29.09}
+{"strats": ["ev", "ev", "near", "ev"], "games": 1000, "win": [0.28, 0.338, 0.21, 0.172], "none": 0.0, "rounds": 29.065}
+{"strats": ["ev", "ev", "far", "ev"], "games": 1000, "win": [0.311, 0.362, 0.12, 0.207], "none": 0.0, "rounds": 29.682}
+{"strats": ["ev", "ev", "bold", "ev"], "games": 1000, "win": [0.329, 0.341, 0.158, 0.172], "none": 0.0, "rounds": 28.414}
+{"strats": ["ev", "ev", "cautious", "ev"], "games": 1000, "win": [0.299, 0.385, 0.109, 0.207], "none": 0.0, "rounds": 30.242}
+{"strats": ["ev", "ev", "scav", "ev"], "games": 1000, "win": [0.302, 0.338, 0.149, 0.211], "none": 0.0, "rounds": 29.552}
+{"strats": ["ev", "ev", "follow", "ev"], "games": 1000, "win": [0.294, 0.361, 0.129, 0.216], "none": 0.0, "rounds": 29.69}
+{"strats": ["ev", "ev", "chaos", "ev"], "games": 1000, "win": [0.368, 0.41, 0.003, 0.219], "none": 0.0, "rounds": 29.068}
+{"strats": ["ev", "ev", "eps", "ev"], "games": 1000, "win": [0.341, 0.399, 0.056, 0.204], "none": 0.0, "rounds": 29.322}
+{"strats": ["ev", "ev", "deep-bold", "ev"], "games": 1000, "win": [0.333, 0.338, 0.153, 0.176], "none": 0.0, "rounds": 28.424}
+{"strats": ["ev", "ev", "mid-bold", "ev"], "games": 1000, "win": [0.333, 0.353, 0.155, 0.159], "none": 0.0, "rounds": 28.373}
+{"strats": ["ev", "ev", "ev", "safe"], "games": 1000, "win": [0.314, 0.304, 0.17, 0.212], "none": 0.0, "rounds": 29.329}
+{"strats": ["ev", "ev", "ev", "L1-2"], "games": 1000, "win": [0.37, 0.349, 0.257, 0.024], "none": 0.0, "rounds": 32.853}
+{"strats": ["ev", "ev", "ev", "L1-3"], "games": 1000, "win": [0.399, 0.325, 0.249, 0.027], "none": 0.0, "rounds": 32.613}
+{"strats": ["ev", "ev", "ev", "L2-4"], "games": 1000, "win": [0.348, 0.442, 0.173, 0.037], "none": 0.0, "rounds": 31.35}
+{"strats": ["ev", "ev", "ev", "L3-5"], "games": 1000, "win": [0.35, 0.424, 0.181, 0.045], "none": 0.0, "rounds": 31.379}
+{"strats": ["ev", "ev", "ev", "L4-6"], "games": 1000, "win": [0.345, 0.42, 0.173, 0.062], "none": 0.0, "rounds": 31.154}
+{"strats": ["ev", "ev", "ev", "L5-6"], "games": 1000, "win": [0.304, 0.315, 0.205, 0.176], "none": 0.0, "rounds": 29.611}
+{"strats": ["ev", "ev", "ev", "L6"], "games": 1000, "win": [0.314, 0.304, 0.17, 0.212], "none": 0.0, "rounds": 29.329}
+{"strats": ["ev", "ev", "ev", "near"], "games": 1000, "win": [0.316, 0.299, 0.171, 0.214], "none": 0.0, "rounds": 29.393}
+{"strats": ["ev", "ev", "ev", "far"], "games": 1000, "win": [0.318, 0.305, 0.183, 0.194], "none": 0.0, "rounds": 29.465}
+{"strats": ["ev", "ev", "ev", "bold"], "games": 1000, "win": [0.32, 0.31, 0.166, 0.204], "none": 0.0, "rounds": 29.445}
+{"strats": ["ev", "ev", "ev", "cautious"], "games": 1000, "win": [0.316, 0.33, 0.198, 0.156], "none": 0.0, "rounds": 29.695}
+{"strats": ["ev", "ev", "ev", "scav"], "games": 1000, "win": [0.308, 0.326, 0.181, 0.185], "none": 0.0, "rounds": 29.57}
+{"strats": ["ev", "ev", "ev", "follow"], "games": 1000, "win": [0.276, 0.344, 0.165, 0.215], "none": 0.0, "rounds": 29.573}
+{"strats": ["ev", "ev", "ev", "chaos"], "games": 1000, "win": [0.365, 0.377, 0.193, 0.065], "none": 0.0, "rounds": 30.658}
+{"strats": ["ev", "ev", "ev", "eps"], "games": 1000, "win": [0.328, 0.369, 0.174, 0.129], "none": 0.0, "rounds": 29.668}
+{"strats": ["ev", "ev", "ev", "deep-bold"], "games": 1000, "win": [0.349, 0.397, 0.171, 0.083], "none": 0.0, "rounds": 31.094}
+{"strats": ["ev", "ev", "ev", "mid-bold"], "games": 1000, "win": [0.35, 0.402, 0.17, 0.078], "none": 0.0, "rounds": 31.066}
+{"strats": ["ev", "ev", "ev", "wiz-old"], "games": 1000, "win": [0.366, 0.418, 0.174, 0.042], "none": 0.0, "rounds": 31.271}
+{"strats": ["ev", "ev", "ev", "wiz-min4"], "games": 1000, "win": [0.345, 0.42, 0.173, 0.062], "none": 0.0, "rounds": 31.154}
+{"strats": ["ev", "ev", "ev", "wiz-min5"], "games": 1000, "win": [0.304, 0.315, 0.205, 0.176], "none": 0.0, "rounds": 29.611}
+{"strats": ["ev", "ev", "ev", "ev"], "games": 800, "win": [0.2875, 0.3625, 0.17625, 0.17375], "none": 0.0, "rounds": 29.77}
+{"strats": ["safe", "ev", "ev", "ev"], "games": 800, "win": [0.25375, 0.38, 0.17875, 0.1875], "none": 0.0, "rounds": 29.82875}
+{"strats": ["L1-2", "ev", "ev", "ev"], "games": 800, "win": [0.245, 0.3575, 0.19625, 0.20125], "none": 0.0, "rounds": 30.42125}
+{"strats": ["L1-3", "ev", "ev", "ev"], "games": 800, "win": [0.25375, 0.38, 0.17875, 0.1875], "none": 0.0, "rounds": 29.82875}
+{"strats": ["L2-4", "ev", "ev", "ev"], "games": 800, "win": [0.255, 0.3925, 0.165, 0.1875], "none": 0.0, "rounds": 29.44875}
+{"strats": ["L3-5", "ev", "ev", "ev"], "games": 800, "win": [0.14, 0.535, 0.14375, 0.18125], "none": 0.0, "rounds": 28.9725}
+{"strats": ["L4-6", "ev", "ev", "ev"], "games": 800, "win": [0.165, 0.53625, 0.13875, 0.16], "none": 0.0, "rounds": 28.45875}
+{"strats": ["L5-6", "ev", "ev", "ev"], "games": 800, "win": [0.14, 0.53875, 0.1325, 0.18875], "none": 0.0, "rounds": 28.99125}
+{"strats": ["L6", "ev", "ev", "ev"], "games": 800, "win": [0.02625, 0.59125, 0.14625, 0.23625], "none": 0.0, "rounds": 28.88125}
+{"strats": ["near", "ev", "ev", "ev"], "games": 800, "win": [0.30875, 0.35625, 0.155, 0.18], "none": 0.0, "rounds": 28.94875}
+{"strats": ["far", "ev", "ev", "ev"], "games": 800, "win": [0.2025, 0.39875, 0.1925, 0.20625], "none": 0.0, "rounds": 30.175}
+{"strats": ["bold", "ev", "ev", "ev"], "games": 800, "win": [0.27625, 0.38875, 0.195, 0.14], "none": 0.0, "rounds": 28.24125}
+{"strats": ["cautious", "ev", "ev", "ev"], "games": 800, "win": [0.24125, 0.36, 0.19125, 0.2075], "none": 0.0, "rounds": 30.41375}
+{"strats": ["scav", "ev", "ev", "ev"], "games": 800, "win": [0.27375, 0.35625, 0.17375, 0.19625], "none": 0.0, "rounds": 29.41625}
+{"strats": ["follow", "ev", "ev", "ev"], "games": 800, "win": [0.21875, 0.40625, 0.19375, 0.18125], "none": 0.0, "rounds": 29.59625}
+{"strats": ["chaos", "ev", "ev", "ev"], "games": 800, "win": [0.01625, 0.66125, 0.1625, 0.16], "none": 0.0, "rounds": 29.385}
+{"strats": ["eps", "ev", "ev", "ev"], "games": 800, "win": [0.1, 0.4725, 0.2125, 0.215], "none": 0.0, "rounds": 30.2025}
+{"strats": ["deep-bold", "ev", "ev", "ev"], "games": 800, "win": [0.16375, 0.54875, 0.16375, 0.12375], "none": 0.0, "rounds": 27.74}
+{"strats": ["mid-bold", "ev", "ev", "ev"], "games": 800, "win": [0.2475, 0.39375, 0.18, 0.17875], "none": 0.0, "rounds": 28.94375}
+{"strats": ["near", "ev", "ev", "ev"], "games": 800, "win": [0.30875, 0.35625, 0.155, 0.18], "none": 0.0, "rounds": 28.94875}
+{"strats": ["near", "safe", "ev", "ev"], "games": 800, "win": [0.46875, 0.22875, 0.145, 0.1575], "none": 0.0, "rounds": 28.57}
+{"strats": ["near", "L1-2", "ev", "ev"], "games": 800, "win": [0.335, 0.29, 0.17375, 0.20125], "none": 0.0, "rounds": 30.225}
+{"strats": ["near", "L1-3", "ev", "ev"], "games": 800, "win": [0.325, 0.31375, 0.17875, 0.1825], "none": 0.0, "rounds": 29.30625}
+{"strats": ["near", "L2-4", "ev", "ev"], "games": 800, "win": [0.46875, 0.22875, 0.145, 0.1575], "none": 0.0, "rounds": 28.57}
+{"strats": ["near", "L3-5", "ev", "ev"], "games": 800, "win": [0.5175, 0.1475, 0.1775, 0.1575], "none": 0.0, "rounds": 28.66875}
+{"strats": ["near", "L4-6", "ev", "ev"], "games": 800, "win": [0.48125, 0.20875, 0.15, 0.16], "none": 0.0, "rounds": 28.37875}
+{"strats": ["near", "L5-6", "ev", "ev"], "games": 800, "win": [0.49125, 0.155, 0.1675, 0.18625], "none": 0.0, "rounds": 29.5025}
+{"strats": ["near", "L6", "ev", "ev"], "games": 800, "win": [0.53625, 0.05875, 0.18375, 0.22125], "none": 0.0, "rounds": 28.70625}
+{"strats": ["near", "near", "ev", "ev"], "games": 800, "win": [0.3025, 0.3475, 0.195, 0.155], "none": 0.0, "rounds": 28.68375}
+{"strats": ["near", "far", "ev", "ev"], "games": 800, "win": [0.43625, 0.23125, 0.14625, 0.18625], "none": 0.0, "rounds": 29.33625}
+{"strats": ["near", "bold", "ev", "ev"], "games": 800, "win": [0.3175, 0.37375, 0.15875, 0.15], "none": 0.0, "rounds": 27.92875}
+{"strats": ["near", "cautious", "ev", "ev"], "games": 800, "win": [0.325, 0.28, 0.18125, 0.21375], "none": 0.0, "rounds": 30.82375}
+{"strats": ["near", "scav", "ev", "ev"], "games": 800, "win": [0.345, 0.31875, 0.15375, 0.1825], "none": 0.0, "rounds": 29.10125}
+{"strats": ["near", "follow", "ev", "ev"], "games": 800, "win": [0.37, 0.23, 0.19, 0.21], "none": 0.0, "rounds": 29.88625}
+{"strats": ["near", "chaos", "ev", "ev"], "games": 800, "win": [0.56, 0.0325, 0.20875, 0.19875], "none": 0.0, "rounds": 29.89625}
+{"strats": ["near", "eps", "ev", "ev"], "games": 800, "win": [0.4525, 0.13625, 0.2225, 0.18875], "none": 0.0, "rounds": 30.21875}
+{"strats": ["near", "deep-bold", "ev", "ev"], "games": 800, "win": [0.5125, 0.1875, 0.13625, 0.16375], "none": 0.0, "rounds": 28.105}
+{"strats": ["near", "mid-bold", "ev", "ev"], "games": 800, "win": [0.4475, 0.2375, 0.1625, 0.1525], "none": 0.0, "rounds": 27.94875}
+{"strats": ["near", "bold", "ev", "ev"], "games": 800, "win": [0.3175, 0.37375, 0.15875, 0.15], "none": 0.0, "rounds": 27.92875}
+{"strats": ["near", "bold", "safe", "ev"], "games": 800, "win": [0.365, 0.3475, 0.1325, 0.155], "none": 0.0, "rounds": 27.85875}
+{"strats": ["near", "bold", "L1-2", "ev"], "games": 800, "win": [0.3675, 0.325, 0.1175, 0.19], "none": 0.0, "rounds": 28.96875}
+{"strats": ["near", "bold", "L1-3", "ev"], "games": 800, "win": [0.34375, 0.35, 0.11, 0.19625], "none": 0.0, "rounds": 29.2975}
+{"strats": ["near", "bold", "L2-4", "ev"], "games": 800, "win": [0.3725, 0.33875, 0.1425, 0.14625], "none": 0.0, "rounds": 27.8975}
+{"strats": ["near", "bold", "L3-5", "ev"], "games": 800, "win": [0.365, 0.3475, 0.1325, 0.155], "none": 0.0, "rounds": 27.85875}
+{"strats": ["near", "bold", "L4-6", "ev"], "games": 800, "win": [0.355, 0.35375, 0.16375, 0.1275], "none": 0.0, "rounds": 27.5725}
+{"strats": ["near", "bold", "L5-6", "ev"], "games": 800, "win": [0.35, 0.3925, 0.05375, 0.20375], "none": 0.0, "rounds": 27.77875}
+{"strats": ["near", "bold", "L6", "ev"], "games": 800, "win": [0.37625, 0.3275, 0.05375, 0.2425], "none": 0.0, "rounds": 28.24875}
+{"strats": ["near", "bold", "near", "ev"], "games": 800, "win": [0.295, 0.385, 0.185, 0.135], "none": 0.0, "rounds": 27.58875}
+{"strats": ["near", "bold", "far", "ev"], "games": 800, "win": [0.38375, 0.3175, 0.13875, 0.16], "none": 0.0, "rounds": 28.44875}
+{"strats": ["near", "bold", "bold", "ev"], "games": 800, "win": [0.3675, 0.36125, 0.1375, 0.13375], "none": 0.0, "rounds": 27.5}
+{"strats": ["near", "bold", "cautious", "ev"], "games": 800, "win": [0.315, 0.40125, 0.105, 0.17875], "none": 0.0, "rounds": 28.8625}
+{"strats": ["near", "bold", "scav", "ev"], "games": 800, "win": [0.33125, 0.34875, 0.14875, 0.17125], "none": 0.0, "rounds": 28.0375}
+{"strats": ["near", "bold", "follow", "ev"], "games": 800, "win": [0.3525, 0.34, 0.1425, 0.165], "none": 0.0, "rounds": 28.43}
+{"strats": ["near", "bold", "chaos", "ev"], "games": 800, "win": [0.42625, 0.40125, 0.01125, 0.16125], "none": 0.0, "rounds": 27.84125}
+{"strats": ["near", "bold", "eps", "ev"], "games": 800, "win": [0.37625, 0.4, 0.065, 0.15875], "none": 0.0, "rounds": 28.33875}
+{"strats": ["near", "bold", "deep-bold", "ev"], "games": 800, "win": [0.37, 0.3625, 0.1375, 0.13], "none": 0.0, "rounds": 27.5025}
+{"strats": ["near", "bold", "mid-bold", "ev"], "games": 800, "win": [0.34125, 0.3575, 0.16375, 0.1375], "none": 0.0, "rounds": 27.29}
+{"strats": ["near", "bold", "near", "ev"], "games": 800, "win": [0.295, 0.385, 0.185, 0.135], "none": 0.0, "rounds": 27.58875}
+{"strats": ["near", "bold", "near", "safe"], "games": 800, "win": [0.295, 0.385, 0.185, 0.135], "none": 0.0, "rounds": 27.58875}
+{"strats": ["near", "bold", "near", "L1-2"], "games": 800, "win": [0.3475, 0.34, 0.28375, 0.02875], "none": 0.0, "rounds": 30.24875}
+{"strats": ["near", "bold", "near", "L1-3"], "games": 800, "win": [0.36125, 0.3475, 0.25875, 0.0325], "none": 0.0, "rounds": 30.5475}
+{"strats": ["near", "bold", "near", "L2-4"], "games": 800, "win": [0.34625, 0.325, 0.25125, 0.0775], "none": 0.0, "rounds": 30.58375}
+{"strats": ["near", "bold", "near", "L3-5"], "games": 800, "win": [0.35625, 0.34375, 0.2425, 0.0575], "none": 0.0, "rounds": 30.21}
+{"strats": ["near", "bold", "near", "L4-6"], "games": 800, "win": [0.34625, 0.34875, 0.2425, 0.0625], "none": 0.0, "rounds": 30.23125}
+{"strats": ["near", "bold", "near", "L5-6"], "games": 800, "win": [0.3, 0.3775, 0.18875, 0.13375], "none": 0.0, "rounds": 27.8}
+{"strats": ["near", "bold", "near", "L6"], "games": 800, "win": [0.295, 0.385, 0.185, 0.135], "none": 0.0, "rounds": 27.58875}
+{"strats": ["near", "bold", "near", "near"], "games": 800, "win": [0.28625, 0.38875, 0.18875, 0.13625], "none": 0.0, "rounds": 27.54125}
+{"strats": ["near", "bold", "near", "far"], "games": 800, "win": [0.29, 0.40125, 0.2025, 0.10625], "none": 0.0, "rounds": 27.645}
+{"strats": ["near", "bold", "near", "bold"], "games": 800, "win": [0.285, 0.3875, 0.18875, 0.13875], "none": 0.0, "rounds": 27.5825}
+{"strats": ["near", "bold", "near", "cautious"], "games": 800, "win": [0.2925, 0.39, 0.19375, 0.12375], "none": 0.0, "rounds": 27.9925}
+{"strats": ["near", "bold", "near", "scav"], "games": 800, "win": [0.275, 0.38625, 0.2175, 0.12125], "none": 0.0, "rounds": 27.72}
+{"strats": ["near", "bold", "near", "follow"], "games": 800, "win": [0.3, 0.335, 0.225, 0.14], "none": 0.0, "rounds": 27.5325}
+{"strats": ["near", "bold", "near", "chaos"], "games": 800, "win": [0.31, 0.3825, 0.2575, 0.05], "none": 0.0, "rounds": 28.4775}
+{"strats": ["near", "bold", "near", "eps"], "games": 800, "win": [0.30625, 0.39, 0.19875, 0.105], "none": 0.0, "rounds": 27.77625}
+{"strats": ["near", "bold", "near", "deep-bold"], "games": 800, "win": [0.34375, 0.3325, 0.245, 0.07875], "none": 0.0, "rounds": 30.02875}
+{"strats": ["near", "bold", "near", "mid-bold"], "games": 800, "win": [0.34, 0.305, 0.2525, 0.1025], "none": 0.0, "rounds": 30.21875}
+{"strats": ["near", "bold", "near", "wiz-old"], "games": 800, "win": [0.355, 0.35, 0.22875, 0.06625], "none": 0.0, "rounds": 30.1975}
+{"strats": ["near", "bold", "near", "wiz-min4"], "games": 800, "win": [0.34625, 0.34875, 0.2425, 0.0625], "none": 0.0, "rounds": 30.23125}
+{"strats": ["near", "bold", "near", "wiz-min5"], "games": 800, "win": [0.3, 0.3775, 0.18875, 0.13375], "none": 0.0, "rounds": 27.8}
+{"strats": ["ev", "bold", "near", "follow"], "games": 800, "win": [0.3175, 0.3325, 0.19, 0.16], "none": 0.0, "rounds": 28.205}
+{"strats": ["safe", "bold", "near", "follow"], "games": 800, "win": [0.29125, 0.345, 0.19625, 0.1675], "none": 0.0, "rounds": 28.185}
+{"strats": ["L1-2", "bold", "near", "follow"], "games": 800, "win": [0.23875, 0.37, 0.215, 0.17625], "none": 0.0, "rounds": 28.34875}
+{"strats": ["L1-3", "bold", "near", "follow"], "games": 800, "win": [0.29125, 0.345, 0.19625, 0.1675], "none": 0.0, "rounds": 28.185}
+{"strats": ["L2-4", "bold", "near", "follow"], "games": 800, "win": [0.25375, 0.3475, 0.20875, 0.19], "none": 0.0, "rounds": 28.14375}
+{"strats": ["L3-5", "bold", "near", "follow"], "games": 800, "win": [0.185, 0.3925, 0.23, 0.1925], "none": 0.0, "rounds": 28.87375}
+{"strats": ["L4-6", "bold", "near", "follow"], "games": 800, "win": [0.26625, 0.36, 0.20375, 0.17], "none": 0.0, "rounds": 28.20125}
+{"strats": ["L5-6", "bold", "near", "follow"], "games": 800, "win": [0.16, 0.42625, 0.22375, 0.19], "none": 0.0, "rounds": 28.80125}
+{"strats": ["L6", "bold", "near", "follow"], "games": 800, "win": [0.03, 0.44625, 0.2925, 0.23125], "none": 0.0, "rounds": 30.4075}
+{"strats": ["near", "bold", "near", "follow"], "games": 800, "win": [0.3, 0.335, 0.225, 0.14], "none": 0.0, "rounds": 27.5325}
+{"strats": ["far", "bold", "near", "follow"], "games": 800, "win": [0.22, 0.34625, 0.23, 0.20375], "none": 0.0, "rounds": 28.565}
+{"strats": ["bold", "bold", "near", "follow"], "games": 800, "win": [0.2875, 0.3675, 0.20375, 0.14125], "none": 0.0, "rounds": 27.43}
+{"strats": ["cautious", "bold", "near", "follow"], "games": 800, "win": [0.21875, 0.38375, 0.21875, 0.17875], "none": 0.0, "rounds": 29.02125}
+{"strats": ["scav", "bold", "near", "follow"], "games": 800, "win": [0.3225, 0.33625, 0.18375, 0.1575], "none": 0.0, "rounds": 28.19375}
+{"strats": ["follow", "bold", "near", "follow"], "games": 800, "win": [0.22375, 0.35625, 0.2375, 0.1825], "none": 0.0, "rounds": 28.93625}
+{"strats": ["chaos", "bold", "near", "follow"], "games": 800, "win": [0.03375, 0.47125, 0.2875, 0.2075], "none": 0.0, "rounds": 30.49625}
+{"strats": ["eps", "bold", "near", "follow"], "games": 800, "win": [0.11375, 0.43, 0.2525, 0.20375], "none": 0.0, "rounds": 29.43375}
+{"strats": ["deep-bold", "bold", "near", "follow"], "games": 800, "win": [0.1875, 0.39375, 0.23875, 0.18], "none": 0.0, "rounds": 28.0825}
+{"strats": ["mid-bold", "bold", "near", "follow"], "games": 800, "win": [0.265, 0.3775, 0.185, 0.1725], "none": 0.0, "rounds": 28.165}
+{"strats": ["scav", "ev", "near", "follow"], "games": 800, "win": [0.2575, 0.33125, 0.22375, 0.1875], "none": 0.0, "rounds": 29.45}
+{"strats": ["scav", "safe", "near", "follow"], "games": 800, "win": [0.36375, 0.22375, 0.2125, 0.2], "none": 0.0, "rounds": 29.46875}
+{"strats": ["scav", "L1-2", "near", "follow"], "games": 800, "win": [0.24625, 0.29375, 0.25, 0.21], "none": 0.0, "rounds": 30.1075}
+{"strats": ["scav", "L1-3", "near", "follow"], "games": 800, "win": [0.2625, 0.30625, 0.235, 0.19625], "none": 0.0, "rounds": 29.665}
+{"strats": ["scav", "L2-4", "near", "follow"], "games": 800, "win": [0.36375, 0.22375, 0.2125, 0.2], "none": 0.0, "rounds": 29.46875}
+{"strats": ["scav", "L3-5", "near", "follow"], "games": 800, "win": [0.335, 0.2175, 0.23125, 0.21625], "none": 0.0, "rounds": 29.77875}
+{"strats": ["scav", "L4-6", "near", "follow"], "games": 800, "win": [0.33875, 0.27, 0.21125, 0.18], "none": 0.0, "rounds": 28.97625}
+{"strats": ["scav", "L5-6", "near", "follow"], "games": 800, "win": [0.36875, 0.14375, 0.2275, 0.26], "none": 0.0, "rounds": 30.24}
+{"strats": ["scav", "L6", "near", "follow"], "games": 800, "win": [0.39625, 0.07375, 0.26375, 0.26625], "none": 0.0, "rounds": 30.92375}
+{"strats": ["scav", "near", "near", "follow"], "games": 800, "win": [0.24375, 0.36125, 0.21625, 0.17875], "none": 0.0, "rounds": 28.7}
+{"strats": ["scav", "far", "near", "follow"], "games": 800, "win": [0.32375, 0.25125, 0.23125, 0.19375], "none": 0.0, "rounds": 29.9225}
+{"strats": ["scav", "bold", "near", "follow"], "games": 800, "win": [0.3225, 0.33625, 0.18375, 0.1575], "none": 0.0, "rounds": 28.19375}
+{"strats": ["scav", "cautious", "near", "follow"], "games": 800, "win": [0.27875, 0.2275, 0.2475, 0.24625], "none": 0.0, "rounds": 30.89875}
+{"strats": ["scav", "scav", "near", "follow"], "games": 800, "win": [0.285, 0.30625, 0.2, 0.20875], "none": 0.0, "rounds": 29.27125}
+{"strats": ["scav", "follow", "near", "follow"], "games": 800, "win": [0.28625, 0.22375, 0.24625, 0.24375], "none": 0.0, "rounds": 30.32375}
+{"strats": ["scav", "chaos", "near", "follow"], "games": 800, "win": [0.43375, 0.025, 0.30625, 0.235], "none": 0.0, "rounds": 31.32375}
+{"strats": ["scav", "eps", "near", "follow"], "games": 800, "win": [0.3825, 0.14625, 0.26, 0.21125], "none": 0.0, "rounds": 30.3975}
+{"strats": ["scav", "deep-bold", "near", "follow"], "games": 800, "win": [0.34375, 0.28125, 0.19875, 0.17625], "none": 0.0, "rounds": 28.01625}
+{"strats": ["scav", "mid-bold", "near", "follow"], "games": 800, "win": [0.34625, 0.28625, 0.1925, 0.175], "none": 0.0, "rounds": 27.97875}
+{"strats": ["scav", "near", "ev", "follow"], "games": 800, "win": [0.2825, 0.36875, 0.165, 0.18375], "none": 0.0, "rounds": 28.82875}
+{"strats": ["scav", "near", "safe", "follow"], "games": 800, "win": [0.3075, 0.3625, 0.1225, 0.2075], "none": 0.0, "rounds": 28.7225}
+{"strats": ["scav", "near", "L1-2", "follow"], "games": 800, "win": [0.2625, 0.3625, 0.10875, 0.26625], "none": 0.0, "rounds": 30.5075}
+{"strats": ["scav", "near", "L1-3", "follow"], "games": 800, "win": [0.28125, 0.39125, 0.10625, 0.22125], "none": 0.0, "rounds": 29.885}
+{"strats": ["scav", "near", "L2-4", "follow"], "games": 800, "win": [0.26, 0.39375, 0.14, 0.20625], "none": 0.0, "rounds": 28.82625}
+{"strats": ["scav", "near", "L3-5", "follow"], "games": 800, "win": [0.3075, 0.3625, 0.1225, 0.2075], "none": 0.0, "rounds": 28.7225}
+{"strats": ["scav", "near", "L4-6", "follow"], "games": 800, "win": [0.29375, 0.38125, 0.16125, 0.16375], "none": 0.0, "rounds": 28.69875}
+{"strats": ["scav", "near", "L5-6", "follow"], "games": 800, "win": [0.315, 0.36375, 0.07125, 0.25], "none": 0.0, "rounds": 28.92875}
+{"strats": ["scav", "near", "L6", "follow"], "games": 800, "win": [0.3525, 0.34375, 0.04375, 0.26], "none": 0.0, "rounds": 28.35625}
+{"strats": ["scav", "near", "near", "follow"], "games": 800, "win": [0.24375, 0.36125, 0.21625, 0.17875], "none": 0.0, "rounds": 28.7}
+{"strats": ["scav", "near", "far", "follow"], "games": 800, "win": [0.285, 0.38625, 0.0975, 0.23125], "none": 0.0, "rounds": 28.97875}
+{"strats": ["scav", "near", "bold", "follow"], "games": 800, "win": [0.27875, 0.40125, 0.155, 0.165], "none": 0.0, "rounds": 28.42375}
+{"strats": ["scav", "near", "cautious", "follow"], "games": 800, "win": [0.2625, 0.39375, 0.10875, 0.235], "none": 0.0, "rounds": 29.59}
+{"strats": ["scav", "near", "scav", "follow"], "games": 800, "win": [0.26375, 0.39, 0.145, 0.20125], "none": 0.0, "rounds": 28.8775}
+{"strats": ["scav", "near", "follow", "follow"], "games": 800, "win": [0.28625, 0.345, 0.14875, 0.22], "none": 0.0, "rounds": 29.39125}
+{"strats": ["scav", "near", "chaos", "follow"], "games": 800, "win": [0.315, 0.47125, 0.0125, 0.20125], "none": 0.0, "rounds": 29.035}
+{"strats": ["scav", "near", "eps", "follow"], "games": 800, "win": [0.3225, 0.39375, 0.07625, 0.2075], "none": 0.0, "rounds": 29.25625}
+{"strats": ["scav", "near", "deep-bold", "follow"], "games": 800, "win": [0.28875, 0.39875, 0.15375, 0.15875], "none": 0.0, "rounds": 28.36625}
+{"strats": ["scav", "near", "mid-bold", "follow"], "games": 800, "win": [0.2625, 0.37875, 0.19875, 0.16], "none": 0.0, "rounds": 27.68375}
+{"strats": ["scav", "near", "near", "ev"], "games": 800, "win": [0.28875, 0.3525, 0.2175, 0.14125], "none": 0.0, "rounds": 28.83}
+{"strats": ["scav", "near", "near", "safe"], "games": 800, "win": [0.28875, 0.3525, 0.2175, 0.14125], "none": 0.0, "rounds": 28.83}
+{"strats": ["scav", "near", "near", "L1-2"], "games": 800, "win": [0.29375, 0.35625, 0.32125, 0.02875], "none": 0.0, "rounds": 31.87625}
+{"strats": ["scav", "near", "near", "L1-3"], "games": 800, "win": [0.3075, 0.3725, 0.2925, 0.0275], "none": 0.0, "rounds": 32.20125}
+{"strats": ["scav", "near", "near", "L2-4"], "games": 800, "win": [0.34375, 0.35875, 0.23625, 0.06125], "none": 0.0, "rounds": 31.38625}
+{"strats": ["scav", "near", "near", "L3-5"], "games": 800, "win": [0.33375, 0.37875, 0.22125, 0.06625], "none": 0.0, "rounds": 31.2775}
+{"strats": ["scav", "near", "near", "L4-6"], "games": 800, "win": [0.3275, 0.36125, 0.235, 0.07625], "none": 0.0, "rounds": 31.27875}
+{"strats": ["scav", "near", "near", "L5-6"], "games": 800, "win": [0.295, 0.35625, 0.23, 0.11875], "none": 0.0, "rounds": 28.8825}
+{"strats": ["scav", "near", "near", "L6"], "games": 800, "win": [0.28875, 0.3525, 0.2175, 0.14125], "none": 0.0, "rounds": 28.83}
+{"strats": ["scav", "near", "near", "near"], "games": 800, "win": [0.2875, 0.35875, 0.21, 0.14375], "none": 0.0, "rounds": 28.8725}
+{"strats": ["scav", "near", "near", "far"], "games": 800, "win": [0.27, 0.3575, 0.22875, 0.14375], "none": 0.0, "rounds": 28.94625}
+{"strats": ["scav", "near", "near", "bold"], "games": 800, "win": [0.275, 0.34875, 0.2325, 0.14375], "none": 0.0, "rounds": 28.76875}
+{"strats": ["scav", "near", "near", "cautious"], "games": 800, "win": [0.29875, 0.3575, 0.21875, 0.125], "none": 0.0, "rounds": 29.0025}
+{"strats": ["scav", "near", "near", "scav"], "games": 800, "win": [0.28, 0.365, 0.22375, 0.13125], "none": 0.0, "rounds": 28.835}
+{"strats": ["scav", "near", "near", "follow"], "games": 800, "win": [0.24375, 0.36125, 0.21625, 0.17875], "none": 0.0, "rounds": 28.7}
+{"strats": ["scav", "near", "near", "chaos"], "games": 800, "win": [0.295, 0.4, 0.23875, 0.06625], "none": 0.0, "rounds": 29.84}
+{"strats": ["scav", "near", "near", "eps"], "games": 800, "win": [0.27625, 0.38125, 0.21875, 0.12375], "none": 0.0, "rounds": 28.89625}
+{"strats": ["scav", "near", "near", "deep-bold"], "games": 800, "win": [0.32875, 0.35375, 0.2425, 0.075], "none": 0.0, "rounds": 31.08}
+{"strats": ["scav", "near", "near", "mid-bold"], "games": 800, "win": [0.3275, 0.35125, 0.22125, 0.1], "none": 0.0, "rounds": 30.90125}
+{"strats": ["scav", "near", "near", "wiz-old"], "games": 800, "win": [0.3075, 0.37625, 0.2675, 0.04875], "none": 0.0, "rounds": 31.7525}
+{"strats": ["scav", "near", "near", "wiz-min4"], "games": 800, "win": [0.3275, 0.36125, 0.235, 0.07625], "none": 0.0, "rounds": 31.27875}
+{"strats": ["scav", "near", "near", "wiz-min5"], "games": 800, "win": [0.295, 0.35625, 0.23, 0.11875], "none": 0.0, "rounds": 28.8825}
+{"strats": ["deep-bold", "deep-bold", "deep-bold", "deep-bold"], "games": 600, "win": [0.21, 0.255, 0.23166666666666666, 0.30333333333333334], "none": 0.0, "rounds": 35.29333333333334}
+{"strats": ["deep-bold", "deep-bold", "deep-bold", "L4-6"], "games": 600, "win": [0.21166666666666667, 0.255, 0.22833333333333333, 0.305], "none": 0.0, "rounds": 35.77166666666667}
+{"strats": ["deep-bold", "deep-bold", "deep-bold", "wiz-min5"], "games": 600, "win": [0.19666666666666666, 0.32166666666666666, 0.24833333333333332, 0.23333333333333334], "none": 0.0, "rounds": 30.675}
+{"strats": ["deep-bold", "deep-bold", "near", "deep-bold"], "games": 600, "win": [0.20666666666666667, 0.2683333333333333, 0.32, 0.205], "none": 0.0, "rounds": 34.115}
+{"strats": ["deep-bold", "deep-bold", "near", "L4-6"], "games": 600, "win": [0.21, 0.24833333333333332, 0.35833333333333334, 0.18333333333333332], "none": 0.0, "rounds": 34.471666666666664}
+{"strats": ["deep-bold", "deep-bold", "near", "wiz-min5"], "games": 600, "win": [0.22833333333333333, 0.3433333333333333, 0.255, 0.17333333333333334], "none": 0.0, "rounds": 28.921666666666667}
+{"strats": ["deep-bold", "deep-bold", "L3-5", "deep-bold"], "games": 600, "win": [0.22166666666666668, 0.255, 0.22, 0.30333333333333334], "none": 0.0, "rounds": 37.42333333333333}
+{"strats": ["deep-bold", "deep-bold", "L3-5", "L4-6"], "games": 600, "win": [0.245, 0.24666666666666667, 0.21833333333333332, 0.29], "none": 0.0, "rounds": 37.50666666666667}
+{"strats": ["deep-bold", "deep-bold", "L3-5", "wiz-min5"], "games": 600, "win": [0.24833333333333332, 0.2966666666666667, 0.22, 0.235], "none": 0.0, "rounds": 32.20166666666667}
+{"strats": ["deep-bold", "L4-6", "deep-bold", "deep-bold"], "games": 600, "win": [0.18166666666666667, 0.37666666666666665, 0.20166666666666666, 0.24], "none": 0.0, "rounds": 34.693333333333335}
+{"strats": ["deep-bold", "L4-6", "deep-bold", "L4-6"], "games": 600, "win": [0.17, 0.37166666666666665, 0.21833333333333332, 0.24], "none": 0.0, "rounds": 34.946666666666665}
+{"strats": ["deep-bold", "L4-6", "deep-bold", "wiz-min5"], "games": 600, "win": [0.17166666666666666, 0.4, 0.20666666666666667, 0.22166666666666668], "none": 0.0, "rounds": 30.326666666666668}
+{"strats": ["deep-bold", "L4-6", "near", "deep-bold"], "games": 600, "win": [0.18, 0.31333333333333335, 0.31333333333333335, 0.19333333333333333], "none": 0.0, "rounds": 33.82}
+{"strats": ["deep-bold", "L4-6", "near", "L4-6"], "games": 600, "win": [0.17666666666666667, 0.325, 0.34, 0.15833333333333333], "none": 0.0, "rounds": 34.276666666666664}
+{"strats": ["deep-bold", "L4-6", "near", "wiz-min5"], "games": 600, "win": [0.20333333333333334, 0.40166666666666667, 0.24, 0.155], "none": 0.0, "rounds": 29.583333333333332}
+{"strats": ["deep-bold", "L4-6", "L3-5", "deep-bold"], "games": 600, "win": [0.17666666666666667, 0.4, 0.22166666666666668, 0.20166666666666666], "none": 0.0, "rounds": 36.98}
+{"strats": ["deep-bold", "L4-6", "L3-5", "L4-6"], "games": 600, "win": [0.19166666666666668, 0.4116666666666667, 0.195, 0.20166666666666666], "none": 0.0, "rounds": 36.56166666666667}
+{"strats": ["deep-bold", "L4-6", "L3-5", "wiz-min5"], "games": 600, "win": [0.21333333333333335, 0.4116666666666667, 0.15666666666666668, 0.21833333333333332], "none": 0.0, "rounds": 31.63}
+{"strats": ["L4-6", "deep-bold", "deep-bold", "deep-bold"], "games": 600, "win": [0.3933333333333333, 0.19333333333333333, 0.17166666666666666, 0.24166666666666667], "none": 0.0, "rounds": 34.82}
+{"strats": ["L4-6", "deep-bold", "deep-bold", "L4-6"], "games": 600, "win": [0.4083333333333333, 0.185, 0.16833333333333333, 0.23833333333333334], "none": 0.0, "rounds": 35.06166666666667}
+{"strats": ["L4-6", "deep-bold", "deep-bold", "wiz-min5"], "games": 600, "win": [0.38, 0.21666666666666667, 0.20166666666666666, 0.20166666666666666], "none": 0.0, "rounds": 30.926666666666666}
+{"strats": ["L4-6", "deep-bold", "near", "deep-bold"], "games": 600, "win": [0.325, 0.21166666666666667, 0.325, 0.13833333333333334], "none": 0.0, "rounds": 33.54}
+{"strats": ["L4-6", "deep-bold", "near", "L4-6"], "games": 600, "win": [0.31333333333333335, 0.20333333333333334, 0.35833333333333334, 0.125], "none": 0.0, "rounds": 33.895}
+{"strats": ["L4-6", "deep-bold", "near", "wiz-min5"], "games": 600, "win": [0.2833333333333333, 0.2683333333333333, 0.2633333333333333, 0.185], "none": 0.0, "rounds": 29.776666666666667}
+{"strats": ["L4-6", "deep-bold", "L3-5", "deep-bold"], "games": 600, "win": [0.44166666666666665, 0.20666666666666667, 0.15166666666666667, 0.2], "none": 0.0, "rounds": 35.696666666666665}
+{"strats": ["L4-6", "deep-bold", "L3-5", "L4-6"], "games": 600, "win": [0.45, 0.20166666666666666, 0.155, 0.19333333333333333], "none": 0.0, "rounds": 35.87166666666667}
+{"strats": ["L4-6", "deep-bold", "L3-5", "wiz-min5"], "games": 600, "win": [0.39166666666666666, 0.205, 0.16, 0.24333333333333335], "none": 0.0, "rounds": 31.965}
+{"strats": ["L4-6", "L4-6", "deep-bold", "deep-bold"], "games": 600, "win": [0.38333333333333336, 0.28833333333333333, 0.13833333333333334, 0.19], "none": 0.0, "rounds": 33.54333333333334}
+{"strats": ["L4-6", "L4-6", "deep-bold", "L4-6"], "games": 600, "win": [0.3883333333333333, 0.295, 0.135, 0.18166666666666667], "none": 0.0, "rounds": 33.318333333333335}
+{"strats": ["L4-6", "L4-6", "deep-bold", "wiz-min5"], "games": 600, "win": [0.33166666666666667, 0.33, 0.17, 0.16833333333333333], "none": 0.0, "rounds": 29.835}
+{"strats": ["L4-6", "L4-6", "near", "deep-bold"], "games": 600, "win": [0.2633333333333333, 0.2916666666666667, 0.3283333333333333, 0.11666666666666667], "none": 0.0, "rounds": 33.72833333333333}
+{"strats": ["L4-6", "L4-6", "near", "L4-6"], "games": 600, "win": [0.2683333333333333, 0.29833333333333334, 0.3333333333333333, 0.1], "none": 0.0, "rounds": 33.776666666666664}
+{"strats": ["L4-6", "L4-6", "near", "wiz-min5"], "games": 600, "win": [0.25666666666666665, 0.29, 0.2633333333333333, 0.19], "none": 0.0, "rounds": 30.933333333333334}
+{"strats": ["L4-6", "L4-6", "L3-5", "deep-bold"], "games": 600, "win": [0.4, 0.31166666666666665, 0.135, 0.15333333333333332], "none": 0.0, "rounds": 34.44833333333333}
+{"strats": ["L4-6", "L4-6", "L3-5", "L4-6"], "games": 600, "win": [0.39, 0.31333333333333335, 0.155, 0.14166666666666666], "none": 0.0, "rounds": 34.30833333333333}
+{"strats": ["L4-6", "L4-6", "L3-5", "wiz-min5"], "games": 600, "win": [0.32166666666666666, 0.33666666666666667, 0.12333333333333334, 0.21833333333333332], "none": 0.0, "rounds": 30.72833333333333}
+{"strats": ["L3-5", "deep-bold", "deep-bold", "deep-bold"], "games": 600, "win": [0.355, 0.20833333333333334, 0.21, 0.22666666666666666], "none": 0.0, "rounds": 34.88333333333333}
+{"strats": ["L3-5", "deep-bold", "deep-bold", "L4-6"], "games": 600, "win": [0.36833333333333335, 0.215, 0.17833333333333334, 0.23833333333333334], "none": 0.0, "rounds": 34.961666666666666}
+{"strats": ["L3-5", "deep-bold", "deep-bold", "wiz-min5"], "games": 600, "win": [0.31833333333333336, 0.23666666666666666, 0.22666666666666666, 0.21833333333333332], "none": 0.0, "rounds": 30.803333333333335}
+{"strats": ["L3-5", "deep-bold", "near", "deep-bold"], "games": 600, "win": [0.27166666666666667, 0.21, 0.36333333333333334, 0.155], "none": 0.0, "rounds": 33.888333333333335}
+{"strats": ["L3-5", "deep-bold", "near", "L4-6"], "games": 600, "win": [0.26, 0.205, 0.4066666666666667, 0.12833333333333333], "none": 0.0, "rounds": 34.35}
+{"strats": ["L3-5", "deep-bold", "near", "wiz-min5"], "games": 600, "win": [0.24833333333333332, 0.275, 0.2966666666666667, 0.18], "none": 0.0, "rounds": 30.39}
+{"strats": ["L3-5", "deep-bold", "L3-5", "deep-bold"], "games": 600, "win": [0.355, 0.21166666666666667, 0.21666666666666667, 0.21666666666666667], "none": 0.0, "rounds": 36.593333333333334}
+{"strats": ["L3-5", "deep-bold", "L3-5", "L4-6"], "games": 600, "win": [0.36666666666666664, 0.20166666666666666, 0.20333333333333334, 0.22833333333333333], "none": 0.0, "rounds": 36.97833333333333}
+{"strats": ["L3-5", "deep-bold", "L3-5", "wiz-min5"], "games": 600, "win": [0.32166666666666666, 0.21833333333333332, 0.17666666666666667, 0.2833333333333333], "none": 0.0, "rounds": 33.155}
+{"strats": ["L3-5", "L4-6", "deep-bold", "deep-bold"], "games": 600, "win": [0.3416666666666667, 0.33, 0.16166666666666665, 0.16666666666666666], "none": 0.0, "rounds": 33.61333333333334}
+{"strats": ["L3-5", "L4-6", "deep-bold", "L4-6"], "games": 600, "win": [0.3383333333333333, 0.33166666666666667, 0.15, 0.18], "none": 0.0, "rounds": 33.721666666666664}
+{"strats": ["L3-5", "L4-6", "deep-bold", "wiz-min5"], "games": 600, "win": [0.2966666666666667, 0.32, 0.18, 0.20333333333333334], "none": 0.0, "rounds": 30.278333333333332}
+{"strats": ["L3-5", "L4-6", "near", "deep-bold"], "games": 600, "win": [0.22333333333333333, 0.275, 0.39, 0.11166666666666666], "none": 0.0, "rounds": 33.471666666666664}
+{"strats": ["L3-5", "L4-6", "near", "L4-6"], "games": 600, "win": [0.23166666666666666, 0.285, 0.3883333333333333, 0.095], "none": 0.0, "rounds": 33.68333333333333}
+{"strats": ["L3-5", "L4-6", "near", "wiz-min5"], "games": 600, "win": [0.22333333333333333, 0.30833333333333335, 0.285, 0.18333333333333332], "none": 0.0, "rounds": 31.466666666666665}
+{"strats": ["L3-5", "L4-6", "L3-5", "deep-bold"], "games": 600, "win": [0.30833333333333335, 0.37333333333333335, 0.16333333333333333, 0.155], "none": 0.0, "rounds": 35.041666666666664}
+{"strats": ["L3-5", "L4-6", "L3-5", "L4-6"], "games": 600, "win": [0.31333333333333335, 0.365, 0.17833333333333334, 0.14333333333333334], "none": 0.0, "rounds": 35.053333333333335}
+{"strats": ["L3-5", "L4-6", "L3-5", "wiz-min5"], "games": 600, "win": [0.2966666666666667, 0.3433333333333333, 0.14, 0.22], "none": 0.0, "rounds": 31.611666666666668}
+{"strats": ["mid-bold", "deep-bold", "deep-bold", "deep-bold"], "games": 600, "win": [0.3416666666666667, 0.24833333333333332, 0.225, 0.185], "none": 0.0, "rounds": 33.22833333333333}
+{"strats": ["mid-bold", "deep-bold", "deep-bold", "L4-6"], "games": 600, "win": [0.3566666666666667, 0.24833333333333332, 0.2, 0.195], "none": 0.0, "rounds": 33.19833333333333}
+{"strats": ["mid-bold", "deep-bold", "deep-bold", "wiz-min5"], "games": 600, "win": [0.31333333333333335, 0.27, 0.23, 0.18666666666666668], "none": 0.0, "rounds": 29.626666666666665}
+{"strats": ["mid-bold", "deep-bold", "near", "deep-bold"], "games": 600, "win": [0.27666666666666667, 0.215, 0.39, 0.11833333333333333], "none": 0.0, "rounds": 31.576666666666668}
+{"strats": ["mid-bold", "deep-bold", "near", "L4-6"], "games": 600, "win": [0.3016666666666667, 0.20166666666666666, 0.38166666666666665, 0.115], "none": 0.0, "rounds": 32.06333333333333}
+{"strats": ["mid-bold", "deep-bold", "near", "wiz-min5"], "games": 600, "win": [0.25, 0.30333333333333334, 0.28833333333333333, 0.15833333333333333], "none": 0.0, "rounds": 28.838333333333335}
+{"strats": ["mid-bold", "deep-bold", "L3-5", "deep-bold"], "games": 600, "win": [0.42833333333333334, 0.20333333333333334, 0.22333333333333333, 0.145], "none": 0.0, "rounds": 33.50333333333333}
+{"strats": ["mid-bold", "deep-bold", "L3-5", "L4-6"], "games": 600, "win": [0.43333333333333335, 0.2, 0.21333333333333335, 0.15333333333333332], "none": 0.0, "rounds": 33.44}
+{"strats": ["mid-bold", "deep-bold", "L3-5", "wiz-min5"], "games": 600, "win": [0.3233333333333333, 0.265, 0.19333333333333333, 0.21833333333333332], "none": 0.0, "rounds": 30.868333333333332}
+{"strats": ["mid-bold", "L4-6", "deep-bold", "deep-bold"], "games": 600, "win": [0.345, 0.31666666666666665, 0.18333333333333332, 0.155], "none": 0.0, "rounds": 32.55833333333333}
+{"strats": ["mid-bold", "L4-6", "deep-bold", "L4-6"], "games": 600, "win": [0.37333333333333335, 0.315, 0.17, 0.14166666666666666], "none": 0.0, "rounds": 32.59}
+{"strats": ["mid-bold", "L4-6", "deep-bold", "wiz-min5"], "games": 600, "win": [0.33, 0.3233333333333333, 0.175, 0.17166666666666666], "none": 0.0, "rounds": 29.601666666666667}
+{"strats": ["mid-bold", "L4-6", "near", "deep-bold"], "games": 600, "win": [0.295, 0.25166666666666665, 0.365, 0.08833333333333333], "none": 0.0, "rounds": 31.928333333333335}
+{"strats": ["mid-bold", "L4-6", "near", "L4-6"], "games": 600, "win": [0.29833333333333334, 0.26, 0.35333333333333333, 0.08833333333333333], "none": 0.0, "rounds": 32.115}
+{"strats": ["mid-bold", "L4-6", "near", "wiz-min5"], "games": 600, "win": [0.24833333333333332, 0.325, 0.2633333333333333, 0.16333333333333333], "none": 0.0, "rounds": 29.183333333333334}
+{"strats": ["mid-bold", "L4-6", "L3-5", "deep-bold"], "games": 600, "win": [0.38333333333333336, 0.3233333333333333, 0.17333333333333334, 0.12], "none": 0.0, "rounds": 33.115}
+{"strats": ["mid-bold", "L4-6", "L3-5", "L4-6"], "games": 600, "win": [0.38166666666666665, 0.3233333333333333, 0.175, 0.12], "none": 0.0, "rounds": 33.26166666666666}
+{"strats": ["mid-bold", "L4-6", "L3-5", "wiz-min5"], "games": 600, "win": [0.3383333333333333, 0.30666666666666664, 0.16166666666666665, 0.19333333333333333], "none": 0.0, "rounds": 29.89}
+{"strats": ["near", "deep-bold", "deep-bold", "deep-bold"], "games": 600, "win": [0.705, 0.13166666666666665, 0.08166666666666667, 0.08166666666666667], "none": 0.0, "rounds": 28.473333333333333}
+{"strats": ["near", "deep-bold", "deep-bold", "L4-6"], "games": 600, "win": [0.6966666666666667, 0.14166666666666666, 0.08833333333333333, 0.07333333333333333], "none": 0.0, "rounds": 28.635}
+{"strats": ["near", "deep-bold", "deep-bold", "wiz-min5"], "games": 600, "win": [0.5433333333333333, 0.21666666666666667, 0.125, 0.115], "none": 0.0, "rounds": 26.636666666666667}
+{"strats": ["near", "deep-bold", "near", "deep-bold"], "games": 600, "win": [0.4533333333333333, 0.19, 0.2833333333333333, 0.07333333333333333], "none": 0.0, "rounds": 31.403333333333332}
+{"strats": ["near", "deep-bold", "near", "L4-6"], "games": 600, "win": [0.45166666666666666, 0.17833333333333334, 0.3, 0.07], "none": 0.0, "rounds": 31.526666666666667}
+{"strats": ["near", "deep-bold", "near", "wiz-min5"], "games": 600, "win": [0.38666666666666666, 0.29, 0.20833333333333334, 0.115], "none": 0.0, "rounds": 27.861666666666668}
+{"strats": ["near", "deep-bold", "L3-5", "deep-bold"], "games": 600, "win": [0.685, 0.13, 0.09666666666666666, 0.08833333333333333], "none": 0.0, "rounds": 29.543333333333333}
+{"strats": ["near", "deep-bold", "L3-5", "L4-6"], "games": 600, "win": [0.7033333333333334, 0.13833333333333334, 0.08166666666666667, 0.07666666666666666], "none": 0.0, "rounds": 29.651666666666667}
+{"strats": ["near", "deep-bold", "L3-5", "wiz-min5"], "games": 600, "win": [0.5866666666666667, 0.20833333333333334, 0.07833333333333334, 0.12666666666666668], "none": 0.0, "rounds": 26.705}
+{"strats": ["near", "L4-6", "deep-bold", "deep-bold"], "games": 600, "win": [0.6383333333333333, 0.18, 0.08, 0.10166666666666667], "none": 0.0, "rounds": 28.846666666666668}
+{"strats": ["near", "L4-6", "deep-bold", "L4-6"], "games": 600, "win": [0.63, 0.19666666666666666, 0.075, 0.09833333333333333], "none": 0.0, "rounds": 28.78}
+{"strats": ["near", "L4-6", "deep-bold", "wiz-min5"], "games": 600, "win": [0.535, 0.25333333333333335, 0.09666666666666666, 0.115], "none": 0.0, "rounds": 26.895}
+{"strats": ["near", "L4-6", "near", "deep-bold"], "games": 600, "win": [0.4116666666666667, 0.2, 0.305, 0.08333333333333333], "none": 0.0, "rounds": 31.82}
+{"strats": ["near", "L4-6", "near", "L4-6"], "games": 600, "win": [0.43166666666666664, 0.215, 0.2866666666666667, 0.06666666666666667], "none": 0.0, "rounds": 32.03666666666667}
+{"strats": ["near", "L4-6", "near", "wiz-min5"], "games": 600, "win": [0.3616666666666667, 0.285, 0.22833333333333333, 0.125], "none": 0.0, "rounds": 29.373333333333335}
+{"strats": ["near", "L4-6", "L3-5", "deep-bold"], "games": 600, "win": [0.6083333333333333, 0.20833333333333334, 0.12833333333333333, 0.055], "none": 0.0, "rounds": 29.921666666666667}
+{"strats": ["near", "L4-6", "L3-5", "L4-6"], "games": 600, "win": [0.615, 0.20333333333333334, 0.12333333333333334, 0.058333333333333334], "none": 0.0, "rounds": 30.408333333333335}
+{"strats": ["near", "L4-6", "L3-5", "wiz-min5"], "games": 600, "win": [0.5783333333333334, 0.20333333333333334, 0.08166666666666667, 0.13666666666666666], "none": 0.0, "rounds": 27.59}
+{"strats": ["deep-bold", "deep-bold", "L3-5", "L4-6"], "games": 10000, "win": [0.2274, 0.2726, 0.2325, 0.2675], "none": 0.0, "rounds": 37.1292}
+{"strats": ["deep-bold", "deep-bold", "L3-5", "wiz-min5"], "games": 10000, "win": [0.229, 0.316, 0.1914, 0.2636], "none": 0.0, "rounds": 31.9602}
+{"strats": ["deep-bold", "deep-bold", "deep-bold", "deep-bold"], "games": 10000, "win": [0.2003, 0.2607, 0.2387, 0.3003], "none": 0.0, "rounds": 35.0008}
+{"strats": ["L4-6", "L4-6", "near", "wiz-min5"], "games": 10000, "win": [0.2638, 0.3041, 0.256, 0.1761], "none": 0.0, "rounds": 30.0006}
+{"strats": ["near", "deep-bold", "L3-5", "L4-6"], "games": 4000, "win": [0.696, 0.149, 0.0965, 0.0585], "none": 0.0, "rounds": 29.0265}
+{"strats": ["deep-bold", "near", "L3-5", "L4-6"], "games": 4000, "win": [0.116, 0.7335, 0.09575, 0.05475], "none": 0.0, "rounds": 28.5005}
+{"strats": ["deep-bold", "deep-bold", "near", "L4-6"], "games": 4000, "win": [0.20625, 0.2595, 0.3625, 0.17175], "none": 0.0, "rounds": 33.561}
+{"strats": ["deep-bold", "deep-bold", "L3-5", "ev"], "games": 4000, "win": [0.2325, 0.304, 0.1745, 0.289], "none": 0.0, "rounds": 31.565}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.29925, 0.3585, 0.16325, 0.179], "none": 0.0, "rounds": 29.453}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"move": "d6"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.27525, 0.32525, 0.171, 0.2285], "none": 0.0, "rounds": 39.72125}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.29925, 0.3585, 0.16325, 0.179], "none": 0.0, "rounds": 29.453}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"move": "d6"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.27525, 0.32525, 0.171, 0.2285], "none": 0.0, "rounds": 39.72125}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"move": "d6p2"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.29275, 0.34925, 0.19075, 0.16725], "none": 0.0, "rounds": 29.1635}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"secret": "retry"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.273, 0.321, 0.16275, 0.24325], "none": 0.0, "rounds": 27.57575}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"secret_share": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.285, 0.3615, 0.17875, 0.17475], "none": 0.0, "rounds": 29.24875}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_where": "chamber"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.303, 0.361, 0.163, 0.173], "none": 0.0, "rounds": 29.50325}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_amt": "full"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.2925, 0.35125, 0.156, 0.20025], "none": 0.0, "rounds": 29.315}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_wait": false}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.30075, 0.35575, 0.162, 0.1815], "none": 0.0, "rounds": 29.352}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"miss_keep": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.2105, 0.2695, 0.096, 0.424], "none": 0.0, "rounds": 27.47425}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"book": "12"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.276, 0.3205, 0.14825, 0.25525], "none": 0.0, "rounds": 28.6535}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_range": 6}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.29925, 0.3585, 0.16325, 0.179], "none": 0.0, "rounds": 29.453}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_range": 6}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 4000, "win": [0.25175, 0.29775, 0.12525, 0.32525], "none": 0.0, "rounds": 27.5955}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_range": 6}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 4000, "win": [0.2595, 0.31525, 0.12775, 0.2975], "none": 0.0, "rounds": 28.1165}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_from": "any"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.29925, 0.3585, 0.16325, 0.179], "none": 0.0, "rounds": 29.453}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_from": "any"}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 4000, "win": [0.305, 0.376, 0.18725, 0.13175], "none": 0.0, "rounds": 29.802}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_from": "any"}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 4000, "win": [0.32075, 0.38875, 0.20625, 0.08425], "none": 0.0, "rounds": 30.06125}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_keep": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.29925, 0.3585, 0.16325, 0.179], "none": 0.0, "rounds": 29.453}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_keep": true}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 4000, "win": [0.31725, 0.37375, 0.18875, 0.12025], "none": 0.0, "rounds": 29.898}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_keep": true}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 4000, "win": [0.32425, 0.393, 0.20675, 0.076], "none": 0.0, "rounds": 30.102}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.2215, 0.28325, 0.2445, 0.25075], "none": 0.0, "rounds": 32.59225}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"trophy": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 4000, "win": [0.33375, 0.3235, 0.10175, 0.241], "none": 0.0, "rounds": 30.63575}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"move": "d6"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.2705, 0.326, 0.1675, 0.236], "none": 0.0, "rounds": 39.6315}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"move": "d6p2"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.283, 0.362, 0.1945, 0.1605], "none": 0.0, "rounds": 29.029}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"secret": "retry"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.2595, 0.309, 0.1805, 0.251], "none": 0.0, "rounds": 27.853}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"secret_share": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.291, 0.374, 0.152, 0.183], "none": 0.0, "rounds": 29.153}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_where": "chamber"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.304, 0.3785, 0.1425, 0.175], "none": 0.0, "rounds": 29.4205}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_amt": "full"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.2875, 0.3705, 0.142, 0.2], "none": 0.0, "rounds": 29.3015}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_wait": false}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.287, 0.3725, 0.153, 0.1875], "none": 0.0, "rounds": 29.444}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"miss_keep": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 2000, "win": [0.191, 0.283, 0.0925, 0.4335], "none": 0.0, "rounds": 27.2595}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 6000, "win": [0.30366666666666664, 0.3496666666666667, 0.1675, 0.17916666666666667], "none": 0.0, "rounds": 29.376666666666665}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.2956666666666667, 0.37266666666666665, 0.14733333333333334, 0.18433333333333332], "none": 0.0, "rounds": 29.322333333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"move": "d6"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.2773333333333333, 0.32466666666666666, 0.16766666666666666, 0.23033333333333333], "none": 0.0, "rounds": 39.385666666666665}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"move": "d6p2"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.28833333333333333, 0.3576666666666667, 0.193, 0.161], "none": 0.0, "rounds": 29.08}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"secret": "retry"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.26866666666666666, 0.306, 0.17333333333333334, 0.252], "none": 0.0, "rounds": 27.747666666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"secret_share": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.291, 0.373, 0.15766666666666668, 0.17833333333333334], "none": 0.0, "rounds": 29.076666666666668}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_where": "chamber"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.30466666666666664, 0.37166666666666665, 0.147, 0.17666666666666667], "none": 0.0, "rounds": 29.340333333333334}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_amt": "full"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.2926666666666667, 0.362, 0.14566666666666667, 0.19966666666666666], "none": 0.0, "rounds": 29.191333333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"regen_wait": false}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.292, 0.36533333333333334, 0.15533333333333332, 0.18733333333333332], "none": 0.0, "rounds": 29.35033333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"miss_keep": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.20633333333333334, 0.2776666666666667, 0.088, 0.428], "none": 0.0, "rounds": 27.171333333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"book": "12"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.27366666666666667, 0.32666666666666666, 0.137, 0.26266666666666666], "none": 0.0, "rounds": 28.449}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_range": 6}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.2956666666666667, 0.37266666666666665, 0.14733333333333334, 0.18433333333333332], "none": 0.0, "rounds": 29.322333333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_range": 6}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 3000, "win": [0.24366666666666667, 0.308, 0.124, 0.3243333333333333], "none": 0.0, "rounds": 27.461333333333332}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_range": 6}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 3000, "win": [0.25, 0.327, 0.11933333333333333, 0.30366666666666664], "none": 0.0, "rounds": 27.851}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_from": "any"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.2956666666666667, 0.37266666666666665, 0.14733333333333334, 0.18433333333333332], "none": 0.0, "rounds": 29.322333333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_from": "any"}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 3000, "win": [0.2976666666666667, 0.3903333333333333, 0.185, 0.127], "none": 0.0, "rounds": 29.655}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_from": "any"}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 3000, "win": [0.33266666666666667, 0.3953333333333333, 0.19066666666666668, 0.08133333333333333], "none": 0.0, "rounds": 29.840666666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_keep": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.2956666666666667, 0.37266666666666665, 0.14733333333333334, 0.18433333333333332], "none": 0.0, "rounds": 29.322333333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_keep": true}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 3000, "win": [0.31533333333333335, 0.38866666666666666, 0.17433333333333334, 0.12166666666666667], "none": 0.0, "rounds": 29.654666666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"tele_keep": true}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 3000, "win": [0.339, 0.404, 0.17466666666666666, 0.08233333333333333], "none": 0.0, "rounds": 29.879333333333335}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.23033333333333333, 0.267, 0.234, 0.26866666666666666], "none": 0.0, "rounds": 32.251}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"trophy": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.3303333333333333, 0.343, 0.11, 0.21666666666666667], "none": 0.0, "rounds": 30.497666666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "move": "d6"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.20066666666666666, 0.238, 0.24566666666666667, 0.31566666666666665], "none": 0.0, "rounds": 43.699333333333335}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "move": "d6p2"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.22766666666666666, 0.2753333333333333, 0.25666666666666665, 0.24033333333333334], "none": 0.0, "rounds": 32.15266666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "secret": "retry"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.19066666666666668, 0.23733333333333334, 0.22766666666666666, 0.3443333333333333], "none": 0.0, "rounds": 30.572666666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "secret_share": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.22133333333333333, 0.275, 0.249, 0.25466666666666665], "none": 0.0, "rounds": 32.25666666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "regen_where": "chamber"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.22866666666666666, 0.267, 0.24466666666666667, 0.25966666666666666], "none": 0.0, "rounds": 32.38933333333333}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "regen_amt": "full"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.225, 0.25666666666666665, 0.22066666666666668, 0.2976666666666667], "none": 0.0, "rounds": 31.983}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "regen_wait": false}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.227, 0.26066666666666666, 0.24133333333333334, 0.271], "none": 0.0, "rounds": 32.287}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "miss_keep": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.134, 0.14833333333333334, 0.12366666666666666, 0.594], "none": 0.0, "rounds": 29.142666666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "book": "12"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.19966666666666666, 0.244, 0.205, 0.35133333333333333], "none": 0.0, "rounds": 31.19}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_range": 6}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.23033333333333333, 0.267, 0.234, 0.26866666666666666], "none": 0.0, "rounds": 32.251}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_range": 6}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 3000, "win": [0.17866666666666667, 0.21, 0.18133333333333335, 0.43], "none": 0.0, "rounds": 30.207666666666668}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_range": 6}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 3000, "win": [0.17333333333333334, 0.22866666666666666, 0.17933333333333334, 0.4186666666666667], "none": 0.0, "rounds": 30.748333333333335}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_from": "any"}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.23033333333333333, 0.267, 0.234, 0.26866666666666666], "none": 0.0, "rounds": 32.251}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_from": "any"}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 3000, "win": [0.262, 0.267, 0.27266666666666667, 0.19833333333333333], "none": 0.0, "rounds": 32.999}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_from": "any"}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 3000, "win": [0.2753333333333333, 0.2996666666666667, 0.28933333333333333, 0.13566666666666666], "none": 0.0, "rounds": 33.55866666666667}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_keep": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.23033333333333333, 0.267, 0.234, 0.26866666666666666], "none": 0.0, "rounds": 32.251}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_keep": true}, "book": {"fireball": 0.55, "lightning": 0.25, "teleport": 0.2}, "games": 3000, "win": [0.24833333333333332, 0.2906666666666667, 0.2713333333333333, 0.18966666666666668], "none": 0.0, "rounds": 33.284666666666666}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "tele_keep": true}, "book": {"fireball": 0.45, "lightning": 0.2, "teleport": 0.35}, "games": 3000, "win": [0.263, 0.30866666666666664, 0.309, 0.11933333333333333], "none": 0.0, "rounds": 33.616}
+{"strats": ["ev", "ev", "ev", "ev"], "rules": {"swords": "fighter", "trophy": true}, "book": {"fireball": 0.7, "lightning": 0.3, "teleport": 0.0}, "games": 3000, "win": [0.2786666666666667, 0.16166666666666665, 0.17233333333333334, 0.3873333333333333], "none": 0.0, "rounds": 34.961333333333336}

@@ -1,0 +1,3 @@
+__pycache__/
+# Board photos are not published (they're photos of the printed board). tools/ expects them here.
+photos/
