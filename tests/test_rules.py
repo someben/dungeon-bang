@@ -591,6 +591,19 @@ class HouseRulings(unittest.TestCase):
         g2.take_turn(h)
         self.assertEqual(g2.slot[r2]["known"], {h.idx})
 
+    def test_hurt_fighter_does_not_lose_a_turn(self):
+        for rules, lost in (({}, 1), (sim.parse_rules("house"), 0)):
+            g = new_game(rules=rules)
+            f = g.heroes[2]
+            park_others(g, f)
+            f.cards = [treasure("Sack of Gold", 1)]
+            r, door = door_room(4)
+            put_on_top(g, monster("Hill Giant"))
+            f.prev, f.pos = door, r
+            g.rng.load(1, 1, 4, 5)                  # miss, then Hurt (9)
+            g.encounter(f)
+            self.assertEqual((f.lose, f.pos, len(f.cards)), (lost, door, 0))
+
     def test_crushed_wizard_gets_new_spellbook(self):
         g = new_game(lineup=("wizard", "wizard", "rogue", "fighter"),
                      book={"fireball": 0.5, "lightning": 0.3, "teleport": 0.2})

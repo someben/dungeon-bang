@@ -1,6 +1,16 @@
 # House rules
 
-Our changes to the printed 2014 rules.
+Our changes to the printed 2014 rules. Nothing printed on the board or the cards changes.
+
+In the simulator, `--rules house` turns on the Fighter rules below. The 12-slot rule is always on.
+
+## Only Fighters use Magic Swords
+
+Only a Fighter adds a Magic Sword's bonus to attack rolls, and only a Fighter can use a sword against a monster with a "–" (counting it as 13). Any other Hero who finds a sword keeps it as treasure: it counts toward their gold, but gives no bonus.
+
+## A Hurt Fighter doesn't lose a turn
+
+When a monster's fight-back roll is 8–10 (Hurt), a Fighter still drops 1 random Treasure card and moves back 1 space. They don't take a Lose a Turn token.
 
 ## Only 12 numbered slots
 

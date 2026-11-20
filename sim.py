@@ -44,9 +44,14 @@ NUM_SLOTS = 12  # numbered monster slots on the board edge
 #   tele_keep    False | True: Teleport goes back into the hand after use
 #   swords       "all" | "fighter": only Fighters can wield Magic Swords (others still keep the gp)
 #   trophy       False | True: to win you also need a Treasure from the deepest of your 'safest levels'
+#   f_reroll     False | True: once per fight a Fighter may re-roll a missed attack
+#   f_armor      False | True: a Fighter treats Stunned (6-7) as a Miss
+#   f_tough      False | True: a Hurt Fighter doesn't lose a turn
+#   f_move       False | True: a Fighter moves up to 6 spaces
 RULES = {"move": "5", "secret": "std", "secret_share": False, "regen_where": "gh", "regen_amt": "d6",
          "regen_wait": True, "miss_keep": False, "book": "d6+6", "tele_range": 1, "tele_from": "chamber",
-         "tele_keep": False, "swords": "all", "trophy": False}
+         "tele_keep": False, "swords": "all", "trophy": False,
+         "f_reroll": False, "f_armor": False, "f_tough": False, "f_move": False}
 # fight-back table probabilities (2d6)
 P2 = {s: (6 - abs(s - 7)) / 36 for s in range(2, 13)}
 
@@ -326,6 +331,8 @@ class Game:
         for mode in (self.modes(h) if spells else [h.cls]):
             bonus = h.sword_bonus if mode == h.cls else 0
             p = self.p_hit(m, mode, bonus) if m else self.p_level[level, mode, bonus]
+            if mode == "fighter" and self.R["f_reroll"]:
+                p = 1 - (1 - p) ** 2
             # prefer melee on ties (spells are a resource)
             if p > best[0] + (0.02 if mode != h.cls else 0):
                 best = (p, mode)
@@ -592,6 +599,8 @@ class Game:
         path = self.path_to(par, target) if target in par else [h.pos]
         mv = self.R["move"]
         moves = MOVE if mv == "5" else d6(self.rng) + (2 if mv == "d6p2" else 0)
+        if h.cls == "fighter" and self.R["f_move"]:
+            moves += 1
         esp_used = False
         for nxt in path[1:]:
             kind = next(k for m, k in self.b.adj[h.pos] if m == nxt)
@@ -803,6 +812,8 @@ class Game:
             if t is None and h.sword_bonus:
                 t = 13
         roll = two_d6(self.rng) + (h.sword_bonus if mode == h.cls else 0)
+        if mode == "fighter" and self.R["f_reroll"] and t is not None and roll < t:
+            roll = two_d6(self.rng) + h.sword_bonus  # one re-roll of a missed attack
         self.log(f"  {h.cls}{h.idx} fights {m['name']} (L{m['level']}) in {n} with {mode}: {roll} vs {t}")
         h.stats["fights"] += 1
         if t is not None and roll >= t:
@@ -878,6 +889,8 @@ class Game:
 
     def fight_back(self, h, n, s):
         r = two_d6(self.rng)
+        if h.cls == "fighter" and self.R["f_armor"] and 6 <= r <= 7:
+            r = 5  # armor: Stunned counts as a Miss
         h.stats["hit_back"] += 1
         if r == 12:
             d = self.drop(h, len(h.cards), s)
@@ -898,7 +911,8 @@ class Game:
             self.drop(h, 1, s)
             self.log("    hurt")
             h.stats["hurt"] += 1
-            h.lose += 1
+            if not (h.cls == "fighter" and self.R["f_tough"]):
+                h.lose += 1
             if h.prev and not (self.occupied(h.prev, h) and self.b.kind(h.prev) != "chamber"):
                 h.pos, h.prev = h.prev, None
         elif r >= 6:
@@ -927,10 +941,17 @@ class Game:
         return None, self.max_rounds
 
 
+# our adopted house rules (see house-rules.md); the 12-slot rule is always on
+HOUSE = {"swords": "fighter", "f_tough": True}
+
+
 def parse_rules(text):
-    """'k=v,k=v' -> rules dict, typed like the RULES defaults."""
+    """'k=v,k=v' -> rules dict, typed like the RULES defaults. 'house' = our adopted house rules."""
     out = {}
     for kv in filter(None, text.replace("+", ",").split(",")):
+        if kv == "house":
+            out.update(HOUSE)
+            continue
         k, v = kv.split("=")
         assert k in RULES, k
         d = RULES[k]
