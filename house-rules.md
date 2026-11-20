@@ -1,8 +1,15 @@
-# House rules
+# House rules: the fixes that make the game work
 
-Our changes to the printed 2014 rules. Nothing printed on the board or the cards changes.
+Played as printed, the 2014 game is lopsided: Rogues and Clerics win about twice as often as Fighters and Wizards. These three rules fix that. Nothing printed on the board or the cards changes.
 
-In the simulator, `--rules house` turns on the Fighter rules below. The 12-slot rule is always on.
+Win rates in a 4-player game with one Hero of each class, over 24,000 simulated games where every player picks a random human-like play style:
+
+| | Rogue | Cleric | Fighter | Wizard |
+|---|---|---|---|---|
+| Printed rules | 31.7% | 33.4% | 15.5% | 19.4% |
+| With these house rules | 24.7% | 28.5% | 23.8% | 23.1% |
+
+In the simulator, `--rules house` turns on the two Fighter rules below. The 12-slot rule is always on.
 
 ## Only Fighters use Magic Swords
 
