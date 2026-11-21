@@ -8,6 +8,7 @@
   python explore.py rules        # house-rule tweaks one at a time, then a greedy search for the most even mix
   python explore.py adapt RULES  # under a rule mix, let each class switch to its best strategy
   python explore.py human [RULES ...]  # human-like styles: everyone the same style, then random mixed tables
+  python explore.py mixed [RULES ...]  # just the random mixed human tables, plus everyone on 'ev'
 
 Results are appended to results/explore.jsonl.
 """
@@ -302,13 +303,16 @@ def _mixed(args):
     return seats, wins, rounds
 
 
-def human(rule_sets, games=3000, mixed_games=24000):
+def human(rule_sets, games=3000, mixed_games=24000, same=True, by_style=True):
     for text in rule_sets:
         rules = rules_of(text)
         label = text or "printed rules"
         print(f"\n#### {label}")
-        print("== everyone plays the same human style")
-        for st in HUMAN:
+        if not same:
+            show(run(["ev"] * 4, 4000, seed=33, rules=rules), "everyone 'ev'")
+        else:
+            print("== everyone plays the same human style")
+        for st in (HUMAN if same else []):
             names = [st] * 4
             pols = [HUMAN[st]] * 4
             step = 25
@@ -336,6 +340,8 @@ def human(rule_sets, games=3000, mixed_games=24000):
         with open(OUT, "a") as f:
             f.write(json.dumps(res) + "\n")
         show(res, "MIXED TABLE overall")
+        if not by_style:
+            continue
         print("   win rate by the style a class played (vs random opponents):")
         for c in CLASSES:
             row = sorted(((wins.get(("win", c, st), 0) / seats[c, st], st) for st in human_menu(c)), reverse=True)
@@ -365,6 +371,8 @@ def main():
         adapt(sys.argv[2] if len(sys.argv) > 2 else "")
     elif cmd == "human":
         human(sys.argv[2:] or ["", "swords=fighter+book=12"])
+    elif cmd == "mixed":
+        human(sys.argv[2:] or ["house"], same=False, by_style=False)
     elif cmd == "verify":
         n = int(sys.argv[3]) if len(sys.argv) > 3 else 10000
         show(run(sys.argv[2].split(","), n, seed=9), f"verify {sys.argv[2]}")

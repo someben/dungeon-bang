@@ -181,7 +181,7 @@ class Combat(unittest.TestCase):
         self.assertEqual(f.gp, 1000)
         active = f.sword_card
         f.cards = [active, spare]
-        g.rng.shuffle = lambda xs: xs.sort(key=lambda c: c is not active)  # random drop hits the active sword
+        g.rng.sample = lambda xs, k: [active]             # random drop hits the active sword
         g.drop(f, 1, {"drops": []})
         self.assertIs(f.sword_card, spare)                 # play the other one, same token
         self.assertEqual(f.sword_bonus, 2)
@@ -632,6 +632,132 @@ class HouseRulings(unittest.TestCase):
         g.rng.load(6, 6)
         g.encounter(h)
         self.assertIn(mine, h.cards)
+
+
+class Replacements(unittest.TestCase):
+    """Candidate replacements for random drops (drop_pick) and Lose a Turn (lose)."""
+
+    def setUp(self):
+        self.room, self.door = door_room(4)
+
+    def hand(self):
+        return [treasure("Sack of Gold", 2), treasure("Silver Coffer", 6), treasure("Sack of Gold", 1),
+                treasure("Silver Ring", 5)]            # collected in this order
+
+    def hit_back(self, rules, roll, cls=0, cards=None):
+        """Hero `cls` misses the Hill Giant, then it rolls `roll` (as two dice)."""
+        g = new_game(rules=sim.parse_rules(rules))
+        h = g.heroes[cls]
+        park_others(g, h)
+        h.cards = cards if cards is not None else self.hand()
+        put_on_top(g, monster("Hill Giant"))
+        h.prev, h.pos = self.door, self.room
+        g.rng.load(1, 1, *roll)
+        return g, h
+
+    def dropped(self, g):
+        return [c["name"] for c in g.slot[self.room]["drops"]]
+
+    def test_drop_pick(self):
+        cases = {"newest": ["Silver Ring"], "lowest": ["Sack of Gold"], "left": ["Silver Coffer"]}
+        for how, want in cases.items():
+            g, h = self.hit_back(f"drop_pick={how}", (3, 3))     # Stunned: drop 1
+            g.encounter(h)
+            self.assertEqual(self.dropped(g), want, how)
+        for die, want in ((2, "Silver Coffer"), (6, "Silver Coffer"), (5, "Sack of Gold")):
+            g, h = self.hit_back("drop_pick=die", (3, 3, die))   # count along the row, wrapping: 6 -> card 2
+            g.encounter(h)
+            self.assertEqual(self.dropped(g), [want], die)
+        g, h = self.hit_back("drop_pick=lowest", (5, 6))         # Seriously Hurt: the 2 lowest levels
+        g.encounter(h)
+        self.assertEqual(sorted(self.dropped(g)), ["Sack of Gold", "Sack of Gold"])
+        self.assertEqual([c["level"] for c in h.cards], [6, 5])   # the rest stay in the order collected
+
+    def test_lose_turn_is_printed_default(self):
+        g, h = self.hit_back("", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, h.pos, len(h.cards)), (1, self.door, 3))
+
+    def test_wound(self):
+        g, h = self.hit_back("lose=wound", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, h.wound, h.pos), (0, 1, self.door))
+        put_on_top(g, monster("Goblin"))                          # Rogue needs 3
+        g.slot.clear()
+        r, door = door_room(1)
+        h.prev, h.pos = door, r
+        g.rng.load(1, 2, 1, 1)                                    # 3 - 1 = 2: miss, then it misses back
+        g.encounter(h)
+        self.assertIn(r, g.slot)
+        self.assertEqual(h.wound, 0)                              # used up by that one roll
+
+    def test_extra_drop(self):
+        g, h = self.hit_back("lose=extra", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, len(g.slot[self.room]["drops"]), len(h.cards)), (0, 2, 2))
+
+    def test_limp_moves_but_does_not_fight(self):
+        g, h = self.hit_back("lose=limp", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, h.limp), (0, 1))
+        fights = h.stats["fights"]
+        for _ in range(3):
+            g.take_turn(h)
+            if h.limp == 0:
+                break
+        self.assertEqual(h.stats["fights"], fights)
+        self.assertTrue(g.cleared(h.pos))
+
+    def test_slow_moves_only_two(self):
+        g, h = self.hit_back("lose=slow", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, h.slow), (0, 1))
+        start = h.pos
+        g.take_turn(h)
+        steps = {start: 0}
+        q = [start]
+        for x in q:
+            for y, _ in BOARD.adj[x]:
+                if y not in steps:
+                    steps[y] = steps[x] + 1
+                    q.append(y)
+        self.assertLessEqual(steps[h.pos], 2)
+        self.assertEqual(h.slow, 0)
+
+    def test_knock_back_toward_great_hall(self):
+        g, h = self.hit_back("lose=knock", (4, 5))
+        before = g.dijkstra(type("P", (), {"pos": self.door, "cls": "rogue", "found": set(),
+                                           "has": lambda self, e: False})())[0][BOARD.gh]
+        g.encounter(h)
+        self.assertEqual(h.lose, 0)
+        self.assertNotEqual(h.pos, self.door)
+        self.assertLess(g.dijkstra(h)[0][BOARD.gh], before)
+
+    def test_rush_moves_everyone_else(self):
+        g, h = self.hit_back("lose=rush", (4, 5))
+        others = [o for o in g.heroes if o is not h]
+        for o in others:
+            o.pos = BOARD.gh
+        g.encounter(h)
+        self.assertEqual(h.lose, 0)
+        self.assertTrue(any(o.pos != BOARD.gh for o in others))
+
+    def test_cage_gives_two_penalties_on_a_high_roll(self):
+        g = new_game(rules={"lose": "wound"})
+        r, door = door_room(4)
+        h = g.heroes[0]
+        park_others(g, h)
+        put_on_top(g, next(m for m in MONSTERS if m["trap"] == "cage" and m["level"] == 4))
+        h.prev, h.pos = door, r
+        g.rng.load(5)
+        g.encounter(h)
+        self.assertEqual((h.lose, h.wound), (0, 2))
+
+    def test_tough_fighter_skips_any_replacement(self):
+        for how in ("wound", "extra", "limp", "slow"):
+            g, h = self.hit_back(f"house+lose={how}", (4, 5), cls=2)
+            g.encounter(h)
+            self.assertEqual((h.lose, h.wound, h.limp, h.slow, len(h.cards)), (0, 0, 0, 0, 3), how)
 
 
 if __name__ == "__main__":

@@ -48,10 +48,19 @@ NUM_SLOTS = 12  # numbered monster slots on the board edge
 #   f_armor      False | True: a Fighter treats Stunned (6-7) as a Miss
 #   f_tough      False | True: a Hurt Fighter doesn't lose a turn
 #   f_move       False | True: a Fighter moves up to 6 spaces
+#   drop_pick    which Treasure cards a "drop 1 random" / "drop half" result takes (Crushed drops everything):
+#                "random" truly random | "die" roll 1 die and count along the hand, laid face up in the order
+#                collected (wrapping) | "left" the player on your left picks by card back: the deepest level |
+#                "newest" your most recently collected | "lowest" your lowest-level card
+#   lose         what replaces each lost turn (Hurt 8-10: 1; Cage Trap: 1 or 2):
+#                "turn" lose the turn | "wound" -1 on your next attack roll (tokens stack) |
+#                "knock" knocked back 5 spaces toward the Great Hall | "limp" next turn move but don't fight |
+#                "slow" next turn move only 2 | "extra" drop 1 more Treasure card | "rush" every opponent moves 2
 RULES = {"move": "5", "secret": "std", "secret_share": False, "regen_where": "gh", "regen_amt": "d6",
          "regen_wait": True, "miss_keep": False, "book": "d6+6", "tele_range": 1, "tele_from": "chamber",
          "tele_keep": False, "swords": "all", "trophy": False,
-         "f_reroll": False, "f_armor": False, "f_tough": False, "f_move": False}
+         "f_reroll": False, "f_armor": False, "f_tough": False, "f_move": False,
+         "drop_pick": "random", "lose": "turn"}
 # fight-back table probabilities (2d6)
 P2 = {s: (6 - abs(s - 7)) / 36 for s in range(2, 13)}
 
@@ -168,6 +177,9 @@ class Hero:
         self.prev = None
         self.cards = []
         self.lose = 0
+        self.wound = 0  # lose=wound: -1 per token on the next attack roll
+        self.limp = 0   # lose=limp: turns of moving without fighting
+        self.slow = 0   # lose=slow: turns of moving only 2
         self.found = set()  # frozenset({a,b}) secret doors found
         self.sword_card = None
         self.sword_bonus = 0
@@ -330,13 +342,32 @@ class Game:
             spells = False
         for mode in (self.modes(h) if spells else [h.cls]):
             bonus = h.sword_bonus if mode == h.cls else 0
-            p = self.p_hit(m, mode, bonus) if m else self.p_level[level, mode, bonus]
+            if h.wound:
+                p = self.p_wounded(h, m, level, mode, bonus)
+            else:
+                p = self.p_hit(m, mode, bonus) if m else self.p_level[level, mode, bonus]
             if mode == "fighter" and self.R["f_reroll"]:
                 p = 1 - (1 - p) ** 2
             # prefer melee on ties (spells are a resource)
             if p > best[0] + (0.02 if mode != h.cls else 0):
                 best = (p, mode)
         return best
+
+    def p_wounded(self, h, m, level, mode, bonus):
+        """Hit chance with h.wound off the roll, vs a known monster or the average of the level's deck."""
+        def one(m):
+            if m["trap"]:
+                return 1.0
+            t = m["tgt"][mode]
+            if t is None:
+                if not bonus or mode in ("fireball", "lightning"):
+                    return 0.0
+                t = 13
+            return p_at_least(t - (bonus if mode not in ("fireball", "lightning") else 0) + h.wound)
+        if m:
+            return one(m)
+        deck = self.all_monsters[level]
+        return sum(one(x) for x in deck) / len(deck)
 
     def draw_monster(self, lv):
         if not self.mdeck[lv]:
@@ -410,8 +441,27 @@ class Game:
     # ---------- decisions
     def fight_back_loss(self, h):
         gp = h.gp
-        avg_card = gp / len(h.cards) if h.cards else 0
-        return gp * P2[12] + gp * 0.5 * P2[11] + avg_card * (1 - P2[12] - P2[11] - sum(P2[s] for s in range(2, 6)))
+        card = self.first_drop_value(h)
+        loss = gp * P2[12] + gp * 0.5 * P2[11] + card * (1 - P2[12] - P2[11] - sum(P2[s] for s in range(2, 6)))
+        if self.R["lose"] == "extra" and not (h.cls == "fighter" and self.R["f_tough"]):
+            loss += card * (P2[8] + P2[9] + P2[10])
+        return loss
+
+    def first_drop_value(self, h):
+        """Expected gp of the first card a 1-card drop takes, under drop_pick."""
+        c = h.cards
+        if not c:
+            return 0
+        how = self.R["drop_pick"]
+        if how == "newest":
+            return c[-1]["gp"]
+        if how == "die":
+            return sum(c[(r - 1) % len(c)]["gp"] for r in range(1, 7)) / 6
+        if how in ("left", "lowest"):
+            lv = (max if how == "left" else min)(x["level"] for x in c)
+            pick = [x["gp"] for x in c if x["level"] == lv]
+            return sum(pick) / len(pick)
+        return sum(x["gp"] for x in c) / len(c)
 
     def seen_monster(self, h, s):
         """The slot's monster card if h can see it: face up, or h peeked at it (ESP / Crystal Ball)."""
@@ -582,25 +632,36 @@ class Game:
         if h.regen:
             self.regain(h)
             return
+        nofight = h.limp > 0
+        if nofight:
+            h.limp -= 1
+        slow = h.slow > 0
+        if slow:
+            h.slow -= 1
         # still in a space with a waiting monster: fight again or leave
-        if not self.cleared(h.pos) and h.pos in self.slot:
+        if not nofight and not self.cleared(h.pos) and h.pos in self.slot:
             ev, p = self.target_value(h, h.pos)
             if ev > 0 or p >= 0.4:
                 self.encounter(h)
                 return
         target, dist, par = self.choose_target(h)
         if target == h.pos and not self.cleared(h.pos):
+            if nofight:
+                self.end_turn(h)
+                return
             self.encounter(h)  # best option is the monster already here: fight it
             return
         if h.has("crystal_ball") and self.try_crystal_ball(h, dist):
             return
-        if self.try_teleport_travel(h, target, dist):
+        if not nofight and self.try_teleport_travel(h, target, dist):
             return
         path = self.path_to(par, target) if target in par else [h.pos]
         mv = self.R["move"]
         moves = MOVE if mv == "5" else d6(self.rng) + (2 if mv == "d6p2" else 0)
         if h.cls == "fighter" and self.R["f_move"]:
             moves += 1
+        if slow:
+            moves = min(moves, 2)
         esp_used = False
         for nxt in path[1:]:
             kind = next(k for m, k in self.b.adj[h.pos] if m == nxt)
@@ -624,7 +685,9 @@ class Game:
                 return
             stopper = not self.cleared(nxt)
             if stopper and self.b.kind(nxt) == "room" and self.occupied(nxt, h):
-                break  # entering would mean stopping in another hero's room
+                break
+            if stopper and nofight:
+                break  # limping: walks up to the door but doesn't go in  # entering would mean stopping in another hero's room
             if stopper:
                 # ESP peek before entering an unknown room/chamber
                 # (one ESP-or-Crystal-Ball use per turn; the card stays face down, only h knows it)
@@ -762,7 +825,7 @@ class Game:
             h.prev, h.pos = h.pos, n
             self.spring_trap(h, n, s)
             return
-        roll = two_d6(self.rng)
+        roll = two_d6(self.rng) - self.use_wound(h)
         t = m["tgt"][mode]
         self.log(f"  {h.cls}{h.idx} casts {mode} at {m['name']} in {n}: {roll} vs {t}")
         if t is not None and roll >= t:
@@ -811,9 +874,10 @@ class Game:
             t = m["tgt"][mode]
             if t is None and h.sword_bonus:
                 t = 13
-        roll = two_d6(self.rng) + (h.sword_bonus if mode == h.cls else 0)
+        wound = self.use_wound(h)
+        roll = two_d6(self.rng) + (h.sword_bonus if mode == h.cls else 0) - wound
         if mode == "fighter" and self.R["f_reroll"] and t is not None and roll < t:
-            roll = two_d6(self.rng) + h.sword_bonus  # one re-roll of a missed attack
+            roll = two_d6(self.rng) + h.sword_bonus - wound  # one re-roll of a missed attack
         self.log(f"  {h.cls}{h.idx} fights {m['name']} (L{m['level']}) in {n} with {mode}: {roll} vs {t}")
         h.stats["fights"] += 1
         if t is not None and roll >= t:
@@ -850,8 +914,9 @@ class Game:
             if t:
                 self.gain(h, t)
         if m["trap"] == "cage":
-            h.lose += 1 if d6(self.rng) <= 3 else 2
-            self.log(f"  {h.cls}{h.idx} caged in {n}, loses {h.lose} turn(s)")
+            k = 1 if d6(self.rng) <= 3 else 2
+            self.log(f"  {h.cls}{h.idx} caged in {n}: {k} x {self.R['lose']}")
+            self.penalize(h, k, None, n)
             self.end_turn(h)
         elif m["trap"].startswith("slide"):
             lv = int(m["trap"].split(":")[1])
@@ -875,12 +940,39 @@ class Game:
             h.sword_card = c
             self.log(f"    {h.cls}{h.idx} wields {c['name']} +{h.sword_bonus}")
 
+    def pick_drops(self, h, k):
+        """Which k of h's cards a drop takes, under drop_pick. h.cards stays in the order collected."""
+        row = list(h.cards)
+        k = min(k, len(row))
+        how = self.R["drop_pick"]
+        if k == len(row):
+            return row
+        if how == "random":
+            return self.rng.sample(row, k)
+        if how == "newest":
+            return row[len(row) - k:]
+        out = []
+        for _ in range(k):
+            if how == "die":
+                c = row[(d6(self.rng) - 1) % len(row)]
+            else:
+                lv = (max if how == "left" else min)(x["level"] for x in row)
+                c = self.rng.choice([x for x in row if x["level"] == lv])  # same-level backs look alike
+            row.remove(c)
+            out.append(c)
+        return out
+
     def drop(self, h, k, s):
-        """Drop k random cards into slot s."""
-        self.rng.shuffle(h.cards)
-        dropped, h.cards = h.cards[:k], h.cards[k:]
-        s["drops"].extend(dropped)
-        if h.sword_card in dropped:
+        """Drop k cards (chosen by drop_pick) into slot s; s=None puts them under their level's treasure pile."""
+        dropped = self.pick_drops(h, k)
+        ids = {id(c) for c in dropped}
+        h.cards = [c for c in h.cards if id(c) not in ids]
+        if s is None:
+            for c in dropped:
+                self.tdeck[c["level"]].insert(0, c)
+        else:
+            s["drops"].extend(dropped)
+        if any(c is h.sword_card for c in dropped):
             spare = next((c for c in h.cards if c["effect"] == "sword"), None)
             h.sword_card = spare
             if not spare:
@@ -911,10 +1003,10 @@ class Game:
             self.drop(h, 1, s)
             self.log("    hurt")
             h.stats["hurt"] += 1
-            if not (h.cls == "fighter" and self.R["f_tough"]):
-                h.lose += 1
             if h.prev and not (self.occupied(h.prev, h) and self.b.kind(h.prev) != "chamber"):
                 h.pos, h.prev = h.prev, None
+            if not (h.cls == "fighter" and self.R["f_tough"]):
+                self.penalize(h, 1, s, n)
         elif r >= 6:
             self.drop(h, 1, s)
             self.log("    stunned")
@@ -923,6 +1015,65 @@ class Game:
             self.log("    missed")
         self.park(n, h)
         self.end_turn(h)
+
+    # ---------- lose-a-turn replacements
+    def use_wound(self, h):
+        w, h.wound = h.wound, 0
+        return w
+
+    def penalize(self, h, k, s, n):
+        """k lost turns (Hurt: 1, Cage Trap: 1-2), or what the 'lose' rule puts in their place.
+        s: the slot of the monster that hurt h (None for a trap, whose space is now clear)."""
+        how = self.R["lose"]
+        h.stats["penalty"] += k
+        if how == "turn":
+            h.lose += k
+        elif how == "wound":
+            h.wound += k
+        elif how == "limp":
+            h.limp += k
+        elif how == "slow":
+            h.slow += k
+        elif how == "extra":
+            if h.cards:
+                self.drop(h, k, s)
+        elif how == "knock":
+            self.knock_back(h, 5 * k)
+        elif how == "rush":
+            for _ in range(k):
+                for o in self.heroes:
+                    if o is not h:
+                        self.free_move(o, 2)
+        else:
+            raise ValueError(how)
+
+    def walk(self, h, path, steps):
+        """Move h up to `steps` spaces along path (path[0] = h.pos) through cleared spaces only,
+        never ending in another hero's room or hallway space."""
+        stops = [h.pos]
+        for a, b in zip(path, path[1:steps + 1]):
+            kind = next(k for m, k in self.b.adj[a] if m == b)
+            if not self.cleared(b) or not self.can_cross(h, a, b, kind):
+                break
+            stops.append(b)
+        while len(stops) > 1 and self.occupied(stops[-1], h) and self.b.kind(stops[-1]) != "chamber":
+            stops.pop()
+        if stops[-1] != h.pos:
+            h.pos, h.prev = stops[-1], None
+
+    def knock_back(self, h, steps):
+        dist, par = self.dijkstra(h)
+        if self.b.gh in par:
+            self.walk(h, self.path_to(par, self.b.gh), steps)
+            self.log(f"    knocked back to {h.pos}")
+
+    def free_move(self, o, steps):
+        """lose=rush: an opponent moves up to `steps` toward their target, between turns, without fighting."""
+        if o.lose or o.regen or getattr(o, "won", False):
+            return
+        target, dist, par = self.choose_target(o)
+        if target in par and target != o.pos:
+            self.walk(o, self.path_to(par, target), steps)
 
     # ---------- driver
     def play(self):
