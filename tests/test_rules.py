@@ -592,7 +592,7 @@ class HouseRulings(unittest.TestCase):
         self.assertEqual(g2.slot[r2]["known"], {h.idx})
 
     def test_hurt_fighter_does_not_lose_a_turn(self):
-        for rules, lost in (({}, 1), (sim.parse_rules("house"), 0)):
+        for rules, lost in (({}, 1), ({"f_tough": True}, 0)):
             g = new_game(rules=rules)
             f = g.heroes[2]
             park_others(g, f)
@@ -765,11 +765,204 @@ class Replacements(unittest.TestCase):
         g.encounter(h)
         self.assertEqual((h.lose, h.wound), (0, 2))
 
+    def test_resting_stays_put(self):
+        g, h = self.hit_back("lose=rest+rest_move=0+rest_fight=1", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, h.resting, h.pos), (0, 1, self.door))
+        g.take_turn(h)
+        self.assertEqual((h.resting, h.pos), (0, self.door))
+
+    def test_resting_fights_the_monster_in_its_space(self):
+        g, h = self.hit_back("lose=rest+rest_move=0+rest_fight=1", (4, 5))
+        g.encounter(h)
+        h.pos = self.room                                         # say it couldn't step back
+        g.slot[self.room]["monster"] = monster("Goblin")
+        g.rng.load(6, 6)
+        g.take_turn(h)
+        self.assertTrue(g.cleared(self.room))
+
+    def test_resting_wizard_casts_next_door(self):
+        g = new_game(rules={"lose": "rest", "rest_move": 0, "rest_fight": True})
+        w = g.heroes[3]
+        park_others(g, w)
+        w.spells = {"fireball": 3, "lightning": 0, "teleport": 0}
+        w.resting, w.pos = 1, self.door
+        g.slot[self.room] = {"monster": monster("Hill Giant"), "drops": [], "known": None}
+        g.rng.load(6, 6)
+        g.take_turn(w)
+        self.assertEqual((w.stats["casts"], w.pos), (1, self.room))
+        self.assertTrue(g.cleared(self.room))
+
+    def test_resting_moves_two_and_does_not_fight(self):
+        g, h = self.hit_back("lose=rest", (4, 5))               # defaults: rest_move=2, rest_fight off
+        g.encounter(h)
+        self.assertEqual((h.lose, h.resting), (0, 1))
+        start, fights = h.pos, h.stats["fights"]
+        g.take_turn(h)
+        steps = {start: 0}
+        q = [start]
+        for x in q:
+            for y, _ in BOARD.adj[x]:
+                if y not in steps:
+                    steps[y] = steps[x] + 1
+                    q.append(y)
+        self.assertLessEqual(steps[h.pos], 2)
+        self.assertEqual((h.resting, h.stats["fights"]), (0, fights))
+        self.assertTrue(g.cleared(h.pos))
+
+    def test_resting_in_place_without_fighting(self):
+        g, h = self.hit_back("lose=rest+rest_move=0", (4, 5))
+        g.encounter(h)
+        h.pos = self.room                                         # say it couldn't step back
+        g.take_turn(h)
+        self.assertEqual((h.pos, h.stats["fights"]), (self.room, 1))
+        self.assertIn(self.room, g.slot)
+
+    def goblin_fight(self, g, h, dice):
+        """h fights a Goblin in a level-1 room (Rogue needs 3); returns whether it won."""
+        r, door = door_room(1)
+        g.slot.pop(r, None)
+        g.defeated[r] = 0
+        put_on_top(g, monster("Goblin"))
+        h.prev, h.pos = door, r
+        g.rng.load(*dice)
+        g.encounter(h)
+        return g.cleared(r)
+
+    def test_hourglass_tokens(self):
+        g, h = self.hit_back("lose=hourglass", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, h.hourglass), (0, 1))
+
+    def test_hourglass_clearing(self):
+        # (rule, after a missed attack, after a won fight, after ending a turn in the Great Hall)
+        for rule, miss, win, hall in (("next", 0, 0, 0), ("win", 2, 0, 0), ("hall", 2, 2, 0), ("game", 2, 2, 2)):
+            g = new_game(rules={"lose": "hourglass", "hourglass": rule})
+            h = g.heroes[0]
+            park_others(g, h)
+            h.hourglass = 2
+            self.assertFalse(self.goblin_fight(g, h, (2, 2, 1, 1)), rule)   # 4 - 2 = 2 misses; it misses back
+            self.assertEqual(h.hourglass, miss, rule)
+            h.hourglass = max(h.hourglass, 0)
+            won = self.goblin_fight(g, h, (2, 3))                           # 5 - tokens >= 3
+            self.assertTrue(won, rule)
+            self.assertEqual(h.hourglass, win, rule)
+            h.pos = BOARD.gh
+            g.end_turn(h)
+            self.assertEqual(h.hourglass, hall, rule)
+
+    def test_hourglass_cage_gives_two(self):
+        g = new_game(rules={"lose": "hourglass"})
+        r, door = door_room(4)
+        h = g.heroes[0]
+        park_others(g, h)
+        put_on_top(g, next(m for m in MONSTERS if m["trap"] == "cage" and m["level"] == 4))
+        h.prev, h.pos = door, r
+        g.rng.load(5)
+        g.encounter(h)
+        self.assertEqual((h.lose, h.hourglass), (0, 2))
+
+    def test_shaken_raises_the_next_fight_back(self):
+        g, h = self.hit_back("lose=shaken", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, h.shaken), (0, 1))
+        h.cards = [treasure("Sack of Gold", 1)] * 3
+        h.prev, h.pos = self.door, self.room
+        g.rng.load(1, 1, 5, 6)                                    # miss, then 11 + 1 = Crushed
+        g.encounter(h)
+        self.assertEqual((h.stats["crushed"], h.pos, h.cards, h.shaken), (1, BOARD.gh, [], 0))
+
+    def test_bless_gives_everyone_else_plus_one(self):
+        g, h = self.hit_back("lose=bless", (4, 5))
+        g.encounter(h)
+        self.assertEqual(h.lose, 0)
+        self.assertEqual([o.wound for o in g.heroes], [0, -1, -1, -1])
+        c = g.heroes[1]                                           # Cleric needs 4 against a Goblin
+        r, door = door_room(1)
+        put_on_top(g, monster("Goblin"))
+        c.prev, c.pos = door, r
+        g.rng.load(1, 2)                                          # 3 + 1 = 4: a hit
+        g.encounter(c)
+        self.assertTrue(g.cleared(r))
+        self.assertEqual(c.wound, 0)
+
+    def test_bounty_pays_whoever_beats_the_monster(self):
+        g, h = self.hit_back("lose=bounty", (4, 5))
+        g.encounter(h)
+        self.assertEqual((h.lose, g.slot[self.room]["bounty"]), (0, 1))
+        o = g.heroes[1]
+        o.cards = []
+        o.prev, o.pos = self.door, self.room
+        g.rng.load(6, 6)
+        g.encounter(o)
+        self.assertEqual(len(o.cards), 3)                         # the drop, the room's Treasure, the bounty
+        self.assertTrue(all(c["level"] == 4 for c in o.cards[1:]))
+
+    def test_bounty_on_a_cage_trap_does_nothing(self):
+        g = new_game(rules={"lose": "bounty"})
+        r, door = door_room(4)
+        h = g.heroes[0]
+        park_others(g, h)
+        put_on_top(g, next(m for m in MONSTERS if m["trap"] == "cage" and m["level"] == 4))
+        h.prev, h.pos = door, r
+        g.rng.load(5)
+        g.encounter(h)
+        self.assertEqual(h.lose, 0)
+        self.assertTrue(g.cleared(r))
+
     def test_tough_fighter_skips_any_replacement(self):
         for how in ("wound", "extra", "limp", "slow"):
-            g, h = self.hit_back(f"house+lose={how}", (4, 5), cls=2)
+            g, h = self.hit_back(f"f_tough=1+lose={how}", (4, 5), cls=2)
             g.encounter(h)
             self.assertEqual((h.lose, h.wound, h.limp, h.slow, len(h.cards)), (0, 0, 0, 0, 3), how)
+
+
+
+class LevelClearPerk(unittest.TestCase):
+    def setup(self, rules):
+        g = new_game(rules=rules)
+        h = g.heroes[0]
+        park_others(g, h)
+        rooms = [r for r in BOARD.rooms if BOARD.level(r) == 1]
+        for r in rooms[1:]:
+            g.defeated[r] = 1
+        last = rooms[0]
+        door = next(m for m, k in BOARD.adj[last] if k == "door")
+        put_on_top(g, monster("Goblin"))
+        h.prev, h.pos, h.cards = door, last, []
+        g.rng.load(6, 6)
+        return g, h
+
+    def test_last_room_of_a_level_pays_a_deeper_treasure(self):
+        g, h = self.setup({"clear_perk": "deeper"})
+        top2 = g.tdeck[2][-1]
+        g.encounter(h)
+        self.assertEqual(len(h.cards), 2)                         # the room's Treasure and the bonus
+        self.assertIn(top2, h.cards)
+        self.assertEqual(h.stats["level_clears"], 1)
+
+    def test_no_perk_by_default_or_before_the_last_room(self):
+        g, h = self.setup({})
+        g.encounter(h)
+        self.assertEqual(len(h.cards), 1)
+        g, h = self.setup({"clear_perk": "deeper"})
+        g.defeated[[r for r in BOARD.rooms if BOARD.level(r) == 1][1]] = 0
+        g.encounter(h)
+        self.assertEqual(len(h.cards), 1)
+
+    def test_chambers_dont_count(self):
+        g = new_game(rules={"clear_perk": "deeper"})
+        for r in BOARD.rooms:
+            if BOARD.level(r) == 2:
+                g.defeated[r] = 1
+        c, hall = chamber(2)
+        h = g.heroes[0]
+        park_others(g, h)
+        h.prev, h.pos, h.cards = hall, c, []
+        g.slot[c] = {"monster": monster("Goblin") | {"level": 2}, "drops": [], "known": None}
+        g.rng.load(6, 6)
+        g.encounter(h)
+        self.assertEqual(h.cards, [])
 
 
 if __name__ == "__main__":

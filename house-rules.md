@@ -1,23 +1,25 @@
 # House rules: the fixes that make the game work
 
-Played as printed, the 2014 game is lopsided: Rogues and Clerics win about twice as often as Fighters and Wizards. These six rules fix that. Nothing printed on the board or the cards changes.
+Played as printed, the 2014 game is lopsided: Rogues and Clerics win about twice as often as Fighters and Wizards. These six rules fix that, and they also replace the two printed mechanics that play worst: losing turns and "random" drops from a hand whose card backs show their level. Nothing printed on the board or the cards changes.
 
 Win rates in a 4-player game with one Hero of each class, over 24,000 simulated games where every player picks a random human-like play style:
 
 | | Rogue | Cleric | Fighter | Wizard |
 |---|---|---|---|---|
 | Printed rules | 31.5% | 33.6% | 15.7% | 19.2% |
-| With these house rules | 26.4% | 28.8% | 23.5% | 21.2% |
+| With these house rules | 26.3% | 26.6% | 22.1% | 25.0% |
 
-In the simulator, `--rules house` turns on the two Fighter rules and Drop Treasure of your choice. The other three rules are always on.
+In the simulator, `--rules house` turns on the first three rules below. The other three are always on.
 
 ## Only Fighters use Magic Swords
 
 Only a Fighter adds a Magic Sword's bonus to attack rolls, and only a Fighter can use a sword against a monster with a "–" (counting it as 13). Any other Hero who finds a sword keeps it as treasure: it counts toward their gold, but gives no bonus.
 
-## A Hurt Fighter doesn't lose a turn
+## Hourglass tokens instead of losing turns
 
-When a monster's fight-back roll is 8–10 (Hurt), a Fighter still drops 1 Treasure card and moves back 1 space. They don't take a Lose a Turn token.
+Nobody ever loses a turn. Whenever a rule says you lose a turn, take 1 Hourglass token for each turn instead: 1 for a Hurt result (fight-back roll 8–10), and 1 or 2 for a Cage Trap. You still drop your Treasure card and move back 1 space when Hurt.
+
+Each Hourglass token takes 1 off every attack roll you make, spells included. All your tokens go back when you win a fight. A Crushed Hero starts over with none. The same rule applies to every Hero, Fighters included.
 
 ## Drop Treasure of your choice
 

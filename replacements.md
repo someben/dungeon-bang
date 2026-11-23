@@ -5,11 +5,11 @@ Two printed mechanics don't play well at the table:
 - **"Random" treasure drops.** Treasure card backs differ by level, so shuffling a hand face down doesn't hide anything.
 - **Lose a Turn** (a Hurt result of 8–10, and the Cage Trap). Skipping a turn is dull; a perk or a penalty is better.
 
-This page compares the candidate replacements. Drop Treasure of your choice (`choice`) is now a house rule (see `house-rules.md`). No Lose a Turn replacement is adopted yet.
+This page compares the candidate replacements. Two are now house rules (see `house-rules.md`): Drop Treasure of your choice (`choice`), and Hourglass tokens that last until you win a fight (`hourglass`), which also replaced "A Hurt Fighter doesn't lose a turn".
 
 ## How it was tested
 
-Each variant was played in 24,000 simulated 4-player games, one Hero of each class, where every player picks a random human-like play style (`python3 explore.py mixed RULES`). Every variant starts from the house rules (see `house-rules.md`) as they were before Drop Treasure of your choice was adopted, so with random drops, unless noted.
+Each variant was played in 24,000 simulated 4-player games, one Hero of each class, where every player picks a random human-like play style (`python3 explore.py mixed RULES`). Every variant starts from the house rules (see `house-rules.md`) as they were before Drop Treasure of your choice was adopted, so with random drops, unless noted. Since `house` now means the adopted rules, rerun the first-round tables with `swords=fighter+f_tough=1` in place of `house`.
 
 Every number moves about ±0.6% between runs from chance alone, so differences under about 1 point are noise. "Worst gap" is how far the furthest class is from an even 25%.
 
@@ -68,6 +68,43 @@ A Hurt Fighter still skips the penalty, as in the current house rules.
 
 Every replacement puts the Fighter at 20–21%, so a Hurt Fighter should still skip the penalty, whichever one is picked.
 
+## Second round: with drops of your choice
+
+These ran after Drop Treasure of your choice was adopted, with the Fighter exemption unless noted (`--rules swords=fighter+f_tough=1+drop_pick=choice+lose=...`).
+
+| | Rogue | Cleric | Fighter | Wizard | Worst gap | Avg. rounds |
+|---|---|---|---|---|---|---|
+| Lose a turn (baseline) | 26.4% | 28.8% | 23.5% | 21.2% | 3.8% | 34.9 |
+| Rest in place, may fight or cast (`rest`, `rest_move=0`, `rest_fight=1`) | 26.4% | 29.0% | 23.6% | 20.9% | 4.1% | 34.8 |
+| Rest: move up to 1, no fighting (`rest`, `rest_move=1`) | 26.0% | 28.6% | 24.0% | 21.4% | 3.6% | 34.7 |
+| Rest: move up to 2, no fighting (`rest`, `rest_move=2`) | 26.2% | 29.1% | 23.8% | 21.0% | 4.1% | 34.5 |
+| Rest: move up to 3, no fighting (`rest`, `rest_move=3`) | 26.2% | 29.1% | 23.9% | 20.9% | 4.1% | 34.5 |
+| Rest: move up to 3, may fight (`rest`, `rest_move=3`, `rest_fight=1`) | 28.2% | 32.1% | 19.8% | 19.8% | 7.1% | 33.2 |
+| Shaken: +1 on the next fight-back roll (`shaken`) | 27.2% | 30.7% | 21.4% | 20.6% | 5.7% | 33.4 |
+| Blessing: every opponent +1 on their next attack (`bless`) | 27.9% | 31.6% | 19.7% | 20.8% | 6.6% | 30.8 |
+| Bounty: 1 extra Treasure for whoever beats the monster (`bounty`) | 30.3% | 40.9% | 13.0% | 15.9% | 15.9% | 26.7 |
+| Hourglass, gone after your next attack roll (`hourglass=next`) | 26.8% | 29.0% | 23.3% | 20.9% | 4.1% | 34.2 |
+| Hourglass, gone when you win a fight (`hourglass=win`) | 24.3% | 25.2% | 28.3% | 22.2% | 3.3% | 35.2 |
+| Hourglass, gone in the Great Hall (`hourglass=hall`) | 19.1% | 20.6% | 34.3% | 26.0% | 9.3% | 37.8 |
+| Hourglass, never gone (`hourglass=game`) | 16.4% | 18.0% | 40.0% | 25.6% | 15.0% | 39.1 |
+| **Without the Fighter exemption** | | | | | | |
+| Hourglass, gone when you win a fight (adopted) | 26.3% | 26.6% | 22.1% | 25.0% | 2.9% | 35.8 |
+| Hourglass, gone in the Great Hall | 22.0% | 23.5% | 21.9% | 32.6% | 7.6% | 39.4 |
+
+- **Resting** plays like losing a turn as long as you can't fight. How far you may move barely matters.
+- **Shaken, Blessing, and Bounty** are too light or too generous, and help the Rogue and Cleric.
+- **Hourglass tokens** get harsher the longer they last, which pulls back the Rogue and Cleric, who are Hurt most. With the Fighter exempt, lasting tokens hand the Fighter the game. Without the exemption, tokens that last until you win a fight give the most even split of any rule set tested, and the Wizard's best result.
+
+### A perk for clearing a level (`--rules house+clear_perk=deeper`, with lose a turn and the Fighter exemption)
+
+Whoever puts the Defeated token on a level's last room (chambers don't count) draws a bonus Treasure card. Each level has exactly as many Treasure cards as rooms, so that level's pile is empty by then; the bonus comes from the next level down.
+
+| | Rogue | Cleric | Fighter | Wizard | Worst gap |
+|---|---|---|---|---|---|
+| Level-clear perk | 29.3% | 29.9% | 21.4% | 19.4% | 5.6% |
+
+Only Levels 1 and 2 ever get cleared (in about half and a third of games), almost always by the Rogue or Cleric, so the perk goes to the leaders.
+
 ## How the simulator plays each one
 
 - **Die roll:** the hand is laid face up in the order the cards were collected, and the count wraps around. With more than 6 cards, the newest ones can't be picked.
@@ -78,6 +115,10 @@ Every replacement puts the Fighter at 20–21%, so a Hurt Fighter should still s
 - **Extra drop from a Cage Trap:** the room is cleared by then, so the card goes to the bottom of its level's treasure pile.
 - **Knock back:** moves only through cleared spaces. Hurt still steps you back 1 space first.
 - **Opponents' 2 moves:** they move toward their targets but don't fight.
+- **Resting:** a Hurt Hero has already stepped back into the hallway. Resting in place with fighting allowed means fighting the monster in your space, if you couldn't step back, or a Wizard casting next door.
+- **Shaken:** the +1 is used by your next melee fight; spells from outside don't use it.
+- **Bounty:** a Cage Trap leaves no monster, so it costs nothing. A discarded monster's bounty goes with its dropped treasure.
+- **Hourglass:** Crushed clears all tokens. The AI doesn't plan trips home to clear Great Hall tokens.
 - **AI awareness:** the AI players account for which card a drop takes and for the extra drop. They don't plan around the other penalties.
 
-Not yet run: a drop rule and a lose rule together, or `explore.py adapt` (each class switching to its best strategy) under a replacement.
+Not yet run: `explore.py adapt` (each class switching to its best strategy) under the adopted house rules.

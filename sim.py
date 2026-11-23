@@ -54,15 +54,27 @@ NUM_SLOTS = 12  # numbered monster slots on the board edge
 #                "newest" your most recently collected | "lowest" your lowest-level card |
 #                "choice" you pick: your cheapest cards, keeping your wielded Magic Sword, ESP, Crystal Ball,
 #                and Secret Door cards for last (every class, for both the 1-card and the half drop)
+#   rest_move    lose=rest: the most spaces a resting Hero moves (0-5)
+#   rest_fight   lose=rest: False | True: a resting Hero may still fight or cast
+#   clear_perk   "none" | "deeper": whoever defeats the last monster in a level's rooms (chambers don't count)
+#                draws 1 Treasure card from the next level down (that level's own pile is empty by then)
+#   hourglass    lose=hourglass: when Hourglass tokens go: "next" after your next attack roll | "win" when you
+#                win a fight | "hall" when you end a turn in the Great Hall | "game" never (Crushed clears everything)
 #   lose         what replaces each lost turn (Hurt 8-10: 1; Cage Trap: 1 or 2):
 #                "turn" lose the turn | "wound" -1 on your next attack roll (tokens stack) |
 #                "knock" knocked back 5 spaces toward the Great Hall | "limp" next turn move but don't fight |
-#                "slow" next turn move only 2 | "extra" drop 1 more Treasure card | "rush" every opponent moves 2
+#                "slow" next turn move only 2 | "extra" drop 1 more Treasure card | "rush" every opponent moves 2 |
+#                "rest" next turn you rest: move at most rest_move spaces, and fight or cast only if rest_fight |
+#                "shaken" +1 on the monster's fight-back roll in your next fight |
+#                "bless" every opponent gets +1 on their next attack roll |
+#                "hourglass" take an Hourglass token: -1 per token on your attack rolls (spells too) until
+#                the tokens go, per the 'hourglass' rule |
+#                "bounty" whoever beats the monster that hurt you draws 1 extra Treasure card of its level
 RULES = {"move": "5", "secret": "std", "secret_share": False, "regen_where": "gh", "regen_amt": "d6",
          "regen_wait": True, "miss_keep": False, "book": "d6+6", "tele_range": 1, "tele_from": "chamber",
          "tele_keep": False, "swords": "all", "trophy": False,
          "f_reroll": False, "f_armor": False, "f_tough": False, "f_move": False,
-         "drop_pick": "random", "lose": "turn"}
+         "drop_pick": "random", "lose": "turn", "rest_move": 2, "rest_fight": False, "clear_perk": "none", "hourglass": "win"}
 # fight-back table probabilities (2d6)
 P2 = {s: (6 - abs(s - 7)) / 36 for s in range(2, 13)}
 
@@ -182,6 +194,9 @@ class Hero:
         self.wound = 0  # lose=wound: -1 per token on the next attack roll
         self.limp = 0   # lose=limp: turns of moving without fighting
         self.slow = 0   # lose=slow: turns of moving only 2
+        self.resting = 0  # lose=rest: turns of resting (limited moves, maybe no fighting)
+        self.hourglass = 0  # lose=hourglass: tokens, -1 each on attack rolls
+        self.shaken = 0  # lose=shaken: + on the fight-back roll in the next fight
         self.found = set()  # frozenset({a,b}) secret doors found
         self.sword_card = None
         self.sword_bonus = 0
@@ -297,9 +312,11 @@ class Game:
             self.tdeck[lv].insert(self.rng.randrange(len(self.tdeck[lv]) + 1), s["treasure"])
         self.stats_slots_full += 1
         self.log(f"  all {NUM_SLOTS} slots taken: {s['monster']['name']} in {n} is discarded")
-        if s["drops"]:
+        if s["drops"] or s.get("bounty"):
             to = self.choose_drop_slot(h)
             self.slot[to]["drops"].extend(s["drops"])
+            if s.get("bounty"):  # the bounty goes with the dropped treasure
+                self.slot[to]["bounty"] = self.slot[to].get("bounty", 0) + s["bounty"]
             self.log(f"    its {len(s['drops'])} dropped card(s) go under the monster in {to}")
 
     def choose_drop_slot(self, h):
@@ -344,7 +361,7 @@ class Game:
             spells = False
         for mode in (self.modes(h) if spells else [h.cls]):
             bonus = h.sword_bonus if mode == h.cls else 0
-            if h.wound:
+            if h.wound or h.hourglass:
                 p = self.p_wounded(h, m, level, mode, bonus)
             else:
                 p = self.p_hit(m, mode, bonus) if m else self.p_level[level, mode, bonus]
@@ -365,7 +382,7 @@ class Game:
                 if not bonus or mode in ("fireball", "lightning"):
                     return 0.0
                 t = 13
-            return p_at_least(t - (bonus if mode not in ("fireball", "lightning") else 0) + h.wound)
+            return p_at_least(t - (bonus if mode not in ("fireball", "lightning") else 0) + h.wound + h.hourglass)
         if m:
             return one(m)
         deck = self.all_monsters[level]
@@ -444,7 +461,10 @@ class Game:
     def fight_back_loss(self, h):
         gp = h.gp
         card = self.first_drop_value(h)
-        loss = gp * P2[12] + gp * 0.5 * P2[11] + card * (1 - P2[12] - P2[11] - sum(P2[s] for s in range(2, 6)))
+        q = {r: 0.0 for r in range(2, 13)}  # fight-back results, after a Shaken bonus
+        for r, pr in P2.items():
+            q[min(12, r + h.shaken)] += pr
+        loss = gp * q[12] + gp * 0.5 * q[11] + card * (1 - q[12] - q[11] - sum(q[s] for s in range(2, 6)))
         if self.R["lose"] == "extra" and not (h.cls == "fighter" and self.R["f_tough"]):
             loss += card * (P2[8] + P2[9] + P2[10])
         return loss
@@ -489,6 +509,8 @@ class Game:
         s = self.slot.get(n)
         drops = sum(c["gp"] for c in s["drops"]) if s else 0  # dropped loot lies face up
         gain = drops * h.p["scav"] + self.room_treasure_value(h, n, s)
+        if s and s.get("bounty"):
+            gain += s["bounty"] * self.avg_treasure.get(lv, 0)
         p, mode = self.best_mode(h, self.seen_monster(h, s), lv)
         loss = 0 if mode in ("fireball", "lightning") else self.fight_back_loss(h) * h.p["risk"]
         return p * gain - (1 - p) * loss, p
@@ -642,6 +664,18 @@ class Game:
         slow = h.slow > 0
         if slow:
             h.slow -= 1
+        if h.resting:
+            h.resting -= 1
+            if self.R["rest_move"] == 0:
+                if self.R["rest_fight"]:
+                    self.rest_turn(h)
+                else:
+                    self.end_turn(h)
+                return
+            nofight = nofight or not self.R["rest_fight"]
+            slow, rest_cap = True, self.R["rest_move"]
+        else:
+            rest_cap = 2
         # still in a space with a waiting monster: fight again or leave
         if not nofight and not self.cleared(h.pos) and h.pos in self.slot:
             ev, p = self.target_value(h, h.pos)
@@ -665,7 +699,7 @@ class Game:
         if h.cls == "fighter" and self.R["f_move"]:
             moves += 1
         if slow:
-            moves = min(moves, 2)
+            moves = min(moves, rest_cap)
         esp_used = False
         for nxt in path[1:]:
             kind = next(k for m, k in self.b.adj[h.pos] if m == nxt)
@@ -753,6 +787,8 @@ class Game:
         self.end_turn(h)
 
     def end_turn(self, h):
+        if h.pos == self.b.gh and self.R["hourglass"] == "hall":
+            h.hourglass = 0
         if h.pos == self.b.gh and h.gp >= GOAL[h.cls] and self.has_trophy(h):
             h.won = True
             return
@@ -884,19 +920,40 @@ class Game:
             roll = two_d6(self.rng) + h.sword_bonus - wound  # one re-roll of a missed attack
         self.log(f"  {h.cls}{h.idx} fights {m['name']} (L{m['level']}) in {n} with {mode}: {roll} vs {t}")
         h.stats["fights"] += 1
+        shaken, h.shaken = h.shaken, 0  # a Shaken token lasts one fight
         if t is not None and roll >= t:
             self.win_fight(h, n, s)
         else:
-            self.fight_back(h, n, s)
+            self.fight_back(h, n, s, shaken)
+
+    def level_clear(self, h, n):
+        """clear_perk: the Defeated token on a level's last room earns a Treasure card from one level down."""
+        if self.R["clear_perk"] == "none" or self.b.kind(n) != "room":
+            return
+        lv = self.b.level(n)
+        if any(not self.cleared(r) for r in self.b.rooms if self.b.level(r) == lv):
+            return
+        h.stats["level_clears"] += 1
+        t = self.draw_treasure(lv + 1) if lv < 6 else None
+        if t:
+            self.gain(h, t)
+            self.log(f"    {h.cls}{h.idx} clears level {lv}: bonus {t['name']} {t['gp']}")
 
     def win_fight(self, h, n, s):
         del self.slot[n]
         self.mdisc[s["monster"]["level"]].append(s["monster"])
         self.defeated[n] += 1
+        self.level_clear(h, n)
+        if self.R["hourglass"] == "win":
+            h.hourglass = 0
         h.stats["wins"] += 1
         gained = list(s["drops"])
         if self.b.kind(n) == "room":
             t = s.get("treasure") or self.draw_treasure(self.b.level(n))
+            if t:
+                gained.append(t)
+        for _ in range(s.get("bounty", 0)):
+            t = self.draw_treasure(self.b.level(n))
             if t:
                 gained.append(t)
         for c in gained:
@@ -911,6 +968,7 @@ class Game:
         self.mdisc[m["level"]].append(m)
         self.defeated[n] += 1
         h.stats["traps"] += 1
+        self.level_clear(h, n)
         for c in s["drops"]:
             self.gain(h, c)
         if self.b.kind(n) == "room":
@@ -991,8 +1049,8 @@ class Game:
                 h.sword_bonus = 0
         return dropped
 
-    def fight_back(self, h, n, s):
-        r = two_d6(self.rng)
+    def fight_back(self, h, n, s, shaken=0):
+        r = min(12, two_d6(self.rng) + shaken)
         if h.cls == "fighter" and self.R["f_armor"] and 6 <= r <= 7:
             r = 5  # armor: Stunned counts as a Miss
         h.stats["hit_back"] += 1
@@ -1030,7 +1088,11 @@ class Game:
 
     # ---------- lose-a-turn replacements
     def use_wound(self, h):
+        """What comes off this attack roll: Wound tokens (used up) and Hourglass tokens."""
         w, h.wound = h.wound, 0
+        w += h.hourglass
+        if self.R["hourglass"] == "next":
+            h.hourglass = 0
         return w
 
     def penalize(self, h, k, s, n):
@@ -1051,6 +1113,19 @@ class Game:
                 self.drop(h, k, s)
         elif how == "knock":
             self.knock_back(h, 5 * k)
+        elif how == "hourglass":
+            h.hourglass += k
+        elif how == "rest":
+            h.resting += k
+        elif how == "shaken":
+            h.shaken += k
+        elif how == "bless":
+            for o in self.heroes:
+                if o is not h:
+                    o.wound -= k  # a negative wound is a bonus on the next attack roll
+        elif how == "bounty":
+            if s is not None:  # a Cage Trap leaves no monster to put a bounty on
+                s["bounty"] = s.get("bounty", 0) + k
         elif how == "rush":
             for _ in range(k):
                 for o in self.heroes:
@@ -1058,6 +1133,29 @@ class Game:
                         self.free_move(o, 2)
         else:
             raise ValueError(how)
+
+    def rest_turn(self, h):
+        """lose=rest with rest_move=0 and rest_fight: fight the monster in this space, or cast next door, or stay."""
+        if not self.cleared(h.pos) and h.pos in self.slot:
+            ev, p = self.target_value(h, h.pos)
+            if ev > 0 or p >= 0.4:
+                self.encounter(h)
+                return
+        if h.cls == "wizard" and h.nspells() and not (self.occupied(h.pos, h) and self.b.kind(h.pos) != "chamber"):
+            best = None
+            for m, kind in self.b.adj[h.pos]:
+                if self.cleared(m) or not self.can_cross(h, h.pos, m, kind):
+                    continue
+                if self.b.kind(m) == "room" and self.occupied(m, h):
+                    continue
+                ev, p = self.target_value(h, m)
+                _, mode = self.best_mode(h, self.seen_monster(h, self.slot.get(m)), self.b.level(m))
+                if mode in ("fireball", "lightning") and ev > 0 and (best is None or ev > best[0]):
+                    best = (ev, m, mode)
+            if best:
+                self.cast(h, best[1], best[2])
+                return
+        self.end_turn(h)
 
     def walk(self, h, path, steps):
         """Move h up to `steps` spaces along path (path[0] = h.pos) through cleared spaces only,
@@ -1105,7 +1203,7 @@ class Game:
 
 
 # our adopted house rules (see house-rules.md); the 12-slot rule is always on
-HOUSE = {"swords": "fighter", "f_tough": True, "drop_pick": "choice"}
+HOUSE = {"swords": "fighter", "drop_pick": "choice", "lose": "hourglass", "hourglass": "win"}
 
 
 def parse_rules(text):
