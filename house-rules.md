@@ -9,6 +9,13 @@ Win rates in a 4-player game with one Hero of each class, over 24,000 simulated 
 | Printed rules | 31.5% | 33.6% | 15.7% | 19.2% |
 | With these house rules | 26.3% | 26.6% | 22.1% | 25.0% |
 
+When every class instead switches to the strategy that wins it the most (`python3 explore.py adapt house`, 2 rounds, 4,000 games):
+
+| | Rogue | Cleric | Fighter | Wizard |
+|---|---|---|---|---|
+| Everyone on the default strategy | 26.1% | 28.1% | 23.5% | 22.4% |
+| After 2 best-response rounds | 24.4% | 26.5% | 27.6% | 21.6% |
+
 In the simulator, `--rules house` turns on the first three rules below. The other three are always on.
 
 ## Only Fighters use Magic Swords
