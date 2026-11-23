@@ -51,7 +51,9 @@ NUM_SLOTS = 12  # numbered monster slots on the board edge
 #   drop_pick    which Treasure cards a "drop 1 random" / "drop half" result takes (Crushed drops everything):
 #                "random" truly random | "die" roll 1 die and count along the hand, laid face up in the order
 #                collected (wrapping) | "left" the player on your left picks by card back: the deepest level |
-#                "newest" your most recently collected | "lowest" your lowest-level card
+#                "newest" your most recently collected | "lowest" your lowest-level card |
+#                "choice" you pick: your cheapest cards, keeping your wielded Magic Sword, ESP, Crystal Ball,
+#                and Secret Door cards for last (every class, for both the 1-card and the half drop)
 #   lose         what replaces each lost turn (Hurt 8-10: 1; Cage Trap: 1 or 2):
 #                "turn" lose the turn | "wound" -1 on your next attack roll (tokens stack) |
 #                "knock" knocked back 5 spaces toward the Great Hall | "limp" next turn move but don't fight |
@@ -457,6 +459,8 @@ class Game:
             return c[-1]["gp"]
         if how == "die":
             return sum(c[(r - 1) % len(c)]["gp"] for r in range(1, 7)) / 6
+        if how == "choice":
+            return self.choice_order(h)[0]["gp"]
         if how in ("left", "lowest"):
             lv = (max if how == "left" else min)(x["level"] for x in c)
             pick = [x["gp"] for x in c if x["level"] == lv]
@@ -951,6 +955,8 @@ class Game:
             return self.rng.sample(row, k)
         if how == "newest":
             return row[len(row) - k:]
+        if how == "choice":
+            return self.choice_order(h)[:k]
         out = []
         for _ in range(k):
             if how == "die":
@@ -961,6 +967,12 @@ class Game:
             row.remove(c)
             out.append(c)
         return out
+
+    def choice_order(self, h):
+        """drop_pick=choice: the order a player gives up cards in. Useful cards last, then cheapest first."""
+        def useful(c):
+            return c is h.sword_card or c["effect"] in ("esp", "crystal_ball", "secret_door")
+        return sorted(h.cards, key=lambda c: (useful(c), c["gp"]))
 
     def drop(self, h, k, s):
         """Drop k cards (chosen by drop_pick) into slot s; s=None puts them under their level's treasure pile."""
@@ -1093,7 +1105,7 @@ class Game:
 
 
 # our adopted house rules (see house-rules.md); the 12-slot rule is always on
-HOUSE = {"swords": "fighter", "f_tough": True}
+HOUSE = {"swords": "fighter", "f_tough": True, "drop_pick": "choice"}
 
 
 def parse_rules(text):

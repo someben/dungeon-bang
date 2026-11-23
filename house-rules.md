@@ -1,15 +1,15 @@
 # House rules: the fixes that make the game work
 
-Played as printed, the 2014 game is lopsided: Rogues and Clerics win about twice as often as Fighters and Wizards. These five rules fix that. Nothing printed on the board or the cards changes.
+Played as printed, the 2014 game is lopsided: Rogues and Clerics win about twice as often as Fighters and Wizards. These six rules fix that. Nothing printed on the board or the cards changes.
 
 Win rates in a 4-player game with one Hero of each class, over 24,000 simulated games where every player picks a random human-like play style:
 
 | | Rogue | Cleric | Fighter | Wizard |
 |---|---|---|---|---|
-| Printed rules | 31.7% | 33.4% | 15.5% | 19.4% |
-| With these house rules | 24.7% | 28.5% | 23.8% | 23.1% |
+| Printed rules | 31.5% | 33.6% | 15.7% | 19.2% |
+| With these house rules | 26.4% | 28.8% | 23.5% | 21.2% |
 
-In the simulator, `--rules house` turns on the two Fighter rules below. The other three rules are always on.
+In the simulator, `--rules house` turns on the two Fighter rules and Drop Treasure of your choice. The other three rules are always on.
 
 ## Only Fighters use Magic Swords
 
@@ -17,7 +17,13 @@ Only a Fighter adds a Magic Sword's bonus to attack rolls, and only a Fighter ca
 
 ## A Hurt Fighter doesn't lose a turn
 
-When a monster's fight-back roll is 8–10 (Hurt), a Fighter still drops 1 random Treasure card and moves back 1 space. They don't take a Lose a Turn token.
+When a monster's fight-back roll is 8–10 (Hurt), a Fighter still drops 1 Treasure card and moves back 1 space. They don't take a Lose a Turn token.
+
+## Drop Treasure of your choice
+
+Whenever a monster's fight-back makes you drop Treasure cards (1 card when Stunned or Hurt, half your cards when Seriously Hurt), you choose which cards to drop instead of drawing them at random. This applies to every Hero. A Crushed Hero still drops everything.
+
+Treasure card backs show their level, so a random draw from a face-down hand never hid anything anyway.
 
 ## Only 12 numbered slots
 

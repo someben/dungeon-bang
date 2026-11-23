@@ -12,7 +12,7 @@ This is an unofficial fan project. It is not affiliated with or endorsed by Wiza
 | `explore.py` | Parallel experiments: strategies, best responses, house-rule searches |
 | `board.txt` | The board as a graph: every hallway space, room, chamber, door, and secret door |
 | `monsters.csv`, `treasures.csv` | Card stats: to-hit numbers per class and spell, treasure values, special effects |
-| `house-rules.md` | The three house rules that even out the four classes, with the results |
+| `house-rules.md` | The six house rules that even out the four classes, with the results |
 | `rules.md` | Our summary of the rules and the sim's interpretation of unclear points |
 | `tools/` | Board-tracing tools (they need your own photos of the board in `photos/`) |
 | `results/explore.jsonl` | Logged experiment results |

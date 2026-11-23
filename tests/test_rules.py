@@ -673,6 +673,18 @@ class Replacements(unittest.TestCase):
         self.assertEqual(sorted(self.dropped(g)), ["Sack of Gold", "Sack of Gold"])
         self.assertEqual([c["level"] for c in h.cards], [6, 5])   # the rest stay in the order collected
 
+    def test_drop_of_your_choice(self):
+        esp = next(t for t in TREASURES if t["effect"] == "esp")
+        cards = self.hand() + [dict(esp)]
+        g, h = self.hit_back("drop_pick=choice", (3, 3), cards=list(cards))   # Stunned: the cheapest
+        g.encounter(h)
+        self.assertEqual([c["gp"] for c in g.slot[self.room]["drops"]], [250])
+        g, h = self.hit_back("drop_pick=choice", (5, 6), cards=list(cards))   # Seriously Hurt: 3 of 5
+        g.encounter(h)
+        self.assertEqual(sorted(c["gp"] for c in g.slot[self.room]["drops"]), [250, 500, 2000])
+        self.assertTrue(h.has("esp"))                    # useful cards go last, whatever they're worth
+        self.assertEqual([c["name"] for c in h.cards if not c["effect"]], ["Silver Coffer"])
+
     def test_lose_turn_is_printed_default(self):
         g, h = self.hit_back("", (4, 5))
         g.encounter(h)
