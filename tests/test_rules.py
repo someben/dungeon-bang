@@ -919,9 +919,9 @@ class Replacements(unittest.TestCase):
 
 
 class LevelClearPerk(unittest.TestCase):
-    def setup(self, rules):
+    def setup(self, rules, idx=0):
         g = new_game(rules=rules)
-        h = g.heroes[0]
+        h = g.heroes[idx]
         park_others(g, h)
         rooms = [r for r in BOARD.rooms if BOARD.level(r) == 1]
         for r in rooms[1:]:
@@ -940,6 +940,23 @@ class LevelClearPerk(unittest.TestCase):
         self.assertEqual(len(h.cards), 2)                         # the room's Treasure and the bonus
         self.assertIn(top2, h.cards)
         self.assertEqual(h.stats["level_clears"], 1)
+
+    def test_shallow_perk_only_below_your_safest_levels(self):
+        g, h = self.setup({"clear_perk": "shallow"})               # the Rogue's safest levels start at 1
+        g.encounter(h)
+        self.assertEqual(len(h.cards), 1)
+        g, h = self.setup({"clear_perk": "shallow"}, idx=2)        # the Fighter's start at 3
+        self.assertEqual(h.cls, "fighter")
+        g.encounter(h)
+        self.assertEqual(len(h.cards), 2)
+
+    def test_tokens_perk_gives_back_hourglass_tokens(self):
+        g, h = self.setup({"clear_perk": "tokens", "lose": "hourglass"})
+        h.hourglass = 1
+        g.rng.load(6, 6)
+        g.encounter(h)
+        self.assertEqual(h.hourglass, 0)
+        self.assertEqual(len(h.cards), 1)                          # no bonus card
 
     def test_no_perk_by_default_or_before_the_last_room(self):
         g, h = self.setup({})

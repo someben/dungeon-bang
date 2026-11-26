@@ -57,7 +57,9 @@ NUM_SLOTS = 12  # numbered monster slots on the board edge
 #   rest_move    lose=rest: the most spaces a resting Hero moves (0-5)
 #   rest_fight   lose=rest: False | True: a resting Hero may still fight or cast
 #   clear_perk   "none" | "deeper": whoever defeats the last monster in a level's rooms (chambers don't count)
-#                draws 1 Treasure card from the next level down (that level's own pile is empty by then)
+#                draws 1 Treasure card from the next level down (that level's own pile is empty by then) |
+#                "shallow" the same, but only for a level shallower than your class's printed safest levels |
+#                "tokens" the clearer gives back all their Hourglass tokens
 #   hourglass    lose=hourglass: when Hourglass tokens go: "next" after your next attack roll | "win" when you
 #                win a fight | "hall" when you end a turn in the Great Hall | "winhall" either one | "win1" each win takes 1 off | "game" never (Crushed clears everything)
 #   goal_<class> gold needed to win for that class (0 = printed: 10000 / 10000 / 20000 / 30000)
@@ -985,6 +987,11 @@ class Game:
         if any(not self.cleared(r) for r in self.b.rooms if self.b.level(r) == lv):
             return
         h.stats["level_clears"] += 1
+        if self.R["clear_perk"] == "tokens":
+            h.hourglass = 0
+            return
+        if self.R["clear_perk"] == "shallow" and lv >= SAFE_LEVELS[h.cls][0]:
+            return
         t = self.draw_treasure(lv + 1) if lv < 6 else None
         if t:
             self.gain(h, t)

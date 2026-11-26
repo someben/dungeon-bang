@@ -58,3 +58,16 @@ When a Wizard is Crushed and comes back as a Wizard, they fill a new spellbook, 
 ## Collect all dropped treasure
 
 When you defeat a monster, you collect every Treasure card dropped under it, in a room or a chamber, including cards you dropped yourself.
+
+## An idea, not adopted: a perk for clearing a level
+
+Whoever defeats the last monster in a level's colored rooms (chambers don't count) gets a reward. It's fun, but it doesn't help balance: only Levels 1 and 2 ever get cleared (in about half and a third of games), and the Rogue or Cleric does over 85% of the clearing, so the perk goes to the classes that already win most. Tested on top of the rules above (`--rules house+clear_perk=...`):
+
+| | Rogue | Cleric | Fighter | Wizard | Worst gap |
+|---|---|---|---|---|---|
+| No perk (the rules above) | 25.9% | 25.4% | 23.7% | 25.0% | 1.3% |
+| Draw a Treasure card from the next level down (`deeper`) | 28.5% | 26.7% | 21.5% | 23.3% | 3.5% |
+| The same, only for a level shallower than your safest levels (`shallow`) | 25.4% | 26.6% | 23.4% | 24.6% | 1.6% |
+| Give back all your Hourglass tokens (`tokens`) | 26.1% | 25.8% | 23.6% | 24.6% | 1.4% |
+
+The bonus card is too generous. The two lighter versions are too small to matter. If your table wants one anyway, either light version is harmless.
