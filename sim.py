@@ -59,7 +59,22 @@ NUM_SLOTS = 12  # numbered monster slots on the board edge
 #   clear_perk   "none" | "deeper": whoever defeats the last monster in a level's rooms (chambers don't count)
 #                draws 1 Treasure card from the next level down (that level's own pile is empty by then)
 #   hourglass    lose=hourglass: when Hourglass tokens go: "next" after your next attack roll | "win" when you
-#                win a fight | "hall" when you end a turn in the Great Hall | "game" never (Crushed clears everything)
+#                win a fight | "hall" when you end a turn in the Great Hall | "winhall" either one | "win1" each win takes 1 off | "game" never (Crushed clears everything)
+#   goal_<class> gold needed to win for that class (0 = printed: 10000 / 10000 / 20000 / 30000)
+#   stun         "drop" Stunned drops 1 Treasure card | "token" Stunned gives 1 Hourglass token instead
+#   chamber_perk False | True: the 3rd Defeated token on a chamber earns a Treasure card of its level
+#   deep_pick    0 | N: in a room of level N or deeper, draw 2 Treasure cards, keep 1, the other to the bottom
+#   homeward     False | True: once you have enough gold to win, you move 10 spaces a turn
+#   underdog     False | True: the Hero(es) with the smallest share of their gold goal get +1 on attack rolls
+#   crush        "all" Crushed drops everything | "half" Crushed drops half (your choice), still back to the Hall
+#   shortcut     False | True: from the Great Hall, move straight to any fully cleared chamber (or back) as your
+#                whole move
+#   serious      "hall" Seriously Hurt sends you to the Great Hall | "tokens" drop half, take 2 Hourglass tokens,
+#                and step back 1 space instead
+#   flee         False | True: having seen the monster, you may step back out by taking 1 Hourglass token
+#   shallow      a win in a room shallower than your class's printed safest levels: "none" no effect |
+#                "token" you take an Hourglass token | "notreasure" you draw no Treasure card (dropped cards still yours)
+#   daring       False | True: +1 on attack rolls in a room or chamber deeper than your class's safest levels
 #   lose         what replaces each lost turn (Hurt 8-10: 1; Cage Trap: 1 or 2):
 #                "turn" lose the turn | "wound" -1 on your next attack roll (tokens stack) |
 #                "knock" knocked back 5 spaces toward the Great Hall | "limp" next turn move but don't fight |
@@ -74,7 +89,10 @@ RULES = {"move": "5", "secret": "std", "secret_share": False, "regen_where": "gh
          "regen_wait": True, "miss_keep": False, "book": "d6+6", "tele_range": 1, "tele_from": "chamber",
          "tele_keep": False, "swords": "all", "trophy": False,
          "f_reroll": False, "f_armor": False, "f_tough": False, "f_move": False,
-         "drop_pick": "random", "lose": "turn", "rest_move": 2, "rest_fight": False, "clear_perk": "none", "hourglass": "win"}
+         "drop_pick": "random", "lose": "turn", "rest_move": 2, "rest_fight": False, "clear_perk": "none", "hourglass": "win",
+         "goal_rogue": 0, "goal_cleric": 0, "goal_fighter": 0, "goal_wizard": 0,
+         "stun": "drop", "chamber_perk": False, "deep_pick": 0, "homeward": False, "underdog": False,
+         "crush": "all", "shortcut": False, "serious": "hall", "flee": False, "shallow": "none", "daring": False}
 # fight-back table probabilities (2d6)
 P2 = {s: (6 - abs(s - 7)) / 36 for s in range(2, 13)}
 
@@ -327,6 +345,9 @@ class Game:
             return p / (1 + math.ceil(dist.get(m, 1e9) / MOVE))
         return max(self.slot, key=score)
 
+    def goal(self, h):
+        return self.R["goal_" + h.cls] or GOAL[h.cls]
+
     def log(self, *a):
         if self.verbose:
             print(*a)
@@ -359,9 +380,10 @@ class Game:
         best = (-1, None)
         if spells and (m["level"] if m else level) < h.wiz["spell_lv"]:
             spells = False
+        lv = m["level"] if m else level
         for mode in (self.modes(h) if spells else [h.cls]):
             bonus = h.sword_bonus if mode == h.cls else 0
-            if h.wound or h.hourglass:
+            if self.atk_minus(h, lv):
                 p = self.p_wounded(h, m, level, mode, bonus)
             else:
                 p = self.p_hit(m, mode, bonus) if m else self.p_level[level, mode, bonus]
@@ -382,7 +404,7 @@ class Game:
                 if not bonus or mode in ("fireball", "lightning"):
                     return 0.0
                 t = 13
-            return p_at_least(t - (bonus if mode not in ("fireball", "lightning") else 0) + h.wound + h.hourglass)
+            return p_at_least(t - (bonus if mode not in ("fireball", "lightning") else 0) + self.atk_minus(h, m["level"] if m else level))
         if m:
             return one(m)
         deck = self.all_monsters[level]
@@ -438,8 +460,8 @@ class Game:
                 # must fight here before passing; a chamber holds up to 3 monsters
                 left = 3 - self.defeated[n] if self.b.kind(n) == "chamber" else 1
                 leave = MOVE * 1.5 * left
-            for m, kind in self.b.adj[n]:
-                c = 1 + leave
+            for m, kind in self.b.adj[n] + self.portals(n):
+                c = (MOVE if kind == "portal" else 1) + leave
                 if kind == "secret" and not self.can_cross(h, n, m, kind):
                     c += secret_pen
                 nd = d + c
@@ -448,6 +470,16 @@ class Game:
                     par[m] = n
                     heapq.heappush(pq, (nd, m))
         return dist, par
+
+    def portals(self, n):
+        """shortcut: the Great Hall links to every fully cleared chamber, one whole move each way."""
+        if not self.R["shortcut"]:
+            return []
+        if n == self.b.gh:
+            return [(c, "portal") for c in self.b.chambers if self.cleared(c)]
+        if self.b.kind(n) == "chamber" and self.cleared(n):
+            return [(self.b.gh, "portal")]
+        return []
 
     @staticmethod
     def path_to(par, t):
@@ -498,6 +530,8 @@ class Game:
         lv = self.b.level(n)
         if self.b.kind(n) != "room":
             return 0
+        if self.R["shallow"] == "notreasure" and lv < SAFE_LEVELS[h.cls][0]:
+            return 0
         t = s.get("treasure") if s else None
         if t is not None:
             return t["gp"] if h.idx in (s.get("known") or ()) or s.get("known") is None else self.avg_treasure.get(lv, 0)
@@ -520,7 +554,7 @@ class Game:
         others = [o for o in self.heroes if o is not h]
         if not others:
             return None
-        lead = max(others, key=lambda o: o.gp / GOAL[o.cls])
+        lead = max(others, key=lambda o: o.gp / self.goal(o))
         d = {lead.pos: 0}
         q = [lead.pos]
         for x in q:
@@ -532,7 +566,7 @@ class Game:
 
     def choose_target(self, h):
         dist, par = self.dijkstra(h)
-        goal = GOAL[h.cls]
+        goal = self.goal(h)
         lo, hi = h.p["lo"], h.p["hi"]
         if not self.has_trophy(h):
             need = SAFE_LEVELS[h.cls][1]
@@ -700,9 +734,17 @@ class Game:
             moves += 1
         if slow:
             moves = min(moves, rest_cap)
+        if self.R["homeward"] and h.gp >= self.goal(h) and self.has_trophy(h):
+            moves = 10
         esp_used = False
+        full = moves
         for nxt in path[1:]:
-            kind = next(k for m, k in self.b.adj[h.pos] if m == nxt)
+            kind = next((k for m, k in self.b.adj[h.pos] if m == nxt), "portal")
+            if kind == "portal":
+                if moves == full:  # the shortcut is a whole move
+                    h.prev, h.pos = h.pos, nxt
+                    h.stats["shortcuts"] += 1
+                break
             if kind == "secret" and h.has("secret_door"):
                 h.found.add(frozenset((h.pos, nxt)))  # you still remember these if you drop the card
             while kind == "secret" and not self.can_cross(h, h.pos, nxt, kind):
@@ -787,9 +829,9 @@ class Game:
         self.end_turn(h)
 
     def end_turn(self, h):
-        if h.pos == self.b.gh and self.R["hourglass"] == "hall":
+        if h.pos == self.b.gh and self.R["hourglass"] in ("hall", "winhall"):
             h.hourglass = 0
-        if h.pos == self.b.gh and h.gp >= GOAL[h.cls] and self.has_trophy(h):
+        if h.pos == self.b.gh and h.gp >= self.goal(h) and self.has_trophy(h):
             h.won = True
             return
         if h.cls == "wizard" and self.refill_spot(h.pos) and h.nspells() < h.maxspells() and (
@@ -829,7 +871,7 @@ class Game:
 
     def try_crystal_ball(self, h, dist):
         """Spend the turn scrying an unrevealed room/chamber when what it tells us beats a turn of play."""
-        if h.gp >= GOAL[h.cls] or len(self.slot) >= NUM_SLOTS:
+        if h.gp >= self.goal(h) or len(self.slot) >= NUM_SLOTS:
             return False
         bt, _, cands = self.scan_targets(h, dist, None, 1, 6)
         pool = [n for n in (cands or []) if n not in self.slot and dist.get(n, 1e18) > MOVE]
@@ -865,7 +907,7 @@ class Game:
             h.prev, h.pos = h.pos, n
             self.spring_trap(h, n, s)
             return
-        roll = two_d6(self.rng) - self.use_wound(h)
+        roll = two_d6(self.rng) - self.use_wound(h, self.b.level(n))
         t = m["tgt"][mode]
         self.log(f"  {h.cls}{h.idx} casts {mode} at {m['name']} in {n}: {roll} vs {t}")
         if t is not None and roll >= t:
@@ -903,6 +945,15 @@ class Game:
                     else:
                         self.end_turn(h)
                     return
+        if self.R["flee"] and h.prev and not (self.occupied(h.prev, h) and self.b.kind(h.prev) != "chamber") \
+                and self.target_value(h, n)[0] < 0:
+            h.hourglass += 1
+            h.stats["fled"] += 1
+            self.log(f"  {h.cls}{h.idx} flees {m['name']} in {n}")
+            h.pos, h.prev = h.prev, None
+            self.park(n, h)
+            self.end_turn(h)
+            return
         p, mode = self.best_mode(h, m, spells=(h.cls == "wizard"))
         if mode in ("fireball", "lightning"):
             # inside the space: casting still allowed, but a miss means it fights back
@@ -914,7 +965,7 @@ class Game:
             t = m["tgt"][mode]
             if t is None and h.sword_bonus:
                 t = 13
-        wound = self.use_wound(h)
+        wound = self.use_wound(h, self.b.level(n))
         roll = two_d6(self.rng) + (h.sword_bonus if mode == h.cls else 0) - wound
         if mode == "fighter" and self.R["f_reroll"] and t is not None and roll < t:
             roll = two_d6(self.rng) + h.sword_bonus - wound  # one re-roll of a missed attack
@@ -944,12 +995,23 @@ class Game:
         self.mdisc[s["monster"]["level"]].append(s["monster"])
         self.defeated[n] += 1
         self.level_clear(h, n)
-        if self.R["hourglass"] == "win":
+        shallow = self.b.kind(n) == "room" and self.b.level(n) < SAFE_LEVELS[h.cls][0]
+        if self.R["hourglass"] in ("win", "winhall"):
             h.hourglass = 0
+        elif self.R["hourglass"] == "win1":
+            h.hourglass = max(0, h.hourglass - 1)
+        if shallow and self.R["shallow"] == "token":
+            h.hourglass += 1
         h.stats["wins"] += 1
         gained = list(s["drops"])
-        if self.b.kind(n) == "room":
-            t = s.get("treasure") or self.draw_treasure(self.b.level(n))
+        if shallow and self.R["shallow"] != "none":
+            h.stats["shallow_wins"] += 1
+        if self.b.kind(n) == "room" and not (shallow and self.R["shallow"] == "notreasure"):
+            t = s.get("treasure") or self.room_draw(self.b.level(n))
+            if t:
+                gained.append(t)
+        if self.R["chamber_perk"] and self.b.kind(n) == "chamber" and self.cleared(n):
+            t = self.draw_treasure(self.b.level(n))
             if t:
                 gained.append(t)
         for _ in range(s.get("bounty", 0)):
@@ -992,6 +1054,15 @@ class Game:
                 self.encounter(h)
             else:
                 self.end_turn(h)
+
+    def room_draw(self, lv):
+        """A room's Treasure: under deep_pick, draw 2 from a deep level, keep the better, the other to the bottom."""
+        t = self.draw_treasure(lv)
+        if t and self.R["deep_pick"] and lv >= self.R["deep_pick"] and self.tdeck[lv]:
+            u = self.draw_treasure(lv)
+            t, u = (t, u) if t["gp"] >= u["gp"] else (u, t)
+            self.tdeck[lv].insert(0, u)
+        return t
 
     def gain(self, h, c):
         h.cards.append(c)
@@ -1055,20 +1126,31 @@ class Game:
             r = 5  # armor: Stunned counts as a Miss
         h.stats["hit_back"] += 1
         if r == 12:
-            d = self.drop(h, len(h.cards), s)
+            if self.R["crush"] == "half":
+                d = self.drop(h, math.ceil(len(h.cards) / 2), s)  # your choice, under drop_pick
+            else:
+                d = self.drop(h, len(h.cards), s)
             self.log(f"    CRUSHED (drops {len(d)})")
             h.stats["crushed"] += 1
             stats = h.stats
             if h.cls == "wizard":
                 self.new_wizard_book(h)
+            kept = h.cards
             h.reset()
             h.stats = stats
             h.pos = self.b.gh
+            for c in kept:
+                self.gain(h, c)
         elif r == 11:
             d = self.drop(h, math.ceil(len(h.cards) / 2), s)
             self.log(f"    seriously hurt (drops {len(d)})")
             h.stats["serious"] += 1
-            h.pos, h.prev = self.b.gh, None
+            if self.R["serious"] == "tokens":
+                h.hourglass += 2
+                if h.prev and not (self.occupied(h.prev, h) and self.b.kind(h.prev) != "chamber"):
+                    h.pos, h.prev = h.prev, None
+            else:
+                h.pos, h.prev = self.b.gh, None
         elif r >= 8:
             self.drop(h, 1, s)
             self.log("    hurt")
@@ -1078,7 +1160,10 @@ class Game:
             if not (h.cls == "fighter" and self.R["f_tough"]):
                 self.penalize(h, 1, s, n)
         elif r >= 6:
-            self.drop(h, 1, s)
+            if self.R["stun"] == "token":
+                h.hourglass += 1
+            else:
+                self.drop(h, 1, s)
             self.log("    stunned")
             h.stats["stunned"] += 1
         else:
@@ -1087,10 +1172,21 @@ class Game:
         self.end_turn(h)
 
     # ---------- lose-a-turn replacements
-    def use_wound(self, h):
-        """What comes off this attack roll: Wound tokens (used up) and Hourglass tokens."""
-        w, h.wound = h.wound, 0
-        w += h.hourglass
+    def is_underdog(self, h):
+        if not self.R["underdog"]:
+            return False
+        share = lambda o: o.gp / self.goal(o)
+        return share(h) <= min(share(o) for o in self.heroes)
+
+    def atk_minus(self, h, lv=None):
+        """What comes off h's attack rolls right now (negative = a bonus); lv = the level fought at, if known."""
+        dare = self.R["daring"] and lv is not None and lv > SAFE_LEVELS[h.cls][1]
+        return h.wound + h.hourglass - (1 if self.is_underdog(h) else 0) - (1 if dare else 0)
+
+    def use_wound(self, h, lv=None):
+        """What comes off this attack roll: Wound tokens (used up), Hourglass tokens, Underdog and Daring bonuses."""
+        w = self.atk_minus(h, lv)
+        h.wound = 0
         if self.R["hourglass"] == "next":
             h.hourglass = 0
         return w
@@ -1203,7 +1299,7 @@ class Game:
 
 
 # our adopted house rules (see house-rules.md); the 12-slot rule is always on
-HOUSE = {"swords": "fighter", "drop_pick": "choice", "lose": "hourglass", "hourglass": "win"}
+HOUSE = {"swords": "fighter", "drop_pick": "choice", "lose": "hourglass", "hourglass": "win1", "serious": "tokens"}
 
 
 def parse_rules(text):

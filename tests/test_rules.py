@@ -965,5 +965,168 @@ class LevelClearPerk(unittest.TestCase):
         self.assertEqual(h.cards, [])
 
 
+
+class Tweaks(unittest.TestCase):
+    """Small rule ideas on top of the house rules."""
+
+    def fight(self, rules, dice, cls=0, cards=None, lv=4, m="Hill Giant"):
+        g = new_game(rules=rules)
+        h = g.heroes[cls]
+        park_others(g, h)
+        h.cards = list(cards or [])
+        r, door = door_room(lv)
+        put_on_top(g, monster(m))
+        h.prev, h.pos = door, r
+        g.rng.load(*dice)
+        g.encounter(h)
+        return g, h, r
+
+    def test_stunned_gives_a_token_instead_of_a_drop(self):
+        g, h, r = self.fight({"stun": "token", "lose": "hourglass"}, (1, 1, 3, 3), cards=[treasure("Sack of Gold", 1)])
+        self.assertEqual((len(h.cards), h.hourglass, g.slot[r]["drops"]), (1, 1, []))
+
+    def test_crushed_drops_half(self):
+        cards = [treasure("Sack of Gold", 1), treasure("Silver Coffer", 6), treasure("Sack of Gold", 2)]
+        g, h, r = self.fight({"crush": "half", "drop_pick": "choice"}, (1, 1, 6, 6), cards=cards)
+        self.assertEqual(h.pos, BOARD.gh)
+        self.assertEqual([c["name"] for c in h.cards], ["Silver Coffer"])
+        self.assertEqual(len(g.slot[r]["drops"]), 2)
+
+    def test_chamber_perk_on_the_third_token(self):
+        g = new_game(rules={"chamber_perk": True})
+        c, hall = chamber(4)
+        h = g.heroes[0]
+        park_others(g, h)
+        h.cards = []
+        g.defeated[c] = 2
+        g.slot[c] = {"monster": monster("Goblin") | {"level": 4}, "drops": [], "known": None}
+        top = g.tdeck[4][-1]
+        h.prev, h.pos = hall, c
+        g.rng.load(6, 6)
+        g.encounter(h)
+        self.assertEqual(h.cards, [top])
+        g.defeated[c] = 1                                         # not the third token: nothing
+        g.slot[c] = {"monster": monster("Goblin") | {"level": 4}, "drops": [], "known": None}
+        h.cards = []
+        h.prev, h.pos = hall, c
+        g.rng.load(6, 6)
+        g.encounter(h)
+        self.assertEqual(h.cards, [])
+
+    def test_deep_pick_keeps_the_better_card(self):
+        g = new_game(rules={"deep_pick": 4})
+        lo, hi = treasure("Sack of Gold", 4), treasure("Silver Coffer", 6) | {"level": 4}
+        g.tdeck[4] += [hi, lo]                                    # lo drawn first, then hi
+        h = g.heroes[0]
+        park_others(g, h)
+        h.cards = []
+        r, door = door_room(4)
+        put_on_top(g, monster("Goblin") | {"level": 4})
+        h.prev, h.pos = door, r
+        g.rng.load(6, 6)
+        g.encounter(h)
+        self.assertEqual(h.cards, [hi])
+        self.assertIs(g.tdeck[4][0], lo)                          # the other goes to the bottom
+
+    def test_homeward_moves_ten(self):
+        g = new_game(rules={"homeward": True})
+        h = g.heroes[0]
+        park_others(g, h)
+        h.cards = [treasure("Silver Coffer", 6)] * 3              # 12,000 gp: enough for a Rogue
+        dist0 = None
+        for n in BOARD.nodes:                                     # a cleared hallway 10+ spaces out
+            if BOARD.kind(n) == "hall":
+                h.pos = n
+                d = g.dijkstra(h)[0][BOARD.gh]
+                if 10 <= d < 12:
+                    dist0 = d
+                    break
+        self.assertIsNotNone(dist0)
+        for r in BOARD.rooms + BOARD.chambers:
+            g.defeated[r] = 3
+        g.take_turn(h)
+        self.assertLessEqual(g.dijkstra(h)[0][BOARD.gh], dist0 - 10)
+
+    def test_underdog_bonus(self):
+        g = new_game(rules={"underdog": True})
+        for o in g.heroes:
+            o.cards = [treasure("Sack of Gold", 1)]
+        g.heroes[0].cards = []
+        self.assertEqual([g.atk_minus(o) for o in g.heroes], [-1, 0, 0, 0])
+        g2, h, r = self.fight({"underdog": True}, (1, 1), lv=1, m="Goblin")   # 2 + 1 = 3: a Rogue hits
+        self.assertTrue(g2.cleared(r))
+
+
+    def test_seriously_hurt_takes_two_tokens_and_steps_back(self):
+        cards = [treasure("Sack of Gold", 1) for _ in range(4)]
+        g, h, r = self.fight({"serious": "tokens", "lose": "hourglass"}, (1, 1, 5, 6), cards=cards)
+        self.assertEqual((h.hourglass, len(h.cards), len(g.slot[r]["drops"])), (2, 2, 2))
+        self.assertNotEqual(h.pos, BOARD.gh)
+        self.assertEqual(BOARD.kind(h.pos), "hall")
+
+    def test_flee_before_a_bad_fight(self):
+        cards = [treasure("Silver Coffer", 6) for _ in range(3)]
+        g = new_game(rules={"flee": True, "lose": "hourglass"})
+        h = g.heroes[0]                                          # a Rogue needs 10 vs a Hill Giant
+        park_others(g, h)
+        h.cards = list(cards)
+        r, door = door_room(4)
+        put_on_top(g, monster("Hill Giant"))
+        h.prev, h.pos = door, r
+        g.encounter(h)
+        self.assertEqual((h.pos, h.hourglass, len(h.cards), h.stats["fights"]), (door, 1, 3, 0))
+        self.assertIn(r, g.slot)
+
+    def test_hourglass_winhall_clears_either_way(self):
+        g = new_game(rules={"lose": "hourglass", "hourglass": "winhall"})
+        h = g.heroes[0]
+        h.hourglass, h.pos = 2, BOARD.gh
+        g.end_turn(h)
+        self.assertEqual(h.hourglass, 0)
+
+    def test_shortcut_great_hall_to_cleared_chamber(self):
+        g = new_game(rules={"shortcut": True})
+        h = g.heroes[2]
+        park_others(g, h)
+        c = max(BOARD.chambers, key=BOARD.level)
+        g.defeated[c] = 3
+        self.assertIn((c, "portal"), g.portals(BOARD.gh))
+        self.assertEqual(g.dijkstra(h)[0][c], sim.MOVE)
+        g.defeated[c] = 2
+        self.assertNotIn((c, "portal"), g.portals(BOARD.gh))
+        g2 = new_game()
+        self.assertEqual(g2.portals(BOARD.gh), [])
+
+
+    def test_shallow_rooms(self):
+        # a Fighter's printed safest levels are 3-5, so a level-1 room is shallow for them
+        g, h, r = self.fight({"shallow": "notreasure"}, (6, 6), cls=2, lv=1, m="Goblin")
+        self.assertTrue(g.cleared(r))
+        self.assertEqual(h.cards, [])
+        g, h, r = self.fight({"shallow": "token", "lose": "hourglass"}, (6, 6), cls=2, lv=1, m="Goblin")
+        self.assertEqual((len(h.cards), h.hourglass), (1, 1))
+        g, h, r = self.fight({"shallow": "notreasure"}, (6, 6), cls=0, lv=1, m="Goblin")   # Rogue: 1-3
+        self.assertEqual(len(h.cards), 1)
+
+
+    def test_daring_bonus_below_your_safest_levels(self):
+        g, h, r = self.fight({"daring": True}, (4, 5), cls=0, lv=4)   # Rogue (1-3) at level 4: 9 + 1 = 10 hits
+        self.assertTrue(g.cleared(r))
+        g, h, r = self.fight({"daring": True}, (3, 5, 1, 1), cls=2, lv=4)   # Fighter (3-5): 8 misses 9, no bonus
+        self.assertFalse(g.cleared(r))
+
+    def test_hourglass_win1_takes_one_off(self):
+        g = new_game(rules={"lose": "hourglass", "hourglass": "win1"})
+        h = g.heroes[0]
+        park_others(g, h)
+        h.hourglass = 2
+        r, door = door_room(1)
+        put_on_top(g, monster("Goblin"))
+        h.prev, h.pos = door, r
+        g.rng.load(6, 6)
+        g.encounter(h)
+        self.assertEqual(h.hourglass, 1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,22 +1,22 @@
 # House rules: the fixes that make the game work
 
-Played as printed, the 2014 game is lopsided: Rogues and Clerics win about twice as often as Fighters and Wizards. These six rules fix that, and they also replace the two printed mechanics that play worst: losing turns and "random" drops from a hand whose card backs show their level. Nothing printed on the board or the cards changes.
+Played as printed, the 2014 game is lopsided: Rogues and Clerics win about twice as often as Fighters and Wizards. These seven rules fix that, and they also replace the two printed mechanics that play worst: losing turns and "random" drops from a hand whose card backs show their level. Nothing printed on the board or the cards changes.
 
 Win rates in a 4-player game with one Hero of each class, over 24,000 simulated games where every player picks a random human-like play style:
 
 | | Rogue | Cleric | Fighter | Wizard |
 |---|---|---|---|---|
 | Printed rules | 31.5% | 33.6% | 15.7% | 19.2% |
-| With these house rules | 26.3% | 26.6% | 22.1% | 25.0% |
+| With these house rules | 25.9% | 25.4% | 23.7% | 25.0% |
 
 When every class instead switches to the strategy that wins it the most (`python3 explore.py adapt house`, 2 rounds, 4,000 games):
 
 | | Rogue | Cleric | Fighter | Wizard |
 |---|---|---|---|---|
-| Everyone on the default strategy | 26.1% | 28.1% | 23.5% | 22.4% |
-| After 2 best-response rounds | 24.4% | 26.5% | 27.6% | 21.6% |
+| Everyone on the default strategy | 24.3% | 28.6% | 24.3% | 22.7% |
+| After 2 best-response rounds | 22.1% | 27.3% | 28.2% | 22.4% |
 
-In the simulator, `--rules house` turns on the first three rules below. The other three are always on.
+In the simulator, `--rules house` turns on the first four rules below. The other three are always on.
 
 ## Only Fighters use Magic Swords
 
@@ -26,7 +26,11 @@ Only a Fighter adds a Magic Sword's bonus to attack rolls, and only a Fighter ca
 
 Nobody ever loses a turn. Whenever a rule says you lose a turn, take 1 Hourglass token for each turn instead: 1 for a Hurt result (fight-back roll 8–10), and 1 or 2 for a Cage Trap. You still drop your Treasure card and move back 1 space when Hurt.
 
-Each Hourglass token takes 1 off every attack roll you make, spells included. All your tokens go back when you win a fight. A Crushed Hero starts over with none. The same rule applies to every Hero, Fighters included.
+Each Hourglass token takes 1 off every attack roll you make, spells included. Each fight you win gives back 1 token. A Crushed Hero starts over with none. The same rule applies to every Hero, Fighters included.
+
+## Seriously Hurt doesn't send you home
+
+A Seriously Hurt Hero (fight-back roll 11) still drops half their Treasure cards, but takes 2 Hourglass tokens and moves back 1 space, just as when Hurt, instead of going back to the Great Hall.
 
 ## Drop Treasure of your choice
 

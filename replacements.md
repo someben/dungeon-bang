@@ -105,6 +105,25 @@ Whoever puts the Defeated token on a level's last room (chambers don't count) dr
 
 Only Levels 1 and 2 ever get cleared (in about half and a third of games), almost always by the Rogue or Cleric, so the perk goes to the leaders.
 
+## Third round: small tweaks on the adopted house rules
+
+Each was screened with mixed human tables and strong play; the best went to a full 24,000-game mixed run and `explore.py adapt` (2 rounds). Numbers are against the house rules as they stood then (`swords=fighter+drop_pick=choice+lose=hourglass+hourglass=win`).
+
+| | Rogue | Cleric | Fighter | Wizard | Worst gap |
+|---|---|---|---|---|---|
+| **Mixed human tables** | | | | | |
+| House rules then | 26.3% | 26.6% | 22.1% | 25.0% | 2.9% |
+| Seriously Hurt: 2 tokens, step back (`serious=tokens`) | 26.3% | 26.2% | 23.5% | 23.9% | 1.5% |
+| Plus each win gives back 1 token (`hourglass=win1`, adopted) | 25.9% | 25.4% | 23.7% | 25.0% | 1.3% |
+| Clearing a chamber pays a Treasure card (`chamber_perk=1`) | 25.5% | 25.8% | 21.2% | 27.5% | 3.8% |
+| **After 2 best-response rounds** | | | | | |
+| House rules then | 24.4% | 26.5% | 27.6% | 21.6% | 3.4% |
+| `serious=tokens` | 22.8% | 27.0% | 28.1% | 22.1% | 3.1% |
+| `serious=tokens+hourglass=win1` (adopted) | 22.1% | 27.3% | 28.2% | 22.4% | 3.2% |
+| `chamber_perk=1` | 24.0% | 25.7% | 26.5% | 23.9% | 1.5% |
+
+Screened and dropped: Stunned gives a token instead of a drop (`stun=token`), a shortcut from the Great Hall to cleared chambers (`shortcut`), fleeing for a token (`flee`: Fighter 35%), draw 2 keep 1 in deep rooms (`deep_pick`: Wizard 32–39%), +1 for the trailing Hero (`underdog`), +1 deeper than your safest levels (`daring`: Rogue 34–38%), a token or no treasure for shallow wins (`shallow`), moving 10 once you have enough gold (`homeward`), Crushed drops half (`crush=half`), and tokens that also clear in the Great Hall (`hourglass=winhall`).
+
 ## How the simulator plays each one
 
 - **Die roll:** the hand is laid face up in the order the cards were collected, and the count wraps around. With more than 6 cards, the newest ones can't be picked.
